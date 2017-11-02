@@ -35,20 +35,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        try {
-//            TitledPane model = FXMLLoader.load(ApplianceGroup.class.getResource("fryer.fxml"));
-//            ApplianceGroup<Fryer> ag = new ApplianceGroup<>(model);
-//            Fryer f = new Fryer(1, 45.5, Employee.PLAYER);
-//            f.setProgress(.5);
-//            ag.addAppliance(f);
-//
-//            TitledPane added = ag.getTitledPanes().get(0);
-//            added.setExpanded(true);
-//            primaryStage.setScene(new Scene(added));
-//            primaryStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         try {
             AnchorPane window = FXMLLoader.load(Main.class.getResource("donut-derper-2.fxml"));
             primaryStage.setScene(new Scene(window));
