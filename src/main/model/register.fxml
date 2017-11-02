@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<TitledPane expanded="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox spacing="8.0">
+         <children>
+            <Label contentDisplay="RIGHT" graphicTextGap="8.0" text="Cashier:">
+               <graphic>
+                  <ChoiceBox maxHeight="-Infinity" minHeight="-Infinity" prefWidth="150.0" />
+               </graphic>
+            </Label>
+            <Label prefWidth="423.0" text="Checks out one customer per second while operated by a cashier." wrapText="true" />
+            <Button mnemonicParsing="false" text="Sell for $0.00" />
+         </children>
+      </VBox>
+   </content>
+   <font>
+      <Font size="16.0" />
+   </font>
+   <graphic>
+      <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="407.0">
+         <children>
+            <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="5.0" layoutY="15.0" text="Unassigned" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="12.0" />
+               </font>
+               <graphic>
+                  <ProgressBar prefWidth="140.0" progress="0.0" />
+               </graphic>
+            </Label>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="285.0" layoutY="13.0" text="\$0.00" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-9.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="12.0" />
+               </font>
+               <graphic>
+                  <Button disable="true" mnemonicParsing="false" text="Collect">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+               </graphic>
+            </Label>
+         </children>
+      </AnchorPane>
+   </graphic>
+</TitledPane>

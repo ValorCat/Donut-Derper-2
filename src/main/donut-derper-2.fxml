@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+   <children>
+      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+            <Tab closable="false" text="Branches">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <TabPane maxHeight="1.7976931348623157E308" prefHeight="308.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <tabs>
+                              <Tab text="Store">
+                                 <content>
+                                    <GridPane hgap="10.0" minHeight="-Infinity" prefHeight="348.0" prefWidth="1000.0" vgap="10.0">
+                                       <children>
+                                          <TitledPane collapsible="false" text="Registers" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                             <content>
+                                                <Accordion fx:id="registerList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <padding>
+                                                      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                                   </padding>
+                                                   <panes>
+                                                      <TitledPane expanded="false">
+                                                         <content>
+                                                            <VBox spacing="8.0">
+                                                               <children>
+                                                                  <Label contentDisplay="RIGHT" graphicTextGap="8.0" text="Cashier:">
+                                                                     <graphic>
+                                                                        <ChoiceBox maxHeight="-Infinity" minHeight="-Infinity" prefWidth="150.0" />
+                                                                     </graphic>
+                                                                  </Label>
+                                                                  <Label prefWidth="423.0" text="Checks out one customer per second while operated by a cashier." wrapText="true" />
+                                                                  <Button mnemonicParsing="false" text="Sell for $0.00" />
+                                                               </children>
+                                                            </VBox>
+                                                         </content>
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <graphic>
+                                                            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="407.0">
+                                                               <children>
+                                                                  <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="5.0" layoutY="15.0" text="Unassigned" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font>
+                                                                     <graphic>
+                                                                        <ProgressBar prefWidth="140.0" progress="0.0" />
+                                                                     </graphic>
+                                                                  </Label>
+                                                                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="285.0" layoutY="13.0" text="\$0.00" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-9.0" AnchorPane.topAnchor="0.0">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font>
+                                                                     <graphic>
+                                                                        <Button disable="true" mnemonicParsing="false" text="Collect">
+                                                                           <font>
+                                                                              <Font size="11.0" />
+                                                                           </font>
+                                                                        </Button>
+                                                                     </graphic>
+                                                                  </Label>
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </graphic>
+                                                      </TitledPane>
+                                                   </panes>
+                                                </Accordion>
+                                             </content>
+                                          </TitledPane>
+                                          <Label alignment="BOTTOM_LEFT" text="customers in store" GridPane.valignment="TOP">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                             <graphic>
+                                                <Label fx:id="customerCount" text="0 / 0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <Button fx:id="manualSellButton" mnemonicParsing="false" onAction="#onManualCheckOut" text="Check Out">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </graphic>
+                                                </Label>
+                                             </graphic></Label>
+                                          <TitledPane collapsible="false" text="Fryers" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                             <content>
+                                                <Accordion fx:id="fryerList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <padding>
+                                                      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                                   </padding>
+                                                   <panes>
+                                                      <TitledPane expanded="false">
+                                                         <content>
+                                                            <VBox spacing="7.0">
+                                                               <children>
+                                                                  <Label contentDisplay="RIGHT" graphicTextGap="8.0" text="Fry Cook:">
+                                                                     <graphic>
+                                                                        <ChoiceBox maxHeight="-Infinity" minHeight="-Infinity" prefWidth="150.0" />
+                                                                     </graphic>
+                                                                  </Label>
+                                                                  <Label contentDisplay="RIGHT" graphicTextGap="8.0" text="Output:">
+                                                                     <graphic>
+                                                                        <ChoiceBox maxHeight="-Infinity" minHeight="-Infinity" prefWidth="150.0" />
+                                                                     </graphic>
+                                                                  </Label>
+                                                                  <Label prefWidth="423.0" text="Produces 1 donut every 3 seconds while operated by a fry cook." wrapText="true" />
+                                                                  <Button mnemonicParsing="false" text="Sell for $0.00" />
+                                                               </children>
+                                                            </VBox>
+                                                         </content>
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <graphic>
+                                                            <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="407.0">
+                                                               <children>
+                                                                  <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="5.0" layoutY="15.0" text="Unassigned" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font>
+                                                                     <graphic>
+                                                                        <ProgressBar prefWidth="140.0" progress="0.0" />
+                                                                     </graphic>
+                                                                  </Label>
+                                                                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="285.0" layoutY="13.0" text="0 plain donuts" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-5.0" AnchorPane.topAnchor="0.0">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </graphic>
+                                                      </TitledPane>
+                                                   </panes>
+                                                </Accordion>
+                                             </content>
+                                          </TitledPane>
+                                          <Label alignment="BOTTOM_LEFT" text="donuts in stock" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                             <graphic>
+                                                <Label fx:id="donutCount" text="0">
+                                                   <graphic>
+                                                      <Button fx:id="manualFryButton" mnemonicParsing="false" onAction="#onManualCook" text="Make Batch">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </graphic>
+                                          </Label>
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="481.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="596.0" minWidth="10.0" prefWidth="479.0" />
+                                       </columnConstraints>
+                                       <padding>
+                                          <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                       </padding>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="Inventory">
+                                 <content>
+                                    <GridPane hgap="10.0" minHeight="-Infinity" prefHeight="348.0" prefWidth="1000.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="378.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="596.0" minWidth="10.0" prefWidth="582.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <TitledPane collapsible="false" text="Ingredients" GridPane.valignment="TOP">
+                                             <content>
+                                                <VBox>
+                                                   <children>
+                                                      <TableView fx:id="ingredientList" prefHeight="200.0" prefWidth="200.0">
+                                                        <columns>
+                                                          <TableColumn prefWidth="200.0" text="Name" />
+                                                          <TableColumn minWidth="8.0" prefWidth="89.0" text="Qty." />
+                                                        </columns>
+                                                      </TableView>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                          </TitledPane>
+                                          <TitledPane collapsible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                                             <content>
+                                                <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
+                                                   <children>
+                                                      <Label fx:id="donutCountDetailed" text="0 donuts in stock (+0/sec)" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="-5.0" />
+                                                      <Accordion fx:id="flavorList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" GridPane.columnIndex="1">
+                                                         <panes>
+                                                            <TitledPane expanded="false" text="0 plain donuts">
+                                                               <content>
+                                                                  <VBox spacing="6.0">
+                                                                     <children>
+                                                                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="200.0">
+                                                                           <children>
+                                                                              <Label text="Price: $" />
+                                                                              <TextField maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="75.0" promptText="cost" text="0.00" />
+                                                                              <Label text=" each" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="200.0" spacing="8.0">
+                                                                           <children>
+                                                                              <Label text="Recipe:" />
+                                                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Set">
+                                                                                 <font>
+                                                                                    <Font size="9.0" />
+                                                                                 </font>
+                                                                              </Button>
+                                                                              <Label text="no ingredients">
+                                                                                 <font>
+                                                                                    <Font size="11.0" />
+                                                                                 </font>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="200.0" spacing="8.0">
+                                                                           <children>
+                                                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Rename" />
+                                                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Discontinue" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </content>
+                                                            </TitledPane>
+                                                            <TitledPane expanded="false" text="0 chocolate donuts">
+                                                               <content>
+                                                                  <VBox spacing="6.0">
+                                                                     <children>
+                                                                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="200.0">
+                                                                           <children>
+                                                                              <Label text="Price: $" />
+                                                                              <TextField maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="75.0" promptText="cost" text="0.00" />
+                                                                              <Label text=" each" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="200.0" spacing="8.0">
+                                                                           <children>
+                                                                              <Label text="Recipe:" />
+                                                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Set">
+                                                                                 <font>
+                                                                                    <Font size="9.0" />
+                                                                                 </font>
+                                                                              </Button>
+                                                                              <Label text="no ingredients">
+                                                                                 <font>
+                                                                                    <Font size="11.0" />
+                                                                                 </font>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="200.0" spacing="8.0">
+                                                                           <children>
+                                                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Rename" />
+                                                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Discontinue" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </content>
+                                                            </TitledPane>
+                                                         </panes>
+                                                      </Accordion>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                             <graphic>
+                                                <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" spacing="15.0">
+                                                   <children>
+                                                      <Label text="Products" />
+                                                      <Button fx:id="addFlavorButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onAddFlavor" text="New Product">
+                                                         <font>
+                                                            <Font size="9.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                             </graphic>
+                                          </TitledPane>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                       </padding>
+                                    </GridPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="Finances">
+                                 <content>
+                                    <GridPane hgap="10.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="500.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="500.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <TitledPane collapsible="false" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                                             <content>
+                                                <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
+                                                   <children>
+                                                      <HBox disable="true" spacing="15.0">
+                                                         <children>
+                                                            <Button fx:id="dismissEmployeeButton" mnemonicParsing="false" onAction="#onDismissSelectedEmployees" text="Dismiss" />
+                                                            <Button fx:id="promoteEmployeeButton" mnemonicParsing="false" onAction="#onPromoteSelectedEmployees" text="Promote" />
+                                                         </children>
+                                                      </HBox>
+                                                      <TableView fx:id="employeeList" prefHeight="200.0" prefWidth="200.0">
+                                                        <columns>
+                                                            <TableColumn prefWidth="35.0" sortable="false">
+                                                               <graphic>
+                                                                  <CheckBox alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" />
+                                                               </graphic>
+                                                            </TableColumn>
+                                                          <TableColumn editable="false" prefWidth="148.0" text="Name" />
+                                                          <TableColumn editable="false" prefWidth="150.0" text="Position" />
+                                                            <TableColumn editable="false" prefWidth="116.0" text="Pay" />
+                                                        </columns>
+                                                      </TableView>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                             <graphic>
+                                                <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" spacing="15.0">
+                                                   <children>
+                                                      <Label text="Employee Roster" />
+                                                      <Button fx:id="hireEmployeeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onHireNewEmployee" text="Hire">
+                                                         <font>
+                                                            <Font size="9.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                             </graphic>
+                                          </TitledPane>
+                                          <VBox spacing="10.0">
+                                             <children>
+                                                <TitledPane collapsible="false" text="Payment" GridPane.valignment="TOP">
+                                                   <content>
+                                                      <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
+                                                         <children>
+                                                            <HBox fx:id="paydayTracker" spacing="12.0">
+                                                               <children>
+                                                                  <ProgressIndicator progress="0.0" />
+                                                                  <VBox alignment="CENTER_LEFT" spacing="5.0">
+                                                                     <children>
+                                                                        <Label text="Payday in 0 seconds" />
+                                                                        <Label text="-$0.00" />
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </HBox>
+                                                            <Label contentDisplay="RIGHT" graphicTextGap="10.0" text="Withdraw from">
+                                                               <graphic>
+                                                                  <ChoiceBox fx:id="salarySource" prefWidth="200.0" />
+                                                               </graphic>
+                                                            </Label>
+                                                         </children>
+                                                      </VBox>
+                                                   </content>
+                                                </TitledPane>
+                                                <TitledPane collapsible="false">
+                                                   <content>
+                                                      <Accordion fx:id="accountList">
+                                                         <padding>
+                                                            <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                                                         </padding>
+                                                         <panes>
+                                                            <TitledPane expanded="false" text="Checking | $0.00">
+                                                               <content>
+                                                                  <VBox spacing="5.0">
+                                                                     <children>
+                                                                        <Label text="Last minute: +$0.00" />
+                                                                        <Label text="Interest: 0.0% ($0.00)" />
+                                                                        <HBox spacing="15.0">
+                                                                           <children>
+                                                                              <Button mnemonicParsing="false" text="Transfer" />
+                                                                              <Button mnemonicParsing="false" text="Rename" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </content>
+                                                            </TitledPane>
+                                                         </panes>
+                                                      </Accordion>
+                                                   </content>
+                                                   <graphic>
+                                                      <AnchorPane prefWidth="452.0">
+                                                         <children>
+                                                            <Label text="Accounts" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                            <Label fx:id="totalBalance" layoutX="10.0" layoutY="10.0" text="\$0.00" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-5.0" AnchorPane.topAnchor="0.0" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                   </graphic>
+                                                </TitledPane>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                       </padding>
+                                    </GridPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="Ordering">
+                                 <content>
+                                    <GridPane hgap="10.0">
+                                       <children>
+                                          <TitledPane collapsible="false" text="Equipment" GridPane.columnIndex="1" GridPane.valignment="TOP" />
+                                          <TitledPane collapsible="false" text="Ingredients" GridPane.valignment="TOP">
+                                             <content>
+                                                <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
+                                                   <children>
+                                                      <HBox spacing="20.0">
+                                                         <children>
+                                                            <Label contentDisplay="RIGHT" graphicTextGap="10.0" text="Order:">
+                                                               <graphic>
+                                                                  <ChoiceBox fx:id="orderItem" prefWidth="200.0" />
+                                                               </graphic>
+                                                            </Label>
+                                                            <Button fx:id="orderButton" mnemonicParsing="false" text="Order" />
+                                                         </children>
+                                                      </HBox>
+                                                      <Label contentDisplay="RIGHT" graphicTextGap="10.0" text="Amount:">
+                                                         <graphic>
+                                                            <Label fx:id="orderAmount" graphicTextGap="10.0" text="0 lb.">
+                                                               <graphic>
+                                                                  <Slider blockIncrement="20.0" majorTickUnit="60.0" max="600.0" minorTickCount="20" prefWidth="170.0" snapToTicks="true" />
+                                                               </graphic>
+                                                            </Label>
+                                                         </graphic>
+                                                      </Label>
+                                                      <Label fx:id="orderCost" contentDisplay="RIGHT" graphicTextGap="10.0" text="Cost: $0.00" />
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                          </TitledPane>
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="500.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="500.0" />
+                                       </columnConstraints>
+                                       <padding>
+                                          <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                       </padding>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                        <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="773.0" layoutY="5.0" text="Branch:" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0">
+                           <graphic>
+                              <ChoiceBox fx:id="currentLocation" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="26.0" prefWidth="150.0">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ChoiceBox>
+                           </graphic>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+          <Tab closable="false" text="Facilities">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab closable="false" text="Research">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Label fx:id="grossDonutCount" layoutX="854.0" layoutY="564.0" text="0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="8.0">
+         <graphic>
+            <Label text="Gross Donuts:" />
+         </graphic></Label>
+   </children>
+</AnchorPane>

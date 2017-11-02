@@ -1,0 +1,74 @@
+package main.model;
+
+import javafx.beans.property.*;
+import javafx.collections.ObservableList;
+
+import java.text.NumberFormat;
+
+import static javafx.collections.FXCollections.observableArrayList;
+
+/**
+ * @author Anthony Morrell
+ * @since 10/29/2017
+ */
+public final class Game {
+
+    public static final Game game = new Game();
+
+    private ListProperty<Location> locations;
+    private ObjectProperty<Location> currentLocation;
+    private LongProperty grossDonuts;
+
+    private Game() {
+        this.locations = new SimpleListProperty<>(observableArrayList(
+                new Location("Tony's Bakery", 8)
+        ));
+        this.currentLocation = new SimpleObjectProperty<>(locations.get(0));
+        this.grossDonuts = new SimpleLongProperty(0);
+        this.currentLocation.get().getRegisters().addAppliance(CashRegister.INITIAL);
+        this.currentLocation.get().getRegisters().assignToPlayer(CashRegister.INITIAL);
+        this.currentLocation.get().getFryers().addAppliance(Fryer.INITIAL);
+        this.currentLocation.get().getFryers().assignToPlayer(Fryer.INITIAL);
+    }
+
+    public void addDonuts(int amount) {
+        grossDonuts.set(grossDonuts.get() + amount);
+    }
+
+    public ObservableList<Location> getLocations() {
+        return locations.get();
+    }
+
+    public ListProperty<Location> locationsProperty() {
+        return locations;
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation.get();
+    }
+
+    public ObjectProperty<Location> currentLocationProperty() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation.set(currentLocation);
+    }
+
+    public long getGrossDonuts() {
+        return grossDonuts.get();
+    }
+
+    public LongProperty grossDonutsProperty() {
+        return grossDonuts;
+    }
+
+    public static Location location() {
+        return game.currentLocation.get();
+    }
+
+    public static String formatMoney(double amount) {
+        return NumberFormat.getCurrencyInstance().format(amount);
+    }
+
+}
