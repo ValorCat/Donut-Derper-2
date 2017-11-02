@@ -33,7 +33,7 @@ public class Fryer extends Appliance {
     }
 
     public void operate() {
-        Game.location().updateDonuts(getOutput());
+        location.updateDonuts(getOutput());
     }
 
     public void assignPlayer() {
