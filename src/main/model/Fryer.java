@@ -7,10 +7,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
 
 /**
  * @author Anthony Morrell
@@ -36,33 +32,16 @@ public class Fryer extends Appliance {
                 outputType, outputAmount);
     }
 
-    public void initialize(TitledPane pane) {
-        ObservableList<Node> header = ((Pane) pane.getGraphic()).getChildren();
-        ObservableList<Node> data = ((Pane) pane.getContent()).getChildren();
-
-        Label operatorName = (Label) (header.get(0));
-        ProgressBar cookTimer = (ProgressBar) ((Labeled) (header.get(0))).getGraphic();
-        Label donutOutput = (Label) (header.get(1));
-        Button sellButton = (Button) data.get(3);
-
-        // suppress the (unavoidable?) warning on the cast from Node -> ChoiceBox<Employee>
-        @SuppressWarnings("unchecked") ChoiceBox<Employee> operator
-                = (ChoiceBox<Employee>) ((Labeled) data.get(0)).getGraphic();
-        @SuppressWarnings("unchecked") ChoiceBox<DonutTypeDescription> outputType
-                = (ChoiceBox<DonutTypeDescription>) ((Labeled) data.get(1)).getGraphic();
-
-        operatorName.textProperty().bind(getOperatorBinding());
-        cookTimer.progressProperty().bind(progressProperty());
-        donutOutput.textProperty().bind(getOutputBinding());
-        operator.itemsProperty().bind(getPossibleOperatorsBinding());
-        operator.valueProperty().bindBidirectional(operatorProperty());
-        outputType.itemsProperty().bind(DonutType.DONUT_TYPES);
-        outputType.valueProperty().bindBidirectional(outputTypeProperty());
-        sellButton.textProperty().bind(getSellTextBinding());
-    }
-
     public void operate() {
         Game.location().updateDonuts(getOutput());
+    }
+
+    public void assignPlayer() {
+        location.getFryers().assignToPlayer(this);
+    }
+
+    public void unassignPlayer() {
+        location.getFryers().unassignPlayer();
     }
 
     public DonutTypeDescription getOutputType() {

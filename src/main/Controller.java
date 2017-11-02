@@ -1,10 +1,7 @@
 package main;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -71,14 +68,12 @@ public class Controller implements Initializable {
 
         bindAppliances(registerList, Game.location().getRegisters());
         bindAppliances(fryerList, Game.location().getFryers());
-
-        //Game.location().getFryers().addAppliance(new Fryer(10, 0));
     }
 
     private <A extends Appliance> void bindAppliances(Accordion uiNode, ApplianceGroup<A> appliances) {
         uiNode.getPanes().clear();
-        uiNode.getPanes().addAll(appliances.getTitledPanes());
-        appliances.titledPanesProperty().addListener(getApplianceListener());
+        uiNode.getPanes().addAll(appliances.getPanes());
+        appliances.panesProperty().addListener(getApplianceListener());
     }
 
     private ListChangeListener<TitledPane> getApplianceListener() {
@@ -105,7 +100,7 @@ public class Controller implements Initializable {
     }
 
     public void onManualCook(ActionEvent event) {
-        Game.location().getFryers().getPlayerAppliance().ifPresent(Fryer::operate);
+        Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::operate);
     }
 
     public void onAddFlavor(ActionEvent event) {

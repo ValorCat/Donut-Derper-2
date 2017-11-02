@@ -5,6 +5,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Optional;
+
 /**
  * @author Anthony Morrell
  * @since 10/29/2017
@@ -16,6 +18,7 @@ public class Employee {
 
     private StringProperty name;
     private ObjectProperty<Job> job;
+    private Appliance station;
 
     public Employee(String name, Job job) {
         this.name = new SimpleStringProperty(name);
@@ -49,6 +52,14 @@ public class Employee {
 
     public void setJob(Job job) {
         this.job.set(job);
+    }
+
+    public Optional<Appliance> getStation() {
+        return Optional.ofNullable(this.station);
+    }
+
+    public void assign(Appliance newStation) {
+        this.station = newStation;
     }
 
     public String toString() {

@@ -3,7 +3,7 @@ package main.model;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
-import static javafx.collections.FXCollections.*;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * @author Anthony Morrell
@@ -31,8 +31,8 @@ public class Location {
         this.name = new SimpleStringProperty(name);
         this.customers = new SimpleIntegerProperty(0);
         this.maxCapacity = new SimpleIntegerProperty(maxCapacity);
-        this.registers = new ApplianceGroup<>("register.fxml", this);
-        this.fryers = new ApplianceGroup<>("fryer.fxml", this);
+        this.registers = new ApplianceGroup<>(this);
+        this.fryers = new ApplianceGroup<>(this);
 
         this.donutStock = new SimpleIntegerProperty(0);
         this.ingredients = new Inventory<>(
@@ -53,7 +53,7 @@ public class Location {
     }
 
     public void leaveCustomer() {
-        assert this.customers.get() > 0;
+        assert customers.get() > 0;
         customers.set(customers.get() - 1);
     }
 

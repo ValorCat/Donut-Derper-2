@@ -3,11 +3,13 @@ package main.model;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TitledPane;
 
-import static javafx.collections.FXCollections.*;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * @author Anthony Morrell
@@ -17,19 +19,25 @@ public abstract class Appliance {
 
     private static final String SELL_FORMAT = "Sell - %s";
 
-    private Location location;
     private ObjectProperty<Employee> operator;
     private DoubleProperty progress;
     private DoubleProperty sellValue;
+    protected Location location;
 
     public Appliance(double sellValue) {
-        this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED);
+        this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED) {
+            public void set(Employee newValue) {
+                setOperatorImpl(operator.get(), newValue);
+                super.set(newValue);
+            }
+        };
         this.progress = new SimpleDoubleProperty(0);
         this.sellValue = new SimpleDoubleProperty(sellValue);
     }
 
-    public abstract void initialize(TitledPane pane);
     public abstract void operate();
+    protected abstract void assignPlayer();
+    protected abstract void unassignPlayer();
 
     public StringBinding getOperatorBinding() {
         return Bindings.createStringBinding(() -> operator.get().getName(), operator);
@@ -87,6 +95,23 @@ public abstract class Appliance {
 
     public void setSellValue(double sellValue) {
         this.sellValue.set(sellValue);
+    }
+
+    private void unassign() {
+        operator.set(Employee.UNASSIGNED);
+    }
+
+    private void setOperatorImpl(Employee oldOperator, Employee newOperator) {
+        if (oldOperator == Employee.PLAYER) {
+            unassignPlayer();
+        }
+        if (newOperator != Employee.UNASSIGNED) {
+            newOperator.getStation().ifPresent(Appliance::unassign);
+            newOperator.assign(this);
+        }
+        if (newOperator == Employee.PLAYER) {
+            assignPlayer();
+        }
     }
 
 }

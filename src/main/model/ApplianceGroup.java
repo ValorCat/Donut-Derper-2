@@ -5,10 +5,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TitledPane;
+import main.TitledPaneFactory;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static javafx.collections.FXCollections.*;
@@ -19,61 +18,51 @@ import static javafx.collections.FXCollections.*;
  */
 public class ApplianceGroup<A extends Appliance> {
 
-    private TitledPane model;
     private Location location;
-    private ListProperty<A> appliances;
-    private ListProperty<TitledPane> titledPanes;
-    private ObjectProperty<A> playerAppliance;
+    private ListProperty<A> list;
+    private ListProperty<TitledPane> panes;
+    private ObjectProperty<A> playerOperated;
 
-    public ApplianceGroup(String source, Location location) {
-        this.model = loadFXML(source);
+    public ApplianceGroup(Location location) {
         this.location = location;
-        this.appliances = new SimpleListProperty<>(observableArrayList());
-        this.titledPanes = new SimpleListProperty<>(observableArrayList());
-        this.playerAppliance = new SimpleObjectProperty<>(null);
+        this.list = new SimpleListProperty<>(observableArrayList());
+        this.panes = new SimpleListProperty<>(observableArrayList());
+        this.playerOperated = new SimpleObjectProperty<>(null);
     }
 
-    private static TitledPane loadFXML(String fileName) {
-        try {
-            return FXMLLoader.load(ApplianceGroup.class.getResource(fileName));
-        } catch (IOException e) {
-            throw new IllegalArgumentException("no FXML file " + fileName);
-        }
-    }
-
-    public Optional<A> getPlayerAppliance() {
-        return Optional.ofNullable(playerAppliance.get());
+    public Optional<A> getPlayerOperated() {
+        return Optional.ofNullable(playerOperated.get());
     }
 
     public void assignToPlayer(A app) {
-        assert appliances.contains(app);
-        playerAppliance.set(app);
-        app.setOperator(Employee.PLAYER);
+        assert list.contains(app);
+        playerOperated.set(app);
     }
 
-    public void addAppliance(A newApp) {
+    public void unassignPlayer() {
+        playerOperated.set(null);
+    }
+
+    public void add(A newApp) {
         newApp.setLocation(location);
-        appliances.add(newApp);
-        TitledPane newPane = new TitledPane(model.getText(), model.getContent());
-        newPane.setGraphic(model.getGraphic());
-        newApp.initialize(newPane);
-        titledPanes.add(newPane);
+        list.add(newApp);
+        panes.add(TitledPaneFactory.buildAppliancePane(newApp));
     }
 
-    public ObservableList getAppliances() {
-        return appliances.get();
+    public ObservableList getList() {
+        return list.get();
     }
 
-    public ListProperty<A> appliancesProperty() {
-        return appliances;
+    public ListProperty<A> listProperty() {
+        return list;
     }
 
-    public ObservableList<TitledPane> getTitledPanes() {
-        return titledPanes.get();
+    public ObservableList<TitledPane> getPanes() {
+        return panes.get();
     }
 
-    public ListProperty<TitledPane> titledPanesProperty() {
-        return titledPanes;
+    public ListProperty<TitledPane> panesProperty() {
+        return panes;
     }
 
 }

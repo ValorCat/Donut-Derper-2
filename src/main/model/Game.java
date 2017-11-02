@@ -25,10 +25,16 @@ public final class Game {
         ));
         this.currentLocation = new SimpleObjectProperty<>(locations.get(0));
         this.grossDonuts = new SimpleLongProperty(0);
-        this.currentLocation.get().getRegisters().addAppliance(CashRegister.INITIAL);
-        this.currentLocation.get().getRegisters().assignToPlayer(CashRegister.INITIAL);
-        this.currentLocation.get().getFryers().addAppliance(Fryer.INITIAL);
-        this.currentLocation.get().getFryers().assignToPlayer(Fryer.INITIAL);
+
+        currentLocation.get().getRegisters().add(CashRegister.INITIAL);
+        currentLocation.get().getRegisters().assignToPlayer(CashRegister.INITIAL);
+        currentLocation.get().getFryers().add(Fryer.INITIAL);
+        currentLocation.get().getFryers().assignToPlayer(Fryer.INITIAL);
+        CashRegister.INITIAL.setOperator(Employee.PLAYER);
+        Fryer.INITIAL.setOperator(Employee.PLAYER);
+
+        // temp
+        currentLocation.get().getFryers().add(new Fryer(5, 45));
     }
 
     public void addDonuts(int amount) {

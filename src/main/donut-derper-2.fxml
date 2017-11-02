@@ -3,7 +3,6 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -76,14 +75,14 @@
                                                 </Accordion>
                                              </content>
                                           </TitledPane>
-                                          <Label alignment="BOTTOM_LEFT" text="customers in store" GridPane.valignment="TOP">
+                                          <Label text="customers in store" GridPane.valignment="TOP">
                                              <font>
-                                                <Font size="11.0" />
+                                                <Font size="12.0" />
                                              </font>
                                              <graphic>
-                                                <Label fx:id="customerCount" text="0 / 0">
+                                                <Label fx:id="customerCount" graphicTextGap="10.0" text="0 / 0">
                                                    <font>
-                                                      <Font size="14.0" />
+                                                      <Font size="15.0" />
                                                    </font>
                                                    <graphic>
                                                       <Button fx:id="manualSellButton" mnemonicParsing="false" onAction="#onManualCheckOut" text="Check Out">
@@ -147,12 +146,12 @@
                                                 </Accordion>
                                              </content>
                                           </TitledPane>
-                                          <Label alignment="BOTTOM_LEFT" text="donuts in stock" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                                          <Label text="donuts in stock" GridPane.columnIndex="1" GridPane.valignment="TOP">
                                              <font>
-                                                <Font size="11.0" />
+                                                <Font size="12.0" />
                                              </font>
                                              <graphic>
-                                                <Label fx:id="donutCount" text="0">
+                                                <Label fx:id="donutCount" graphicTextGap="10.0" text="0">
                                                    <graphic>
                                                       <Button fx:id="manualFryButton" mnemonicParsing="false" onAction="#onManualCook" text="Make Batch">
                                                          <font>
@@ -161,7 +160,7 @@
                                                       </Button>
                                                    </graphic>
                                                    <font>
-                                                      <Font size="14.0" />
+                                                      <Font size="15.0" />
                                                    </font>
                                                 </Label>
                                              </graphic>
@@ -480,7 +479,7 @@
                         </TabPane>
                         <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="773.0" layoutY="5.0" text="Branch:" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0">
                            <graphic>
-                              <ChoiceBox fx:id="currentLocation" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="26.0" prefWidth="150.0">
+                              <ChoiceBox fx:id="currentLocation" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="26.0" prefWidth="200.0">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>

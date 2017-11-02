@@ -1,24 +1,11 @@
 package main;
 
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableIntegerValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import main.model.*;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -45,4 +32,5 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+
 }

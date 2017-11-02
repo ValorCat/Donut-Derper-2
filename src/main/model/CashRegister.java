@@ -2,7 +2,6 @@ package main.model;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.control.TitledPane;
 
 /**
  * @author Anthony Morrell
@@ -19,12 +18,14 @@ public class CashRegister extends Appliance {
         this.balance = new SimpleDoubleProperty(0);
     }
 
-    public void initialize(TitledPane pane) {
+    public void operate() { /* not yet implemented */ }
 
+    public void assignPlayer() {
+        location.getRegisters().assignToPlayer(this);
     }
 
-    public void operate() {
-
+    public void unassignPlayer() {
+        location.getRegisters().unassignPlayer();
     }
 
     public double collect() {
