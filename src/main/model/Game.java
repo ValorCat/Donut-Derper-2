@@ -29,10 +29,8 @@ public final class Game {
         this.grossDonuts = new SimpleLongProperty(0);
 
         currentLocation.get().getRegisters().add(CashRegister.INITIAL);
-        currentLocation.get().getRegisters().assignToPlayer(CashRegister.INITIAL);
         currentLocation.get().getFryers().add(Fryer.INITIAL);
         currentLocation.get().getFryers().assignToPlayer(Fryer.INITIAL);
-        CashRegister.INITIAL.setOperator(Employee.PLAYER);
         Fryer.INITIAL.setOperator(Employee.PLAYER);
 
         // temp

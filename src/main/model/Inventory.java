@@ -35,7 +35,6 @@ public class Inventory<
                 if (current.isEmpty()) {
                     iter.remove();
                 }
-                System.out.println();
                 return;
             }
         }

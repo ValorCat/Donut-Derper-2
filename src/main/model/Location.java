@@ -50,8 +50,12 @@ public class Location {
     }
 
     public void update() {
-        if (customerCanEnter() && Game.random.nextFloat() < 0.005f) {
+        if (customerCanEnter() && Game.random.nextFloat() < 0.003f) {
             enterCustomer();
+        }
+        float filled = (float) customers.get() / maxCapacity.get();
+        if (filled > .5f && Game.random.nextFloat() < (filled - .4f) / 200f) {
+            leaveCustomer();
         }
     }
 
@@ -60,7 +64,12 @@ public class Location {
                 && donutStock.get() >= MIN_DONUTS_FOR_BUSINESS;
     }
 
+    private boolean atCapacity() {
+        return customers.get() == maxCapacity.get();
+    }
+
     public void enterCustomer() {
+        assert customers.get() < maxCapacity.get();
         customers.set(customers.get() + 1);
     }
 
