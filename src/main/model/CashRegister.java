@@ -26,6 +26,8 @@ public class CashRegister extends Appliance {
             location.updateDonuts(random);
             addBalance(random.getData().getCost());
             location.leaveCustomer();
+            location.setLastCheckOut();
+            location.boostAppeal(location.getAppealBoostPerPerson());
         }
     }
 

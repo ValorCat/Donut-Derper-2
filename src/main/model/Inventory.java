@@ -3,6 +3,7 @@ package main.model;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
+import main.RNG;
 
 import java.util.*;
 
@@ -42,7 +43,7 @@ public class Inventory<
     }
 
     public Item getRandom() {
-        return stock.get(Game.random.nextInt(stock.size()));
+        return RNG.choose(stock);
     }
 
     public ObservableList<Item> getStock() {

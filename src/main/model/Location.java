@@ -1,7 +1,9 @@
 package main.model;
 
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import main.RNG;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -11,16 +13,27 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public class Location {
 
-    private static final int MIN_DONUTS_FOR_BUSINESS = 8;
     private StringProperty name;
+    private double appeal = 1;                       // modifies rate of customer entry
+    private int lowStockTolerance = 12;              // min donuts before customers will enter
+    private long slowServiceTolerance = (long) 5e9;  // min nanoseconds w/o service before customers walk out
+    private double baseEnterChance = 0.003;          // base chance of customer entry per tick
+    private double leaveChance = 0.006;              // base chance of customer walking out per tick
+    private double appealBoostPerPerson = .1;        // effect of one happy customer on appeal
+    private double maxAppealDropPerPerson = 0.02;    // max effect of one unhappy customer on appeal
+
     private IntegerProperty customers;
     private IntegerProperty maxCapacity;
-    private ApplianceGroup<CashRegister> registers;
-    private ApplianceGroup<Fryer> fryers;
+    private DoubleBinding occupancy;
+    private long lastCheckOut;
+    private long noCustomerTimeRemaining;
+    private boolean customersLeaving;
 
     private IntegerProperty donutStock;
-    private Inventory<Ingredient,Double> ingredients;
     private Inventory<DonutType,Integer> donuts;
+    private Inventory<Ingredient,Double> ingredients;
+    private ApplianceGroup<CashRegister> registers;
+    private ApplianceGroup<Fryer> fryers;
 
     private DoubleProperty totalBalance;
     private DoubleProperty totalWages;
@@ -30,51 +43,73 @@ public class Location {
 
     public Location(String name, int maxCapacity) {
         this.name = new SimpleStringProperty(name);
-        this.customers = new SimpleIntegerProperty(0);
+        this.customers = new SimpleIntegerProperty();
         this.maxCapacity = new SimpleIntegerProperty(maxCapacity);
-        this.registers = new ApplianceGroup<>(this);
-        this.fryers = new ApplianceGroup<>(this);
+        this.occupancy = customers.add(0.0).divide(this.maxCapacity);
 
-        this.donutStock = new SimpleIntegerProperty(0);
+        this.donutStock = new SimpleIntegerProperty();
+        this.donuts = new Inventory<>(
+                new DonutType("Plain", 0));
         this.ingredients = new Inventory<>(
                 new Ingredient("Flour", 2000),
                 new Ingredient("Sugar", 1000));
-        this.donuts = new Inventory<>(
-                new DonutType("Plain", 0));
+        this.registers = new ApplianceGroup<>(this);
+        this.fryers = new ApplianceGroup<>(this);
 
-        this.totalBalance = new SimpleDoubleProperty(0);
-        this.totalWages = new SimpleDoubleProperty(0);
+        this.totalBalance = new SimpleDoubleProperty();
+        this.totalWages = new SimpleDoubleProperty();
         this.accounts = new SimpleListProperty<>(observableArrayList());
-        this.wageSourceAccount = new SimpleObjectProperty<>(null);
+        this.wageSourceAccount = new SimpleObjectProperty<>();
         this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER));
     }
 
-    public void update() {
-        if (customerCanEnter() && Game.random.nextFloat() < 0.003f) {
-            enterCustomer();
+    public void update(long now, long last) {
+        boolean haveCustomers = customers.get() > 0;
+        boolean recentCheckout = (now - lastCheckOut) < slowServiceTolerance;
+        if (customersLeaving) {
+            if (!haveCustomers) {
+                customersLeaving = false;
+                noCustomerTimeRemaining = RNG.range((long) 3e9, (long) 8e9);
+            } else if (recentCheckout) {
+                customersLeaving = false;
+            } else {
+                RNG.chance(leaveChance, this::leaveCustomer);
+            }
+        } else if (haveCustomers && !recentCheckout) {
+            customersLeaving = true;
+        } else if (customerCanEnter()) {
+            double chance = baseEnterChance * appeal;
+            if (occupancy.get() > .5) {
+                chance /= 3;
+            }
+            RNG.chance(chance, this::enterCustomer);
         }
-        float filled = (float) customers.get() / maxCapacity.get();
-        if (filled > .5f && Game.random.nextFloat() < (filled - .4f) / 200f) {
-            leaveCustomer();
+        if (noCustomerTimeRemaining > 0) {
+            noCustomerTimeRemaining -= now - last;
         }
     }
 
     private boolean customerCanEnter() {
-        return customers.get() < maxCapacity.get()
-                && donutStock.get() >= MIN_DONUTS_FOR_BUSINESS;
-    }
-
-    private boolean atCapacity() {
-        return customers.get() == maxCapacity.get();
+        return noCustomerTimeRemaining <= 0
+                && occupancy.get() < 1
+                && donutStock.get() >= lowStockTolerance;
     }
 
     public void enterCustomer() {
         assert customers.get() < maxCapacity.get();
+        if (customers.get() == 0) {
+            // ensure customers don't immediately leave upon entering
+            // after a long break without anyone showing up
+            setLastCheckOut();
+        }
         customers.set(customers.get() + 1);
     }
 
     public void leaveCustomer() {
         assert customers.get() > 0;
+        if (customersLeaving) {
+            appeal -= RNG.range(maxAppealDropPerPerson);
+        }
         customers.set(customers.get() - 1);
     }
 
@@ -108,6 +143,10 @@ public class Location {
         this.name.set(name);
     }
 
+    public double getAppealBoostPerPerson() {
+        return appealBoostPerPerson;
+    }
+
     public int getCustomers() {
         return customers.get();
     }
@@ -126,6 +165,14 @@ public class Location {
 
     public void setMaxCapacity(int maxCapacity) {
         this.maxCapacity.set(maxCapacity);
+    }
+
+    public void setLastCheckOut() {
+        this.lastCheckOut = System.nanoTime();
+    }
+
+    public void boostAppeal(double amount) {
+        this.appeal += amount;
     }
 
     public ObservableList<Employee> getRoster() {

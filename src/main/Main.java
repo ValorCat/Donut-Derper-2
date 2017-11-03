@@ -32,10 +32,19 @@ public class Main extends Application {
             primaryStage.show();
 
             AnimationTimer loop = new AnimationTimer() {
+
+                private long lastTimeStamp = -1;
+
                 public void handle(long now) {
-                    tick();
+                    if (lastTimeStamp == -1) {
+                        lastTimeStamp = now;
+                    }
+                    tick(now, lastTimeStamp);
+                    lastTimeStamp = now;
                 }
+
             };
+
             loop.start();
         } catch (IOException e) {
             System.out.println("Couldn't find FXML data:");
@@ -43,9 +52,9 @@ public class Main extends Application {
         }
     }
 
-    private static void tick() {
+    private static void tick(long now, long last) {
         for (Location l : Game.game.getLocations()) {
-            l.update();
+            l.update(now, last);
         }
     }
 
