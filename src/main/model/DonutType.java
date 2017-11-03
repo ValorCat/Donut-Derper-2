@@ -19,6 +19,7 @@ public class DonutType extends Consumable<DonutTypeDescription, Integer> {
                     new Ingredient("Flour", 0.085),
                     new Ingredient("Sugar", 0.01))
     ));
+
     public static final DonutTypeDescription PLAIN = DONUT_TYPES.get(0);
 
     {

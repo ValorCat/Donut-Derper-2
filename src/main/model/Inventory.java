@@ -35,10 +35,15 @@ public class Inventory<
                 if (current.isEmpty()) {
                     iter.remove();
                 }
+                System.out.println();
                 return;
             }
         }
         stock.add(item);
+    }
+
+    public Item getRandom() {
+        return stock.get(Game.random.nextInt(stock.size()));
     }
 
     public ObservableList<Item> getStock() {

@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
 import java.text.NumberFormat;
+import java.util.Random;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -14,6 +15,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 public final class Game {
 
     public static final Game game = new Game();
+    public static final Random random = new Random();
 
     private ListProperty<Location> locations;
     private ObjectProperty<Location> currentLocation;

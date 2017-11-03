@@ -11,6 +11,7 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public class Location {
 
+    private static final int MIN_DONUTS_FOR_BUSINESS = 8;
     private StringProperty name;
     private IntegerProperty customers;
     private IntegerProperty maxCapacity;
@@ -48,6 +49,17 @@ public class Location {
         this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER));
     }
 
+    public void update() {
+        if (customerCanEnter() && Game.random.nextFloat() < 0.005f) {
+            enterCustomer();
+        }
+    }
+
+    private boolean customerCanEnter() {
+        return customers.get() < maxCapacity.get()
+                && donutStock.get() >= MIN_DONUTS_FOR_BUSINESS;
+    }
+
     public void enterCustomer() {
         customers.set(customers.get() + 1);
     }
@@ -59,7 +71,7 @@ public class Location {
 
     public void updateDonuts(DonutType newDonuts) {
         int addition = newDonuts.getAmount();
-        int newTotal = donutStock.intValue() + addition;
+        int newTotal = donutStock.get() + addition;
         this.donutStock.set(newTotal < 0 ? 0 : newTotal);
         this.donuts.update(newDonuts);
         if (addition > 0) {

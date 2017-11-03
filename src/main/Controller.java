@@ -57,8 +57,16 @@ public class Controller implements Initializable {
         currentLocation.setOnAction(this::onBranchChange);
         currentLocation.itemsProperty().bind(Game.game.locationsProperty());
         currentLocation.valueProperty().bind(Game.game.currentLocationProperty());
-
         grossDonutCount.textProperty().bind(Game.game.grossDonutsProperty().asString());
+
+        customerCount.textProperty().bind(Bindings.createStringBinding(
+                () -> String.format("%d / %d",
+                        Game.location().customersProperty().getValue(),
+                        Game.location().maxCapacityProperty().getValue()),
+                Game.game.currentLocationProperty(),
+                Game.location().customersProperty(),
+                Game.location().maxCapacityProperty()
+        ));
 
         donutCount.textProperty().bind(Bindings.createStringBinding(
                 () -> Game.location().donutStockProperty().getValue().toString(),
@@ -96,7 +104,7 @@ public class Controller implements Initializable {
     }
 
     public void onManualCheckOut(ActionEvent event) {
-
+        Game.location().getRegisters().getPlayerOperated().ifPresent(CashRegister::operate);
     }
 
     public void onManualCook(ActionEvent event) {

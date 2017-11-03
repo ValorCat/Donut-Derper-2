@@ -1,10 +1,10 @@
 package main;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import main.model.*;
 
 import java.io.IOException;
@@ -80,12 +80,54 @@ public final class TitledPaneFactory {
     }
 
     private static TitledPane buildRegisterPane(CashRegister register) {
-        try {
-            return FXMLLoader.load(Main.class.getResource("model/register.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        // checkout timer
+        ProgressBar checkoutTimer = new ProgressBar();
+        checkoutTimer.progressProperty().bind(register.progressProperty());
+        checkoutTimer.setPrefWidth(150);
+
+        // operator name
+        Label cashierName = new Label("", checkoutTimer);
+        cashierName.textProperty().bind(register.getOperatorBinding());
+        cashierName.setGraphicTextGap(8);
+        cashierName.setContentDisplay(ContentDisplay.RIGHT);
+        setAnchors(cashierName, 0d, 0d, 0d, null);
+
+        // collect button
+        Button collectButton = new Button("Collect");
+        collectButton.setOnAction(a -> register.collect());
+        collectButton.setFont(Font.font(9));
+
+        // balance
+        Label balance = new Label("", collectButton);
+        balance.textProperty().bind(register.getBalanceBinding());
+        balance.setGraphicTextGap(8);
+        balance.setContentDisplay(ContentDisplay.RIGHT);
+        setAnchors(balance, 0d, 0d, null, -8d);
+
+        // operator selector
+        ChoiceBox<Employee> cashierSelect = new ChoiceBox<>();
+        cashierSelect.itemsProperty().bind(register.getPossibleOperatorsBinding());
+        cashierSelect.valueProperty().bindBidirectional(register.operatorProperty());
+        Label cashier = new Label("Cashier:", cashierSelect);
+        cashier.setGraphicTextGap(8);
+        cashier.setContentDisplay(ContentDisplay.RIGHT);
+
+        // description
+        Label description = new Label("Checks out one customer per second while operated by a cashier.");
+        description.setPrefWidth(420);
+        description.setWrapText(true);
+
+        // sell button
+        Button sellButton = new Button();
+        sellButton.textProperty().bind(register.getSellTextBinding());
+
+        AnchorPane header = new AnchorPane(cashierName, balance);
+        header.setPrefSize(407, 20);
+        VBox body = new VBox(7, cashier, description, sellButton);
+
+        TitledPane pane = new TitledPane("", body);
+        pane.setGraphic(header);
+        return pane;
     }
 
     private static void setAnchors(Node node, Double top, Double bottom, Double left, Double right) {
