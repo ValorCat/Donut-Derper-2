@@ -1,8 +1,10 @@
 package main;
 
+import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import main.model.*;
@@ -53,6 +55,14 @@ public final class TitledPaneFactory {
         cook.setGraphicTextGap(8);
         cook.setContentDisplay(ContentDisplay.RIGHT);
 
+        // assign self button
+        Button assignSelfButton = new Button("Assign Self");
+        assignSelfButton.setOnAction(e -> fryer.setOperator(Employee.PLAYER));
+        assignSelfButton.visibleProperty().bind(Bindings.createBooleanBinding(
+                () -> fryer.getOperator() == Employee.UNASSIGNED,
+                fryer.operatorProperty()
+        ));
+
         // donut type selector
         ChoiceBox<DonutTypeDescription> typeSelect = new ChoiceBox<>();
         typeSelect.itemsProperty().bind(DonutType.DONUT_TYPES);
@@ -72,7 +82,7 @@ public final class TitledPaneFactory {
 
         AnchorPane header = new AnchorPane(cookName, output);
         header.setPrefSize(407, 20);
-        VBox body = new VBox(7, cook, type, description, sellButton);
+        VBox body = new VBox(7, new HBox(10, cook, assignSelfButton), type, description, sellButton);
 
         TitledPane pane = new TitledPane("", body);
         pane.setGraphic(header);
@@ -96,6 +106,9 @@ public final class TitledPaneFactory {
         Button collectButton = new Button("Collect");
         collectButton.setOnAction(a -> register.collect());
         collectButton.setFont(Font.font(9));
+        collectButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> register.getBalance() == 0, register.balanceProperty()
+        ));
 
         // balance
         Label balance = new Label("", collectButton);
@@ -112,6 +125,14 @@ public final class TitledPaneFactory {
         cashier.setGraphicTextGap(8);
         cashier.setContentDisplay(ContentDisplay.RIGHT);
 
+        // assign self button
+        Button assignSelfButton = new Button("Assign Self");
+        assignSelfButton.setOnAction(e -> register.setOperator(Employee.PLAYER));
+        assignSelfButton.visibleProperty().bind(Bindings.createBooleanBinding(
+                () -> register.getOperator() == Employee.UNASSIGNED,
+                register.operatorProperty()
+        ));
+
         // description
         Label description = new Label("Checks out one customer per second while operated by a cashier.");
         description.setPrefWidth(420);
@@ -123,7 +144,7 @@ public final class TitledPaneFactory {
 
         AnchorPane header = new AnchorPane(cashierName, balance);
         header.setPrefSize(407, 20);
-        VBox body = new VBox(7, cashier, description, sellButton);
+        VBox body = new VBox(7, new HBox(10, cashier, assignSelfButton), description, sellButton);
 
         TitledPane pane = new TitledPane("", body);
         pane.setGraphic(header);

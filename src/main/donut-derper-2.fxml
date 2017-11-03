@@ -85,7 +85,7 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                    <graphic>
-                                                      <Button fx:id="manualSellButton" mnemonicParsing="false" onAction="#onManualCheckOut" text="Check Out">
+                                                      <Button fx:id="manualSellButton" mnemonicParsing="false" onAction="#onManualCheckout" text="Check Out">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -153,7 +153,7 @@
                                              <graphic>
                                                 <Label fx:id="donutCount" graphicTextGap="10.0" text="0">
                                                    <graphic>
-                                                      <Button fx:id="manualFryButton" mnemonicParsing="false" onAction="#onManualCook" text="Make Batch">
+                                                      <Button fx:id="manualFryButton" mnemonicParsing="false" onAction="#onManualFry" text="Make Batch">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -210,7 +210,7 @@
                                                 <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
                                                    <children>
                                                       <Label fx:id="donutCountDetailed" text="0 donuts in stock (+0/sec)" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="-5.0" />
-                                                      <Accordion fx:id="flavorList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" GridPane.columnIndex="1">
+                                                      <Accordion fx:id="productList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" GridPane.columnIndex="1">
                                                          <panes>
                                                             <TitledPane expanded="false" text="0 plain donuts">
                                                                <content>
@@ -293,7 +293,7 @@
                                                 <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" spacing="15.0">
                                                    <children>
                                                       <Label text="Products" />
-                                                      <Button fx:id="addFlavorButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onAddFlavor" text="New Product">
+                                                      <Button fx:id="addProductButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCreateProduct" text="New Product">
                                                          <font>
                                                             <Font size="9.0" />
                                                          </font>

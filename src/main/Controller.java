@@ -33,8 +33,8 @@ public class Controller implements Initializable {
     // inventory
     @FXML public TableView<Ingredient> ingredientList;
     @FXML public Label donutCountDetailed;
-    @FXML public Accordion flavorList;
-    @FXML public Button addFlavorButton;
+    @FXML public Accordion productList;
+    @FXML public Button addProductButton;
 
     // finances
     @FXML public HBox paydayTracker;
@@ -54,10 +54,24 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentLocation.setOnAction(this::onBranchChange);
+        currentLocation.setOnAction(this::onLocationChange);
         currentLocation.itemsProperty().bind(Game.game.locationsProperty());
         currentLocation.valueProperty().bind(Game.game.currentLocationProperty());
         grossDonutCount.textProperty().bind(Game.game.grossDonutsProperty().asString());
+
+        manualSellButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> !Game.location().getRegisters().playerHasAppliance()
+                    || Game.location().getCustomers() == 0,
+                Game.game.currentLocationProperty(),
+                Game.location().getRegisters().playerHasApplianceProperty(),
+                Game.location().customersProperty()
+        ));
+
+        manualFryButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> !Game.location().getFryers().playerHasAppliance(),
+                Game.game.currentLocationProperty(),
+                Game.location().getFryers().playerHasApplianceProperty()
+        ));
 
         customerCount.textProperty().bind(Bindings.createStringBinding(
                 () -> String.format("%d / %d",
@@ -81,10 +95,10 @@ public class Controller implements Initializable {
     private <A extends Appliance> void bindAppliances(Accordion uiNode, ApplianceGroup<A> appliances) {
         uiNode.getPanes().clear();
         uiNode.getPanes().addAll(appliances.getPanes());
-        appliances.panesProperty().addListener(getApplianceListener());
+        appliances.panesProperty().addListener(getApplianceListener(uiNode));
     }
 
-    private ListChangeListener<TitledPane> getApplianceListener() {
+    private ListChangeListener<TitledPane> getApplianceListener(Accordion uiNode) {
         return change -> {
             while (change.next()) {
                 if (change.wasPermutated()) {
@@ -92,26 +106,26 @@ public class Controller implements Initializable {
                 } else if (change.wasUpdated()) {
                     throw new RuntimeException("TitledPane was modified in ApplianceGroup list: " + change.getList().get(change.getFrom()));
                 } else {
-                    fryerList.getPanes().removeAll(change.getRemoved());
-                    fryerList.getPanes().addAll(change.getAddedSubList());
+                    uiNode.getPanes().removeAll(change.getRemoved());
+                    uiNode.getPanes().addAll(change.getAddedSubList());
                 }
             }
         };
     }
 
-    public void onBranchChange(ActionEvent event) {
+    public void onLocationChange(ActionEvent event) {
 
     }
 
-    public void onManualCheckOut(ActionEvent event) {
+    public void onManualCheckout(ActionEvent event) {
         Game.location().getRegisters().getPlayerOperated().ifPresent(CashRegister::operate);
     }
 
-    public void onManualCook(ActionEvent event) {
+    public void onManualFry(ActionEvent event) {
         Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::operate);
     }
 
-    public void onAddFlavor(ActionEvent event) {
+    public void onCreateProduct(ActionEvent event) {
 
     }
 

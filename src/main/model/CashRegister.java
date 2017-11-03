@@ -51,6 +51,10 @@ public class CashRegister extends Appliance {
         return balance.get();
     }
 
+    public DoubleProperty balanceProperty() {
+        return balance;
+    }
+
     private void addBalance(double amount) {
         balance.set(balance.get() + amount);
     }
