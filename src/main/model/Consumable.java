@@ -29,7 +29,7 @@ public abstract class Consumable<Data, Unit extends Number & Comparable<Unit>> {
     public abstract void update(Unit modifier);
 
     public boolean isEmpty() {
-        return amount.get().compareTo(minimum) >= 0;
+        return amount.get().compareTo(minimum) < 0;
     }
 
     public Data getData() {
