@@ -151,6 +151,33 @@ public final class TitledPaneFactory {
         return pane;
     }
 
+    public static TitledPane buildAccountPane(Account account) {
+        Label header = new Label();
+        header.textProperty().bind(Bindings.format(
+                "%s  |  %s", account.nameProperty(), Bindings.createStringBinding(
+                        () -> Game.formatMoney(account.getBalance()),
+                        account.balanceProperty()
+                )
+        ));
+
+        Label interest = new Label();
+        interest.textProperty().bind(Bindings.format(
+                "Interest: %.2f%% (%s)",
+                account.interestRateProperty().multiply(100),
+                Bindings.createStringBinding(
+                        () -> Game.formatMoney(account.getBalance() * account.getInterestRate()),
+                        account.balanceProperty(),
+                        account.interestRateProperty()
+                )
+        ));
+
+        VBox body = new VBox(7, interest);
+
+        TitledPane pane = new TitledPane("", body);
+        pane.setGraphic(header);
+        return pane;
+    }
+
     private static void setAnchors(Node node, Double top, Double bottom, Double left, Double right) {
         if (top != null)
             AnchorPane.setTopAnchor(node, top);

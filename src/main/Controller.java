@@ -40,6 +40,7 @@ public class Controller implements Initializable {
     @FXML public HBox paydayTracker;
     @FXML public ChoiceBox<Account> salarySource;
     @FXML public Label totalBalance;
+    @FXML public ChoiceBox<Account> depositAccount;
     @FXML public Accordion accountList;
     @FXML public Button hireEmployeeButton;
     @FXML public Button dismissEmployeeButton;
@@ -54,6 +55,8 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Game.controller = this;
+
         currentLocation.setOnAction(this::onLocationChange);
         currentLocation.itemsProperty().bind(Game.game.locationsProperty());
         currentLocation.valueProperty().bind(Game.game.currentLocationProperty());
@@ -90,6 +93,30 @@ public class Controller implements Initializable {
 
         bindAppliances(registerList, Game.location().getRegisters());
         bindAppliances(fryerList, Game.location().getFryers());
+
+        totalBalance.textProperty().bind(Bindings.createStringBinding(
+                () -> Game.formatMoney(Game.location().getTotalBalance()),
+                Game.game.currentLocationProperty(),
+                Game.location().totalBalanceProperty()
+        ));
+
+        accountList.getPanes().clear();
+        accountList.getPanes().addAll(Game.location().getAccountPanes());
+        Game.location().getAccountPanes().addListener((ListChangeListener<? super TitledPane>) change -> {
+            while (change.next()) {
+                if (change.wasPermutated()) {
+                    throw new RuntimeException("Account list permutation was unhandled: " + change);
+                } else if (change.wasUpdated()) {
+                    throw new RuntimeException("TitledPane was modified in Account list: " + change.getList().get(change.getFrom()));
+                } else {
+                    accountList.getPanes().removeAll(change.getRemoved());
+                    accountList.getPanes().addAll(change.getAddedSubList());
+                }
+            }
+        });
+
+        depositAccount.itemsProperty().bind(Game.location().accountsProperty());
+        depositAccount.valueProperty().bindBidirectional(Game.location().depositAccountProperty());
     }
 
     private <A extends Appliance> void bindAppliances(Accordion uiNode, ApplianceGroup<A> appliances) {

@@ -8,17 +8,19 @@ import javafx.beans.property.*;
  */
 public class Account {
 
-    public static final byte INTEREST_INTERVAL = 120;
-    public static final byte PAY_PERIOD_LENGTH = 60;
+    public static final long INTEREST_INTERVAL = (long) 10e9;             // nano seconds between interest deposits
+    public static long untilInterestDeposit = INTEREST_INTERVAL;
 
     private StringProperty name;
     private DoubleProperty balance;
-    private FloatProperty interestRate;
+    private DoubleProperty interestRate;
+    private Location location;
 
-    public Account(String name, float interestRate) {
+    public Account(String name, double interestRate, Location location) {
         this.name = new SimpleStringProperty(name);
         this.balance = new SimpleDoubleProperty(0.0);
-        this.interestRate = new SimpleFloatProperty(interestRate);
+        this.interestRate = new SimpleDoubleProperty(interestRate);
+        this.location = location;
     }
 
     public void deposit(double amount) {
@@ -49,19 +51,20 @@ public class Account {
         return balance;
     }
 
-    public void setBalance(double balance) {
-        this.balance.set(balance);
+    public void addBalance(double amount) {
+        balance.set(balance.get() + amount);
+        location.updateTotalBalance(amount);
     }
 
-    public float getInterestRate() {
+    public double getInterestRate() {
         return interestRate.get();
     }
 
-    public FloatProperty interestRateProperty() {
+    public DoubleProperty interestRateProperty() {
         return interestRate;
     }
 
-    public void setInterestRate(float interestRate) {
+    public void setInterestRate(double interestRate) {
         this.interestRate.set(interestRate);
     }
 

@@ -44,9 +44,8 @@ public class CashRegister extends Appliance {
     }
 
     public void collect() {
-        double collected = balance.get();
+        location.getDepositAccount().addBalance(balance.get());
         balance.set(0);
-        // do something with collected
     }
 
     public double getBalance() {

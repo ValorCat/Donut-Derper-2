@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
@@ -360,7 +361,7 @@
                                           </TitledPane>
                                           <VBox spacing="10.0">
                                              <children>
-                                                <TitledPane collapsible="false" text="Payment" GridPane.valignment="TOP">
+                                                <TitledPane collapsible="false" text="Employee Income" GridPane.valignment="TOP">
                                                    <content>
                                                       <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
                                                          <children>
@@ -386,29 +387,51 @@
                                                 </TitledPane>
                                                 <TitledPane collapsible="false">
                                                    <content>
-                                                      <Accordion fx:id="accountList">
-                                                         <padding>
-                                                            <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
-                                                         </padding>
-                                                         <panes>
-                                                            <TitledPane expanded="false" text="Checking | $0.00">
-                                                               <content>
-                                                                  <VBox spacing="5.0">
-                                                                     <children>
-                                                                        <Label text="Last minute: +$0.00" />
-                                                                        <Label text="Interest: 0.0% ($0.00)" />
-                                                                        <HBox spacing="15.0">
+                                                      <VBox spacing="10.0">
+                                                         <children>
+                                                            <Label contentDisplay="RIGHT" graphicTextGap="8.0" text="Deposit Account:">
+                                                               <graphic>
+                                                                  <ChoiceBox fx:id="depositAccount" prefWidth="150.0" />
+                                                               </graphic>
+                                                            </Label>
+                                                            <Accordion fx:id="accountList">
+                                                               <panes>
+                                                                  <TitledPane expanded="false" text="Checking | $0.00">
+                                                                     <content>
+                                                                        <VBox spacing="5.0">
                                                                            <children>
-                                                                              <Button mnemonicParsing="false" text="Transfer" />
-                                                                              <Button mnemonicParsing="false" text="Rename" />
+                                                                              <Label text="Last minute: +$0.00" />
+                                                                              <Label text="Interest: 0.0% ($0.00)" />
+                                                                              <HBox spacing="15.0">
+                                                                                 <children>
+                                                                                    <Button mnemonicParsing="false" text="Transfer" />
+                                                                                    <Button mnemonicParsing="false" text="Rename" />
+                                                                                 </children>
+                                                                              </HBox>
                                                                            </children>
-                                                                        </HBox>
-                                                                     </children>
-                                                                  </VBox>
-                                                               </content>
-                                                            </TitledPane>
-                                                         </panes>
-                                                      </Accordion>
+                                                                        </VBox>
+                                                                     </content>
+                                                                  </TitledPane>
+                                                                  <TitledPane expanded="false" text="Checking | $0.00">
+                                                                     <content>
+                                                                        <VBox spacing="5.0">
+                                                                           <children>
+                                                                              <Label text="Last minute: +$0.00" />
+                                                                              <Label text="Interest: 0.0% ($0.00)" />
+                                                                              <HBox spacing="15.0">
+                                                                                 <children>
+                                                                                    <Button mnemonicParsing="false" text="Transfer" />
+                                                                                    <Button mnemonicParsing="false" text="Rename" />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </content>
+                                                                  </TitledPane>
+                                                               </panes>
+                                                            </Accordion>
+                                                         </children>
+                                                      </VBox>
                                                    </content>
                                                    <graphic>
                                                       <AnchorPane prefWidth="452.0">

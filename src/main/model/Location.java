@@ -3,7 +3,9 @@ package main.model;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TitledPane;
 import main.RNG;
+import main.TitledPaneFactory;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -19,7 +21,7 @@ public class Location {
     private long slowServiceTolerance = (long) 5e9;  // min nanoseconds w/o service before customers walk out
     private double baseEnterChance = 0.003;          // base chance of customer entry per tick
     private double leaveChance = 0.006;              // base chance of customer walking out per tick
-    private double appealBoostPerPerson = .1;        // effect of one happy customer on appeal
+    private double appealBoostPerPerson = .05;       // effect of one happy customer on appeal
     private double maxAppealDropPerPerson = 0.02;    // max effect of one unhappy customer on appeal
 
     private IntegerProperty customers;
@@ -37,9 +39,11 @@ public class Location {
 
     private DoubleProperty totalBalance;
     private DoubleProperty totalWages;
-    private ListProperty<Account> accounts;
+    private ObjectProperty<Account> depositAccount;
     private ObjectProperty<Account> wageSourceAccount;
+    private ListProperty<Account> accounts;
     private ListProperty<Employee> roster;
+    private ObservableList<TitledPane> accountPanes;
 
     public Location(String name, int maxCapacity) {
         this.name = new SimpleStringProperty(name);
@@ -59,7 +63,10 @@ public class Location {
         this.totalBalance = new SimpleDoubleProperty();
         this.totalWages = new SimpleDoubleProperty();
         this.accounts = new SimpleListProperty<>(observableArrayList());
-        this.wageSourceAccount = new SimpleObjectProperty<>();
+        this.accountPanes = observableArrayList();
+        addAccount(new Account("Checking", .007, this));
+        this.depositAccount = new SimpleObjectProperty<>(accounts.get(0));
+        this.wageSourceAccount = new SimpleObjectProperty<>(accounts.get(0));
         this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER));
     }
 
@@ -87,6 +94,15 @@ public class Location {
         if (noCustomerTimeRemaining > 0) {
             noCustomerTimeRemaining -= now - last;
         }
+        Account.untilInterestDeposit -= now - last;
+        if (Account.untilInterestDeposit <= 0) {
+            depositInterest();
+            Account.untilInterestDeposit = Account.INTEREST_INTERVAL;
+        }
+    }
+
+    private void depositInterest() {
+        accounts.forEach(Account::addInterest);
     }
 
     private boolean customerCanEnter() {
@@ -239,12 +255,25 @@ public class Location {
         return wageSourceAccount;
     }
 
-    public void setWageSourceAccount(Account wageSourceAccount) {
-        this.wageSourceAccount.set(wageSourceAccount);
+    public Account getDepositAccount() {
+        return depositAccount.get();
+    }
+
+    public ObjectProperty<Account> depositAccountProperty() {
+        return depositAccount;
+    }
+
+    public ObservableList<TitledPane> getAccountPanes() {
+        return accountPanes;
     }
 
     public String toString() {
         return name.get();
+    }
+
+    private void addAccount(Account acc) {
+        accounts.add(acc);
+        accountPanes.add(TitledPaneFactory.buildAccountPane(acc));
     }
 
 }

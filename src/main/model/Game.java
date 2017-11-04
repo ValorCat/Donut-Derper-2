@@ -2,6 +2,7 @@ package main.model;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import main.Controller;
 
 import java.text.NumberFormat;
 
@@ -14,6 +15,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 public final class Game {
 
     public static final Game game = new Game();
+    public static Controller controller;
 
     private ListProperty<Location> locations;
     private ObjectProperty<Location> currentLocation;
@@ -30,9 +32,6 @@ public final class Game {
         currentLocation.get().getFryers().add(Fryer.INITIAL);
         currentLocation.get().getFryers().assignToPlayer(Fryer.INITIAL);
         Fryer.INITIAL.setOperator(Employee.PLAYER);
-
-        // temp
-        currentLocation.get().getFryers().add(new Fryer(5, 45));
     }
 
     public void addDonuts(int amount) {
