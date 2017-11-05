@@ -157,6 +157,10 @@ public final class UILinker {
         return l.donutStockProperty().asString();
     }
 
+    public static BooleanBinding getTimerVisible(Appliance a) {
+        return a.operatorProperty().isNotEqualTo(Employee.UNASSIGNED);
+    }
+
     public static StringBinding getTotalBalance(Location l) {
         return wrap(l.totalBalanceProperty(), UILinker::asMoney);
     }

@@ -1,5 +1,6 @@
 package main;
 
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -20,6 +21,7 @@ public final class TitledPaneFactory {
     private static final int HEADER_WIDTH = 407;
     private static final int HEADER_HEIGHT = 20;
     private static final int TIMER_WIDTH = 150;
+    private static final int TIMER_HEIGHT = 12;
     private static final int TEXT_GAP = 8;
     private static final int BODY_SPACING = 7;
     private static final String ASSIGN_SELF = "Assign Self";
@@ -29,9 +31,15 @@ public final class TitledPaneFactory {
     private TitledPaneFactory() {}
 
     public static TitledPane buildAppliancePane(Appliance app) {
+        TitledPane pane = new TitledPane();
+
         ProgressBar timer = new ProgressBar();
         timer.setPrefWidth(TIMER_WIDTH);
+        timer.setMinHeight(TIMER_HEIGHT);
+        timer.setMaxHeight(TIMER_HEIGHT);
+        timer.setMouseTransparent(true);
         link(timer.progressProperty(), getProgress(app));
+        link(timer.visibleProperty(), getTimerVisible(app));
 
         Label operatorName = new Label("", timer);
         operatorName.setGraphicTextGap(TEXT_GAP);
@@ -40,6 +48,7 @@ public final class TitledPaneFactory {
         linkText(operatorName, getOperatorName(app));
 
         ChoiceBox<Employee> operatorSelect = new ChoiceBox<>();
+        operatorSelect.setCursor(Cursor.HAND);
         Label operator = new Label("", operatorSelect);
         operator.setGraphicTextGap(TEXT_GAP);
         operator.setContentDisplay(ContentDisplay.RIGHT);
@@ -48,6 +57,7 @@ public final class TitledPaneFactory {
 
         Button assignSelfButton = new Button(ASSIGN_SELF);
         assignSelfButton.setOnAction(e -> app.setOperator(Employee.PLAYER));
+        assignSelfButton.setCursor(Cursor.HAND);
         link(assignSelfButton.visibleProperty(), getAssignSelfVisible(app));
 
         Label description = new Label();
@@ -55,12 +65,13 @@ public final class TitledPaneFactory {
         description.setWrapText(true);
 
         Button sellButton = new Button();
+        sellButton.setCursor(Cursor.HAND);
         link(sellButton.textProperty(), getSellButtonText(app));
 
         AnchorPane header = new AnchorPane(operatorName);
         header.setPrefSize(HEADER_WIDTH, HEADER_HEIGHT);
         VBox body = new VBox(BODY_SPACING, new HBox(TEXT_GAP, operator, assignSelfButton), description, sellButton);
-        TitledPane pane = new TitledPane("", body);
+        pane.setContent(body);
         pane.setGraphic(header);
 
         if (app instanceof Fryer) {
@@ -82,6 +93,7 @@ public final class TitledPaneFactory {
         header.getChildren().add(output);
 
         ChoiceBox<DonutTypeDescription> typeSelect = new ChoiceBox<>();
+        typeSelect.setCursor(Cursor.HAND);
         Label type = new Label("Output:", typeSelect);
         type.setGraphicTextGap(TEXT_GAP);
         type.setContentDisplay(ContentDisplay.RIGHT);
@@ -97,6 +109,7 @@ public final class TitledPaneFactory {
         Button collectButton = new Button("Collect");
         collectButton.setOnAction(a -> register.collect());
         collectButton.setFont(COLLECT_FONT);
+        collectButton.setCursor(Cursor.HAND);
         link(collectButton.disableProperty(), getCollectButtonDisable(register));
 
         Label balance = new Label("", collectButton);

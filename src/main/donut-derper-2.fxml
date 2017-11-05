@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
@@ -90,6 +89,9 @@
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
                                                       </Button>
                                                    </graphic>
                                                 </Label>
@@ -158,6 +160,9 @@
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
                                                       </Button>
                                                    </graphic>
                                                    <font>
@@ -298,6 +303,9 @@
                                                          <font>
                                                             <Font size="9.0" />
                                                          </font>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
                                                       </Button>
                                                    </children>
                                                 </HBox>
@@ -327,8 +335,14 @@
                                                    <children>
                                                       <HBox disable="true" spacing="15.0">
                                                          <children>
-                                                            <Button fx:id="dismissEmployeeButton" mnemonicParsing="false" onAction="#onDismissSelectedEmployees" text="Dismiss" />
-                                                            <Button fx:id="promoteEmployeeButton" mnemonicParsing="false" onAction="#onPromoteSelectedEmployees" text="Promote" />
+                                                            <Button fx:id="dismissEmployeeButton" mnemonicParsing="false" onAction="#onDismissSelectedEmployees" text="Dismiss">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor></Button>
+                                                            <Button fx:id="promoteEmployeeButton" mnemonicParsing="false" onAction="#onPromoteSelectedEmployees" text="Promote">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor></Button>
                                                          </children>
                                                       </HBox>
                                                       <TableView fx:id="employeeList" prefHeight="200.0" prefWidth="200.0">
@@ -354,6 +368,9 @@
                                                          <font>
                                                             <Font size="9.0" />
                                                          </font>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
                                                       </Button>
                                                    </children>
                                                 </HBox>
@@ -378,7 +395,10 @@
                                                             </HBox>
                                                             <Label contentDisplay="RIGHT" graphicTextGap="10.0" text="Withdraw from">
                                                                <graphic>
-                                                                  <ChoiceBox fx:id="salarySource" prefWidth="200.0" />
+                                                                  <ChoiceBox fx:id="salarySource" prefWidth="200.0">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor></ChoiceBox>
                                                                </graphic>
                                                             </Label>
                                                          </children>
@@ -391,7 +411,10 @@
                                                          <children>
                                                             <Label contentDisplay="RIGHT" graphicTextGap="8.0" text="Deposit Account:">
                                                                <graphic>
-                                                                  <ChoiceBox fx:id="depositAccount" prefWidth="150.0" />
+                                                                  <ChoiceBox fx:id="depositAccount" prefWidth="150.0">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor></ChoiceBox>
                                                                </graphic>
                                                             </Label>
                                                             <Accordion fx:id="accountList">
@@ -464,17 +487,26 @@
                                                          <children>
                                                             <Label contentDisplay="RIGHT" graphicTextGap="10.0" text="Order:">
                                                                <graphic>
-                                                                  <ChoiceBox fx:id="orderItem" prefWidth="200.0" />
+                                                                  <ChoiceBox fx:id="orderItem" prefWidth="200.0">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor></ChoiceBox>
                                                                </graphic>
                                                             </Label>
-                                                            <Button fx:id="orderButton" mnemonicParsing="false" text="Order" />
+                                                            <Button fx:id="orderButton" mnemonicParsing="false" text="Order">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor></Button>
                                                          </children>
                                                       </HBox>
                                                       <Label contentDisplay="RIGHT" graphicTextGap="10.0" text="Amount:">
                                                          <graphic>
                                                             <Label fx:id="orderAmount" graphicTextGap="10.0" text="0 lb.">
                                                                <graphic>
-                                                                  <Slider blockIncrement="20.0" majorTickUnit="60.0" max="600.0" minorTickCount="20" prefWidth="170.0" snapToTicks="true" />
+                                                                  <Slider blockIncrement="20.0" majorTickUnit="60.0" max="600.0" minorTickCount="20" prefWidth="170.0" snapToTicks="true">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="H_RESIZE" />
+                                                                     </cursor></Slider>
                                                                </graphic>
                                                             </Label>
                                                          </graphic>
