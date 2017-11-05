@@ -1,7 +1,5 @@
 package main.model;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -29,10 +27,6 @@ public class CashRegister extends Appliance {
             location.setLastCheckOut();
             location.boostAppeal(location.getAppealBoostPerPerson());
         }
-    }
-
-    public StringBinding getBalanceBinding() {
-        return Bindings.createStringBinding(() -> Game.formatMoney(balance.get()), balance);
     }
 
     public void assignPlayer() {

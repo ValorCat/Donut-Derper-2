@@ -65,6 +65,7 @@ public class Location {
         this.accounts = new SimpleListProperty<>(observableArrayList());
         this.accountPanes = observableArrayList();
         addAccount(new Account("Checking", .007, this));
+        addAccount(new Account("Savings", .011, this));
         this.depositAccount = new SimpleObjectProperty<>(accounts.get(0));
         this.wageSourceAccount = new SimpleObjectProperty<>(accounts.get(0));
         this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER));
@@ -264,6 +265,7 @@ public class Location {
     }
 
     public ObservableList<TitledPane> getAccountPanes() {
+        // todo move out of Location
         return accountPanes;
     }
 

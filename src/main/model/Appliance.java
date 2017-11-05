@@ -1,23 +1,15 @@
 package main.model;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-
-import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * @author Anthony Morrell
  * @since 10/29/2017
  */
 public abstract class Appliance {
-
-    private static final String SELL_FORMAT = "Sell - %s";
 
     private ObjectProperty<Employee> operator;
     private DoubleProperty progress;
@@ -39,22 +31,8 @@ public abstract class Appliance {
     protected abstract void assignPlayer();
     protected abstract void unassignPlayer();
 
-    public StringBinding getOperatorBinding() {
-        return Bindings.createStringBinding(() -> operator.get().getName(), operator);
-    }
-
-    public StringBinding getSellTextBinding() {
-        return Bindings.createStringBinding(() ->
-                String.format(SELL_FORMAT, Game.formatMoney(sellValue.get())),
-        sellValue);
-    }
-
-    public ObjectBinding<ObservableList<Employee>> getPossibleOperatorsBinding() {
-        return Bindings.createObjectBinding(() -> {
-            ObservableList<Employee> options = observableArrayList(location.getRoster());
-            options.add(Employee.UNASSIGNED);
-            return options;
-        }, location.rosterProperty());
+    public Location getLocation() {
+        return location;
     }
 
     public void setLocation(Location location) {

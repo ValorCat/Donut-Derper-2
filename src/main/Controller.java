@@ -1,7 +1,5 @@
 package main;
 
-import javafx.beans.binding.Bindings;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +9,8 @@ import main.model.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static main.UILinker.*;
 
 /**
  * @author Anthony Morrell
@@ -55,93 +55,22 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Game.controller = this;
-
-        currentLocation.setOnAction(this::onLocationChange);
-        currentLocation.itemsProperty().bind(Game.game.locationsProperty());
-        currentLocation.valueProperty().bind(Game.game.currentLocationProperty());
-        grossDonutCount.textProperty().bind(Game.game.grossDonutsProperty().asString());
-
-        manualSellButton.disableProperty().bind(Bindings.createBooleanBinding(
-                () -> !Game.location().getRegisters().playerHasAppliance()
-                    || Game.location().getCustomers() == 0,
-                Game.game.currentLocationProperty(),
-                Game.location().getRegisters().playerHasApplianceProperty(),
-                Game.location().customersProperty()
-        ));
-
-        manualFryButton.disableProperty().bind(Bindings.createBooleanBinding(
-                () -> !Game.location().getFryers().playerHasAppliance(),
-                Game.game.currentLocationProperty(),
-                Game.location().getFryers().playerHasApplianceProperty()
-        ));
-
-        customerCount.textProperty().bind(Bindings.createStringBinding(
-                () -> String.format("%d / %d",
-                        Game.location().customersProperty().getValue(),
-                        Game.location().maxCapacityProperty().getValue()),
-                Game.game.currentLocationProperty(),
-                Game.location().customersProperty(),
-                Game.location().maxCapacityProperty()
-        ));
-
-        donutCount.textProperty().bind(Bindings.createStringBinding(
-                () -> Game.location().donutStockProperty().getValue().toString(),
-                Game.game.currentLocationProperty(), Game.location().donutStockProperty()
-                // todo donutCount only updates for first location
-        ));
-
-        bindAppliances(registerList, Game.location().getRegisters());
-        bindAppliances(fryerList, Game.location().getFryers());
-
-        totalBalance.textProperty().bind(Bindings.createStringBinding(
-                () -> Game.formatMoney(Game.location().getTotalBalance()),
-                Game.game.currentLocationProperty(),
-                Game.location().totalBalanceProperty()
-        ));
-
-        accountList.getPanes().clear();
-        accountList.getPanes().addAll(Game.location().getAccountPanes());
-        Game.location().getAccountPanes().addListener((ListChangeListener<? super TitledPane>) change -> {
-            while (change.next()) {
-                if (change.wasPermutated()) {
-                    throw new RuntimeException("Account list permutation was unhandled: " + change);
-                } else if (change.wasUpdated()) {
-                    throw new RuntimeException("TitledPane was modified in Account list: " + change.getList().get(change.getFrom()));
-                } else {
-                    accountList.getPanes().removeAll(change.getRemoved());
-                    accountList.getPanes().addAll(change.getAddedSubList());
-                }
-            }
-        });
-
-        depositAccount.itemsProperty().bind(Game.location().accountsProperty());
-        depositAccount.valueProperty().bindBidirectional(Game.location().depositAccountProperty());
+        linkItems(currentLocation, getLocations());
+        linkText(grossDonutCount, getGrossDonuts());
+        linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
     }
 
-    private <A extends Appliance> void bindAppliances(Accordion uiNode, ApplianceGroup<A> appliances) {
-        uiNode.getPanes().clear();
-        uiNode.getPanes().addAll(appliances.getPanes());
-        appliances.panesProperty().addListener(getApplianceListener(uiNode));
-    }
-
-    private ListChangeListener<TitledPane> getApplianceListener(Accordion uiNode) {
-        return change -> {
-            while (change.next()) {
-                if (change.wasPermutated()) {
-                    throw new RuntimeException("Appliance list permutation was unhandled: " + change);
-                } else if (change.wasUpdated()) {
-                    throw new RuntimeException("TitledPane was modified in ApplianceGroup list: " + change.getList().get(change.getFrom()));
-                } else {
-                    uiNode.getPanes().removeAll(change.getRemoved());
-                    uiNode.getPanes().addAll(change.getAddedSubList());
-                }
-            }
-        };
-    }
-
-    public void onLocationChange(ActionEvent event) {
-
+    private void bindLocationSpecific(Location loc) {
+        link(manualSellButton.disableProperty(), getCheckoutButtonDisable(loc));
+        link(manualFryButton.disableProperty(), getFryButtonDisable(loc));
+        linkText(customerCount, getCustomerCount(loc));
+        linkText(donutCount, getStockedDonuts(loc));
+        linkPanes(registerList, loc.getRegisters().getPanes());
+        linkPanes(fryerList, loc.getFryers().getPanes());
+        linkText(totalBalance, getTotalBalance(loc));
+        linkItems(depositAccount, getAccounts(loc));
+        linkChoice(depositAccount, getDepositAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
+        linkPanes(accountList, loc.getAccountPanes());
     }
 
     public void onManualCheckout(ActionEvent event) {

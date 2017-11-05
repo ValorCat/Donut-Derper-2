@@ -1,6 +1,5 @@
 package main;
 
-import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -9,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import main.model.*;
 
-import java.io.IOException;
+import static main.UILinker.*;
 
 /**
  * @author Anthony Morrell
@@ -30,46 +29,45 @@ public final class TitledPaneFactory {
     }
 
     private static TitledPane buildFryerPane(Fryer fryer) {
+        // todo move repeated code in buildRegisterPane into buildAppliancePane
+
         // cook timer
         ProgressBar cookTimer = new ProgressBar();
-        cookTimer.progressProperty().bind(fryer.progressProperty());
         cookTimer.setPrefWidth(150);
+        link(cookTimer.progressProperty(), getProgress(fryer));
 
         // operator name
         Label cookName = new Label("", cookTimer);
-        cookName.textProperty().bind(fryer.getOperatorBinding());
         cookName.setGraphicTextGap(8);
         cookName.setContentDisplay(ContentDisplay.RIGHT);
         setAnchors(cookName, 0d, 0d, 0d, null);
+        linkText(cookName, getOperatorName(fryer));
 
         // donut output
         Label output = new Label();
-        output.textProperty().bind(fryer.getOutputBinding());
         setAnchors(output, 0d, 0d, null, 0d);
+        linkText(output, getOutputText(fryer));
 
         // operator selector
         ChoiceBox<Employee> cookSelect = new ChoiceBox<>();
-        cookSelect.itemsProperty().bind(fryer.getPossibleOperatorsBinding());
-        cookSelect.valueProperty().bindBidirectional(fryer.operatorProperty());
         Label cook = new Label("Fry Cook:", cookSelect);
         cook.setGraphicTextGap(8);
         cook.setContentDisplay(ContentDisplay.RIGHT);
+        linkItems(cookSelect, getPossibleOperators(fryer));
+        linkChoice(cookSelect, getOperator(fryer));
 
         // assign self button
         Button assignSelfButton = new Button("Assign Self");
         assignSelfButton.setOnAction(e -> fryer.setOperator(Employee.PLAYER));
-        assignSelfButton.visibleProperty().bind(Bindings.createBooleanBinding(
-                () -> fryer.getOperator() == Employee.UNASSIGNED,
-                fryer.operatorProperty()
-        ));
+        link(assignSelfButton.visibleProperty(), getAssignSelfVisible(fryer));
 
         // donut type selector
         ChoiceBox<DonutTypeDescription> typeSelect = new ChoiceBox<>();
-        typeSelect.itemsProperty().bind(DonutType.DONUT_TYPES);
-        typeSelect.valueProperty().bindBidirectional(fryer.outputTypeProperty());
         Label type = new Label("Output:", typeSelect);
         type.setGraphicTextGap(8);
         type.setContentDisplay(ContentDisplay.RIGHT);
+        linkItems(typeSelect, DonutType.DONUT_TYPES);
+        linkChoice(typeSelect, getOutputType(fryer));
 
         // description
         Label description = new Label("Produces 1 donut every 3 seconds while operated by a fry cook.");
@@ -78,7 +76,7 @@ public final class TitledPaneFactory {
 
         // sell button
         Button sellButton = new Button();
-        sellButton.textProperty().bind(fryer.getSellTextBinding());
+        link(sellButton.textProperty(), getSellButtonText(fryer));
 
         AnchorPane header = new AnchorPane(cookName, output);
         header.setPrefSize(407, 20);
@@ -92,46 +90,41 @@ public final class TitledPaneFactory {
     private static TitledPane buildRegisterPane(CashRegister register) {
         // checkout timer
         ProgressBar checkoutTimer = new ProgressBar();
-        checkoutTimer.progressProperty().bind(register.progressProperty());
         checkoutTimer.setPrefWidth(150);
+        link(checkoutTimer.progressProperty(), getProgress(register));
 
         // operator name
         Label cashierName = new Label("", checkoutTimer);
-        cashierName.textProperty().bind(register.getOperatorBinding());
         cashierName.setGraphicTextGap(8);
         cashierName.setContentDisplay(ContentDisplay.RIGHT);
         setAnchors(cashierName, 0d, 0d, 0d, null);
+        linkText(cashierName, getOperatorName(register));
 
         // collect button
         Button collectButton = new Button("Collect");
         collectButton.setOnAction(a -> register.collect());
         collectButton.setFont(Font.font(9));
-        collectButton.disableProperty().bind(Bindings.createBooleanBinding(
-                () -> register.getBalance() == 0, register.balanceProperty()
-        ));
+        link(collectButton.disableProperty(), getCollectButtonDisable(register));
 
         // balance
         Label balance = new Label("", collectButton);
-        balance.textProperty().bind(register.getBalanceBinding());
         balance.setGraphicTextGap(8);
         balance.setContentDisplay(ContentDisplay.RIGHT);
         setAnchors(balance, 0d, 0d, null, -8d);
+        linkText(balance, getBalance(register));
 
         // operator selector
         ChoiceBox<Employee> cashierSelect = new ChoiceBox<>();
-        cashierSelect.itemsProperty().bind(register.getPossibleOperatorsBinding());
-        cashierSelect.valueProperty().bindBidirectional(register.operatorProperty());
         Label cashier = new Label("Cashier:", cashierSelect);
         cashier.setGraphicTextGap(8);
         cashier.setContentDisplay(ContentDisplay.RIGHT);
+        linkItems(cashierSelect, getPossibleOperators(register));
+        linkChoice(cashierSelect, getOperator(register));
 
         // assign self button
         Button assignSelfButton = new Button("Assign Self");
         assignSelfButton.setOnAction(e -> register.setOperator(Employee.PLAYER));
-        assignSelfButton.visibleProperty().bind(Bindings.createBooleanBinding(
-                () -> register.getOperator() == Employee.UNASSIGNED,
-                register.operatorProperty()
-        ));
+        link(assignSelfButton.visibleProperty(), getAssignSelfVisible(register));
 
         // description
         Label description = new Label("Checks out one customer per second while operated by a cashier.");
@@ -140,7 +133,7 @@ public final class TitledPaneFactory {
 
         // sell button
         Button sellButton = new Button();
-        sellButton.textProperty().bind(register.getSellTextBinding());
+        link(sellButton.textProperty(), getSellButtonText(register));
 
         AnchorPane header = new AnchorPane(cashierName, balance);
         header.setPrefSize(407, 20);
@@ -153,23 +146,10 @@ public final class TitledPaneFactory {
 
     public static TitledPane buildAccountPane(Account account) {
         Label header = new Label();
-        header.textProperty().bind(Bindings.format(
-                "%s  |  %s", account.nameProperty(), Bindings.createStringBinding(
-                        () -> Game.formatMoney(account.getBalance()),
-                        account.balanceProperty()
-                )
-        ));
+        linkText(header, getAccountHeader(account));
 
         Label interest = new Label();
-        interest.textProperty().bind(Bindings.format(
-                "Interest: %.2f%% (%s)",
-                account.interestRateProperty().multiply(100),
-                Bindings.createStringBinding(
-                        () -> Game.formatMoney(account.getBalance() * account.getInterestRate()),
-                        account.balanceProperty(),
-                        account.interestRateProperty()
-                )
-        ));
+        linkText(interest, getInterest(account));
 
         VBox body = new VBox(7, interest);
 

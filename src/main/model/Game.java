@@ -4,8 +4,6 @@ import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import main.Controller;
 
-import java.text.NumberFormat;
-
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
@@ -15,7 +13,6 @@ import static javafx.collections.FXCollections.observableArrayList;
 public final class Game {
 
     public static final Game game = new Game();
-    public static Controller controller;
 
     private ListProperty<Location> locations;
     private ObjectProperty<Location> currentLocation;
@@ -23,7 +20,8 @@ public final class Game {
 
     private Game() {
         this.locations = new SimpleListProperty<>(observableArrayList(
-                new Location("Tony's Bakery", 8)
+                new Location("Tony's Bakery", 8),
+                new Location("Second Place", 12)
         ));
         this.currentLocation = new SimpleObjectProperty<>(locations.get(0));
         this.grossDonuts = new SimpleLongProperty(0);
@@ -64,10 +62,6 @@ public final class Game {
 
     public static Location location() {
         return game.currentLocation.get();
-    }
-
-    public static String formatMoney(double amount) {
-        return NumberFormat.getCurrencyInstance().format(amount);
     }
 
 }

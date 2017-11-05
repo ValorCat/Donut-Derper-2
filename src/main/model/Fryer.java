@@ -1,7 +1,6 @@
 package main.model;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -15,7 +14,7 @@ import javafx.beans.value.ObservableValue;
 public class Fryer extends Appliance {
 
     public static final Fryer INITIAL = new Fryer(1, 0);
-    private static final String OUTPUT_FORMAT = "%d %s Donut(s)";
+    public static final String OUTPUT_FORMAT = "%d %s Donut(s)";
 
     // output must be an ObservableValue, and not an ObjectProperty, for its
     // binding to work in the constructor
@@ -46,17 +45,6 @@ public class Fryer extends Appliance {
 
     public DonutTypeDescription getOutputType() {
         return outputType.get();
-    }
-
-    public StringBinding getOutputBinding() {
-        return new StringBinding() {
-            {
-                super.bind(outputType, outputAmount);
-            }
-            protected String computeValue() {
-                return String.format(OUTPUT_FORMAT, outputAmount.get(), outputType.get());
-            }
-        };
     }
 
     public ObjectProperty<DonutTypeDescription> outputTypeProperty() {
