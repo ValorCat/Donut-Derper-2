@@ -106,7 +106,7 @@ public final class UILinker {
     }
 
     public static StringExpression getInterest(Account a) {
-        return format("Interest: %.2f%% (+%s)",
+        return format("Interest: %.2f%%  (+%s)",
                 a.interestRateProperty().multiply(100),
                 createStringBinding(
                         () -> asMoney(a.getBalance() * a.getInterestRate()),
