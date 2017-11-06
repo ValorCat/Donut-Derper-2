@@ -71,8 +71,8 @@ public final class UILinker {
         return l.accountsProperty();
     }
 
-    public static BooleanBinding getAssignSelfVisible(Appliance a) {
-        return a.operatorProperty().isEqualTo(Employee.UNASSIGNED);
+    public static BooleanBinding getAssignSelfVisible(Station s) {
+        return s.operatorProperty().isEqualTo(Employee.UNASSIGNED);
     }
 
     public static StringBinding getBalance(CashRegister r) {
@@ -80,7 +80,7 @@ public final class UILinker {
     }
 
     public static BooleanBinding getCheckoutButtonDisable(Location l) {
-        return l.getRegisters().playerHasApplianceProperty()
+        return l.getRegisters().playerHasStationProperty()
                 .not()
                 .or(l.customersProperty().isEqualTo(0));
     }
@@ -98,7 +98,7 @@ public final class UILinker {
     }
 
     public static BooleanBinding getFryButtonDisable(Location l) {
-        return l.getFryers().playerHasApplianceProperty().not();
+        return l.getFryers().playerHasStationProperty().not();
     }
 
     public static StringBinding getGrossDonuts() {
@@ -121,12 +121,12 @@ public final class UILinker {
         return Game.game.locationsProperty();
     }
 
-    public static ObjectProperty<Employee> getOperator(Appliance a) {
-        return a.operatorProperty();
+    public static ObjectProperty<Employee> getOperator(Station s) {
+        return s.operatorProperty();
     }
 
-    public static StringBinding getOperatorName(Appliance a) {
-        return wrap(a.operatorProperty(), Employee::getName);
+    public static StringBinding getOperatorName(Station s) {
+        return wrap(s.operatorProperty(), Employee::getName);
     }
 
     public static StringExpression getOutputText(Fryer f) {
@@ -137,28 +137,28 @@ public final class UILinker {
         return f.outputTypeProperty();
     }
 
-    public static ObjectBinding<ObservableList<Employee>> getPossibleOperators(Appliance a) {
+    public static ObjectBinding<ObservableList<Employee>> getPossibleOperators(Station s) {
         return createObjectBinding(() -> {
-            ObservableList<Employee> options = observableArrayList(a.getLocation().getRoster());
+            ObservableList<Employee> options = observableArrayList(s.getLocation().getRoster());
             options.add(Employee.UNASSIGNED);
             return options;
-        }, a.getLocation().rosterProperty());
+        }, s.getLocation().rosterProperty());
     }
 
-    public static DoubleProperty getProgress(Appliance a) {
-        return a.progressProperty();
+    public static DoubleProperty getProgress(Station s) {
+        return s.progressProperty();
     }
 
-    public static StringBinding getSellButtonText(Appliance a) {
-        return wrap(a.sellValueProperty(), val -> "Sell - " + asMoney(val));
+    public static StringBinding getSellButtonText(Station s) {
+        return wrap(s.sellValueProperty(), val -> "Sell - " + asMoney(val));
     }
 
     public static StringBinding getStockedDonuts(Location l) {
         return l.donutStockProperty().asString();
     }
 
-    public static BooleanBinding getTimerVisible(Appliance a) {
-        return a.operatorProperty().isNotEqualTo(Employee.UNASSIGNED);
+    public static BooleanBinding getTimerVisible(Station s) {
+        return s.operatorProperty().isNotEqualTo(Employee.UNASSIGNED);
     }
 
     public static StringBinding getTotalBalance(Location l) {

@@ -18,7 +18,7 @@ public class Employee {
 
     private StringProperty name;
     private ObjectProperty<Job> job;
-    private Appliance station;
+    private Station station;
 
     public Employee(String name, Job job) {
         this.name = new SimpleStringProperty(name);
@@ -54,11 +54,11 @@ public class Employee {
         this.job.set(job);
     }
 
-    public Optional<Appliance> getStation() {
+    public Optional<Station> getStation() {
         return Optional.ofNullable(this.station);
     }
 
-    public void assign(Appliance newStation) {
+    public void assign(Station newStation) {
         this.station = newStation;
     }
 

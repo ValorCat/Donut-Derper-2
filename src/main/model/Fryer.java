@@ -11,7 +11,7 @@ import javafx.beans.value.ObservableValue;
  * @author Anthony Morrell
  * @since 10/29/2017
  */
-public class Fryer extends Appliance {
+public class Fryer extends Station {
 
     public static final Fryer INITIAL = new Fryer(1, 0);
     public static final String OUTPUT_FORMAT = "%d %s Donut(s)";

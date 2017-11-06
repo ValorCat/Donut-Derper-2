@@ -9,14 +9,14 @@ import javafx.beans.property.SimpleObjectProperty;
  * @author Anthony Morrell
  * @since 10/29/2017
  */
-public abstract class Appliance {
+public abstract class Station {
 
     private ObjectProperty<Employee> operator;
     private DoubleProperty progress;
     private DoubleProperty sellValue;
     protected Location location;
 
-    public Appliance(double sellValue) {
+    public Station(double sellValue) {
         this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED) {
             public void set(Employee newValue) {
                 setOperatorImpl(operator.get(), newValue);
@@ -84,7 +84,7 @@ public abstract class Appliance {
             unassignPlayer();
         }
         if (newOperator != Employee.UNASSIGNED) {
-            newOperator.getStation().ifPresent(Appliance::unassign);
+            newOperator.getStation().ifPresent(Station::unassign);
             newOperator.assign(this);
         }
         if (newOperator == Employee.PLAYER) {

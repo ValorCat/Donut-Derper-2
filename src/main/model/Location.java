@@ -34,8 +34,8 @@ public class Location {
     private IntegerProperty donutStock;
     private Inventory<DonutType,Integer> donuts;
     private Inventory<Ingredient,Double> ingredients;
-    private ApplianceGroup<CashRegister> registers;
-    private ApplianceGroup<Fryer> fryers;
+    private StationGroup<CashRegister> registers;
+    private StationGroup<Fryer> fryers;
 
     private DoubleProperty totalBalance;
     private DoubleProperty totalWages;
@@ -57,8 +57,8 @@ public class Location {
         this.ingredients = new Inventory<>(
                 new Ingredient("Flour", 2000),
                 new Ingredient("Sugar", 1000));
-        this.registers = new ApplianceGroup<>(this);
-        this.fryers = new ApplianceGroup<>(this);
+        this.registers = new StationGroup<>(this);
+        this.fryers = new StationGroup<>(this);
 
         this.totalBalance = new SimpleDoubleProperty();
         this.totalWages = new SimpleDoubleProperty();
@@ -200,11 +200,11 @@ public class Location {
         return roster;
     }
 
-    public ApplianceGroup<CashRegister> getRegisters() {
+    public StationGroup<CashRegister> getRegisters() {
         return registers;
     }
 
-    public ApplianceGroup<Fryer> getFryers() {
+    public StationGroup<Fryer> getFryers() {
         return fryers;
     }
 

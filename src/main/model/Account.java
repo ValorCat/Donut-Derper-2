@@ -1,6 +1,9 @@
 package main.model;
 
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * @author Anthony Morrell
@@ -8,7 +11,7 @@ import javafx.beans.property.*;
  */
 public class Account {
 
-    public static final long INTEREST_INTERVAL = (long) 10e9;             // nano seconds between interest deposits
+    public static final long INTEREST_INTERVAL = (long) 10e9; // nano seconds between interest deposits
     public static long untilInterestDeposit = INTEREST_INTERVAL;
 
     private StringProperty name;

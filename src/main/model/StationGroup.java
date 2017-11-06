@@ -7,54 +7,54 @@ import main.TitledPaneFactory;
 
 import java.util.Optional;
 
-import static javafx.collections.FXCollections.*;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * @author Anthony Morrell
  * @since 10/30/2017
  */
-public class ApplianceGroup<A extends Appliance> {
+public class StationGroup<S extends Station> {
 
     private Location location;
-    private ListProperty<A> list;
+    private ListProperty<S> list;
     private ListProperty<TitledPane> panes;
-    private ObjectProperty<A> playerOperated;
-    private BooleanProperty playerHasAppliance;
+    private ObjectProperty<S> playerOperated;
+    private BooleanProperty playerHasStation;
 
-    public ApplianceGroup(Location location) {
+    public StationGroup(Location location) {
         this.location = location;
         this.list = new SimpleListProperty<>(observableArrayList());
         this.panes = new SimpleListProperty<>(observableArrayList());
         this.playerOperated = new SimpleObjectProperty<>(null);
-        this.playerHasAppliance = new SimpleBooleanProperty(false);
+        this.playerHasStation = new SimpleBooleanProperty(false);
     }
 
-    public Optional<A> getPlayerOperated() {
+    public Optional<S> getPlayerOperated() {
         return Optional.ofNullable(playerOperated.get());
     }
 
-    public void assignToPlayer(A app) {
-        assert list.contains(app);
-        playerOperated.set(app);
-        playerHasAppliance.set(true);
+    public void assignToPlayer(S station) {
+        assert list.contains(station);
+        playerOperated.set(station);
+        playerHasStation.set(true);
     }
 
     public void unassignPlayer() {
         playerOperated.set(null);
-        playerHasAppliance.set(false);
+        playerHasStation.set(false);
     }
 
-    public void add(A newApp) {
-        newApp.setLocation(location);
-        list.add(newApp);
-        panes.add(TitledPaneFactory.buildAppliancePane(newApp));
+    public void add(S station) {
+        station.setLocation(location);
+        list.add(station);
+        panes.add(TitledPaneFactory.buildStationPane(station));
     }
 
     public ObservableList getList() {
         return list.get();
     }
 
-    public ListProperty<A> listProperty() {
+    public ListProperty<S> listProperty() {
         return list;
     }
 
@@ -66,11 +66,8 @@ public class ApplianceGroup<A extends Appliance> {
         return panes;
     }
 
-    public boolean playerHasAppliance() {
-        return playerHasAppliance.get();
+    public BooleanProperty playerHasStationProperty() {
+        return playerHasStation;
     }
 
-    public BooleanProperty playerHasApplianceProperty() {
-        return playerHasAppliance;
-    }
 }

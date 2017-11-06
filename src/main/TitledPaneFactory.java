@@ -30,7 +30,7 @@ public final class TitledPaneFactory {
 
     private TitledPaneFactory() {}
 
-    public static TitledPane buildAppliancePane(Appliance app) {
+    public static TitledPane buildStationPane(Station sta) {
         TitledPane pane = new TitledPane();
 
         ProgressBar timer = new ProgressBar();
@@ -38,27 +38,27 @@ public final class TitledPaneFactory {
         timer.setMinHeight(TIMER_HEIGHT);
         timer.setMaxHeight(TIMER_HEIGHT);
         timer.setMouseTransparent(true);
-        link(timer.progressProperty(), getProgress(app));
-        link(timer.visibleProperty(), getTimerVisible(app));
+        link(timer.progressProperty(), getProgress(sta));
+        link(timer.visibleProperty(), getTimerVisible(sta));
 
         Label operatorName = new Label("", timer);
         operatorName.setGraphicTextGap(TEXT_GAP);
         operatorName.setContentDisplay(ContentDisplay.RIGHT);
         setAnchors(operatorName, 0d, 0d, 0d, null);
-        linkText(operatorName, getOperatorName(app));
+        linkText(operatorName, getOperatorName(sta));
 
         ChoiceBox<Employee> operatorSelect = new ChoiceBox<>();
         operatorSelect.setCursor(Cursor.HAND);
         Label operator = new Label("", operatorSelect);
         operator.setGraphicTextGap(TEXT_GAP);
         operator.setContentDisplay(ContentDisplay.RIGHT);
-        linkItems(operatorSelect, getPossibleOperators(app));
-        linkChoice(operatorSelect, getOperator(app));
+        linkItems(operatorSelect, getPossibleOperators(sta));
+        linkChoice(operatorSelect, getOperator(sta));
 
         Button assignSelfButton = new Button(ASSIGN_SELF);
-        assignSelfButton.setOnAction(e -> app.setOperator(Employee.PLAYER));
+        assignSelfButton.setOnAction(e -> sta.setOperator(Employee.PLAYER));
         assignSelfButton.setCursor(Cursor.HAND);
-        link(assignSelfButton.visibleProperty(), getAssignSelfVisible(app));
+        link(assignSelfButton.visibleProperty(), getAssignSelfVisible(sta));
 
         Label description = new Label();
         description.setPrefWidth(DESCRIPTION_MAX_WIDTH);
@@ -66,7 +66,7 @@ public final class TitledPaneFactory {
 
         Button sellButton = new Button();
         sellButton.setCursor(Cursor.HAND);
-        link(sellButton.textProperty(), getSellButtonText(app));
+        link(sellButton.textProperty(), getSellButtonText(sta));
 
         AnchorPane header = new AnchorPane(operatorName);
         header.setPrefSize(HEADER_WIDTH, HEADER_HEIGHT);
@@ -74,10 +74,10 @@ public final class TitledPaneFactory {
         pane.setContent(body);
         pane.setGraphic(header);
 
-        if (app instanceof Fryer) {
-            setupFryer((Fryer) app, header, body, operator, description);
-        } else if (app instanceof CashRegister) {
-            setupRegister((CashRegister) app, header, operator, description);
+        if (sta instanceof Fryer) {
+            setupFryer((Fryer) sta, header, body, operator, description);
+        } else if (sta instanceof CashRegister) {
+            setupRegister((CashRegister) sta, header, operator, description);
         }
 
         return pane;

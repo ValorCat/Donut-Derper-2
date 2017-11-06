@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
  * @author Anthony Morrell
  * @since 10/29/2017
  */
-public class CashRegister extends Appliance {
+public class CashRegister extends Station {
 
     public static final CashRegister INITIAL = new CashRegister(0);
 
