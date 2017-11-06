@@ -74,11 +74,11 @@ public class Controller implements Initializable {
     }
 
     public void onManualCheckout(ActionEvent event) {
-        Game.location().getRegisters().getPlayerOperated().ifPresent(CashRegister::operate);
+        Game.location().getRegisters().getPlayerOperated().ifPresent(CashRegister::begin);
     }
 
     public void onManualFry(ActionEvent event) {
-        Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::operate);
+        Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::begin);
     }
 
     public void onCreateProduct(ActionEvent event) {

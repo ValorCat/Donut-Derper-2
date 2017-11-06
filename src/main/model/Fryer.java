@@ -13,7 +13,7 @@ import javafx.beans.value.ObservableValue;
  */
 public class Fryer extends Station {
 
-    public static final Fryer INITIAL = new Fryer(1, 0);
+    public static final Fryer INITIAL = new Fryer(0.8, 2, 0);
     public static final String OUTPUT_FORMAT = "%d %s Donut(s)";
 
     // output must be an ObservableValue, and not an ObjectProperty, for its
@@ -22,8 +22,8 @@ public class Fryer extends Station {
     private ObjectProperty<DonutTypeDescription> outputType;
     private IntegerProperty outputAmount;
 
-    public Fryer(int donutsPerBatch, double sellValue) {
-        super(sellValue);
+    public Fryer(double speed, int donutsPerBatch, double sellValue) {
+        super(speed, sellValue);
         this.outputType = new SimpleObjectProperty<>(DonutType.PLAIN);
         this.outputAmount = new SimpleIntegerProperty(donutsPerBatch);
         this.output = Bindings.createObjectBinding(
@@ -31,7 +31,8 @@ public class Fryer extends Station {
                 outputType, outputAmount);
     }
 
-    public void operate() {
+    public void finish() {
+        super.finish();
         location.updateDonuts(getOutput());
     }
 
@@ -67,7 +68,7 @@ public class Fryer extends Station {
         this.outputAmount.set(outputAmount);
     }
 
-    public DonutType getOutput() {
+    private DonutType getOutput() {
         return new DonutType(output.getValue());
     }
 

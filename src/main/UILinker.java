@@ -80,8 +80,8 @@ public final class UILinker {
     }
 
     public static BooleanBinding getCheckoutButtonDisable(Location l) {
-        return l.getRegisters().playerHasStationProperty()
-                .not()
+        return l.getRegisters().playerHasStationProperty().not()
+                .or(l.getRegisters().playerStationInUseProperty())
                 .or(l.customersProperty().isEqualTo(0));
     }
 
@@ -98,7 +98,8 @@ public final class UILinker {
     }
 
     public static BooleanBinding getFryButtonDisable(Location l) {
-        return l.getFryers().playerHasStationProperty().not();
+        return l.getFryers().playerHasStationProperty().not()
+                .or(l.getFryers().playerStationInUseProperty());
     }
 
     public static StringBinding getGrossDonuts() {
@@ -158,7 +159,7 @@ public final class UILinker {
     }
 
     public static BooleanBinding getTimerVisible(Station s) {
-        return s.operatorProperty().isNotEqualTo(Employee.UNASSIGNED);
+        return s.progressProperty().isNotEqualTo(0);
     }
 
     public static StringBinding getTotalBalance(Location l) {

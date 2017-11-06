@@ -1,9 +1,6 @@
 package main.model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 
 /**
  * @author Anthony Morrell
@@ -14,22 +11,52 @@ public abstract class Station {
     private ObjectProperty<Employee> operator;
     private DoubleProperty progress;
     private DoubleProperty sellValue;
+    private double speed;
+    private BooleanProperty inUse;
     protected Location location;
 
-    public Station(double sellValue) {
+    public Station(double speed, double sellValue) {
         this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED) {
             public void set(Employee newValue) {
                 setOperatorImpl(operator.get(), newValue);
                 super.set(newValue);
             }
         };
-        this.progress = new SimpleDoubleProperty(0);
+        this.speed = speed;
+        this.progress = new SimpleDoubleProperty();
         this.sellValue = new SimpleDoubleProperty(sellValue);
+        this.inUse = new SimpleBooleanProperty();
     }
 
-    public abstract void operate();
     protected abstract void assignPlayer();
     protected abstract void unassignPlayer();
+
+    public void begin() {
+        inUse.set(true);
+        progress.set(0);
+    }
+
+    public void finish() {
+        inUse.set(false);
+        progress.set(0);
+    }
+
+    public void update() {
+        if (inUse.get() && operator.get() != Employee.UNASSIGNED) {
+            progress.set(progress.get() + speed / 60);
+            if (progress.get() >= 1) {
+                finish();
+            }
+        }
+    }
+
+    public boolean isInUse() {
+        return inUse.get();
+    }
+
+    public BooleanProperty inUseProperty() {
+        return inUse;
+    }
 
     public Location getLocation() {
         return location;

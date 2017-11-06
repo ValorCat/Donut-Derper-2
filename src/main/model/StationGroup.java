@@ -20,13 +20,19 @@ public class StationGroup<S extends Station> {
     private ListProperty<TitledPane> panes;
     private ObjectProperty<S> playerOperated;
     private BooleanProperty playerHasStation;
+    private BooleanProperty playerStationInUse;
 
     public StationGroup(Location location) {
         this.location = location;
         this.list = new SimpleListProperty<>(observableArrayList());
         this.panes = new SimpleListProperty<>(observableArrayList());
-        this.playerOperated = new SimpleObjectProperty<>(null);
-        this.playerHasStation = new SimpleBooleanProperty(false);
+        this.playerOperated = new SimpleObjectProperty<>();
+        this.playerHasStation = new SimpleBooleanProperty();
+        this.playerStationInUse = new SimpleBooleanProperty();
+    }
+
+    public void update() {
+        list.forEach(Station::update);
     }
 
     public Optional<S> getPlayerOperated() {
@@ -37,11 +43,13 @@ public class StationGroup<S extends Station> {
         assert list.contains(station);
         playerOperated.set(station);
         playerHasStation.set(true);
+        playerStationInUse.bind(station.inUseProperty());
     }
 
     public void unassignPlayer() {
         playerOperated.set(null);
         playerHasStation.set(false);
+        playerStationInUse.unbind();
     }
 
     public void add(S station) {
@@ -70,4 +78,11 @@ public class StationGroup<S extends Station> {
         return playerHasStation;
     }
 
+    public boolean isPlayerStationInUse() {
+        return playerStationInUse.get();
+    }
+
+    public BooleanProperty playerStationInUseProperty() {
+        return playerStationInUse;
+    }
 }

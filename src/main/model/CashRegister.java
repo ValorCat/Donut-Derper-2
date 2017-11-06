@@ -9,23 +9,35 @@ import javafx.beans.property.SimpleDoubleProperty;
  */
 public class CashRegister extends Station {
 
-    public static final CashRegister INITIAL = new CashRegister(0);
+    public static final CashRegister INITIAL = new CashRegister(1.2, 0);
 
     private DoubleProperty balance;
 
-    public CashRegister(double sellValue) {
-        super(sellValue);
+    public CashRegister(double speed, double sellValue) {
+        super(speed, sellValue);
         this.balance = new SimpleDoubleProperty(0);
     }
 
-    public void operate() {
+    public void begin() {
+        super.begin();
+        location.setLastCheckOut();
+    }
+
+    public void finish() {
+        super.finish();
         if (location.getCustomers() > 0 && location.getDonutStock() > 0) {
             DonutType random = getRandomDonutType(-1);
             location.updateDonuts(random);
             addBalance(random.getData().getCost());
             location.leaveCustomer();
-            location.setLastCheckOut();
             location.boostAppeal(location.getAppealBoostPerPerson());
+        }
+    }
+
+    public void update() {
+        super.update();
+        if (isInUse() && location.getCustomers() == 0) {
+            super.finish();
         }
     }
 

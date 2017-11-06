@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
    <children>
       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -85,7 +84,7 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                    <graphic>
-                                                      <Button fx:id="manualSellButton" mnemonicParsing="false" onAction="#onManualCheckout" text="Check Out">
+                                                      <Button fx:id="manualSellButton" focusTraversable="false" mnemonicParsing="false" onAction="#onManualCheckout" text="Check Out">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -156,7 +155,7 @@
                                              <graphic>
                                                 <Label fx:id="donutCount" graphicTextGap="10.0" text="0">
                                                    <graphic>
-                                                      <Button fx:id="manualFryButton" mnemonicParsing="false" onAction="#onManualFry" text="Make Batch">
+                                                      <Button fx:id="manualFryButton" focusTraversable="false" mnemonicParsing="false" onAction="#onManualFry" text="Make Batch">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>

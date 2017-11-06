@@ -12,7 +12,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 public class DonutType extends Consumable<DonutTypeDescription, Integer> {
 
     public static final ListProperty<DonutTypeDescription> DONUT_TYPES = new SimpleListProperty<>(observableArrayList(
-            new DonutTypeDescription("Plain", 1.5,
+            new DonutTypeDescription("Plain", 1.2,
                     new Ingredient("Flour", 0.085),
                     new Ingredient("Sugar", 0.01)),
             new DonutTypeDescription("Chocolate", 1.5,

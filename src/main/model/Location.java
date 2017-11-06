@@ -19,9 +19,9 @@ public class Location {
     private double appeal = 1;                       // modifies rate of customer entry
     private int lowStockTolerance = 12;              // min donuts before customers will enter
     private long slowServiceTolerance = (long) 5e9;  // min nanoseconds w/o service before customers walk out
-    private double baseEnterChance = 0.003;          // base chance of customer entry per tick
+    private double baseEnterChance = 0.0015;          // base chance of customer entry per tick
     private double leaveChance = 0.006;              // base chance of customer walking out per tick
-    private double appealBoostPerPerson = .05;       // effect of one happy customer on appeal
+    private double appealBoostPerPerson = .01;       // effect of one happy customer on appeal
     private double maxAppealDropPerPerson = 0.02;    // max effect of one unhappy customer on appeal
 
     private IntegerProperty customers;
@@ -72,44 +72,9 @@ public class Location {
     }
 
     public void update(long now, long last) {
-        boolean haveCustomers = customers.get() > 0;
-        boolean recentCheckout = (now - lastCheckOut) < slowServiceTolerance;
-        if (customersLeaving) {
-            if (!haveCustomers) {
-                customersLeaving = false;
-                noCustomerTimeRemaining = RNG.range((long) 3e9, (long) 8e9);
-            } else if (recentCheckout) {
-                customersLeaving = false;
-            } else {
-                RNG.chance(leaveChance, this::leaveCustomer);
-            }
-        } else if (haveCustomers && !recentCheckout) {
-            customersLeaving = true;
-        } else if (customerCanEnter()) {
-            double chance = baseEnterChance * appeal;
-            if (occupancy.get() > .5) {
-                chance /= 3;
-            }
-            RNG.chance(chance, this::enterCustomer);
-        }
-        if (noCustomerTimeRemaining > 0) {
-            noCustomerTimeRemaining -= now - last;
-        }
-        Account.untilInterestDeposit -= now - last;
-        if (Account.untilInterestDeposit <= 0) {
-            depositInterest();
-            Account.untilInterestDeposit = Account.INTEREST_INTERVAL;
-        }
-    }
-
-    private void depositInterest() {
-        accounts.forEach(Account::addInterest);
-    }
-
-    private boolean customerCanEnter() {
-        return noCustomerTimeRemaining <= 0
-                && occupancy.get() < 1
-                && donutStock.get() >= lowStockTolerance;
+        updateCustomers(now, last);
+        updateStations();
+        updateAccounts(now, last);
     }
 
     public void enterCustomer() {
@@ -271,6 +236,55 @@ public class Location {
 
     public String toString() {
         return name.get();
+    }
+
+    private void updateCustomers(long now, long last) {
+        boolean haveCustomers = customers.get() > 0;
+        boolean recentCheckout = (now - lastCheckOut) < slowServiceTolerance;
+        if (customersLeaving) {
+            if (!haveCustomers) {
+                customersLeaving = false;
+                noCustomerTimeRemaining = RNG.range((long) 3e9, (long) 8e9);
+            } else if (recentCheckout) {
+                customersLeaving = false;
+            } else {
+                RNG.chance(leaveChance, this::leaveCustomer);
+            }
+        } else if (haveCustomers && !recentCheckout) {
+            customersLeaving = true;
+        } else if (customerCanEnter()) {
+            double chance = baseEnterChance * appeal;
+            if (occupancy.get() > .5) {
+                chance /= 3;
+            }
+            RNG.chance(chance, this::enterCustomer);
+        }
+        if (noCustomerTimeRemaining > 0) {
+            noCustomerTimeRemaining -= now - last;
+        }
+    }
+
+    private void updateStations() {
+        registers.update();
+        fryers.update();
+    }
+
+    private void updateAccounts(long now, long last) {
+        Account.untilInterestDeposit -= now - last;
+        if (Account.untilInterestDeposit <= 0) {
+            depositInterest();
+            Account.untilInterestDeposit = Account.INTEREST_INTERVAL;
+        }
+    }
+
+    private void depositInterest() {
+        accounts.forEach(Account::addInterest);
+    }
+
+    private boolean customerCanEnter() {
+        return noCustomerTimeRemaining <= 0
+                && occupancy.get() < 1
+                && donutStock.get() >= lowStockTolerance;
     }
 
     private void addAccount(Account acc) {

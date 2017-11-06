@@ -31,7 +31,9 @@ public class Account {
     }
 
     public void addInterest() {
-        balance.set(balance.get() * (1 + interestRate.get()));
+        double deposit = balance.get() * (1 + interestRate.get()) - balance.get();
+        balance.set(balance.get() + deposit);
+        location.updateTotalBalance(deposit);
     }
 
     public String getName() {
