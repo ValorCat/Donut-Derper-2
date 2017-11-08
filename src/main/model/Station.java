@@ -12,16 +12,14 @@ public abstract class Station {
     private DoubleProperty progress;
     private DoubleProperty sellValue;
     private double speed;
-    private BooleanProperty inUse;
+    protected BooleanProperty inUse;
+    protected boolean automatic;
     protected Location location;
+    protected Job.Skill skill;
 
     public Station(double speed, double sellValue) {
-        this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED) {
-            public void set(Employee newValue) {
-                setOperatorImpl(operator.get(), newValue);
-                super.set(newValue);
-            }
-        };
+        this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED);
+        this.operator.addListener((obs, oldValue, newValue) -> setOperatorImpl(oldValue, newValue));
         this.speed = speed;
         this.progress = new SimpleDoubleProperty();
         this.sellValue = new SimpleDoubleProperty(sellValue);
@@ -37,12 +35,14 @@ public abstract class Station {
     }
 
     public void finish() {
-        inUse.set(false);
+        if (!automatic) {
+            inUse.set(false);
+        }
         progress.set(0);
     }
 
     public void update() {
-        if (inUse.get() && operator.get() != Employee.UNASSIGNED) {
+        if (inUse.get() && (operator.get() != Employee.UNASSIGNED)) {
             progress.set(progress.get() + speed / 60);
             if (progress.get() >= 1) {
                 finish();
@@ -102,6 +102,10 @@ public abstract class Station {
         this.sellValue.set(sellValue);
     }
 
+    public Job.Skill getSkill() {
+        return skill;
+    }
+
     private void unassign() {
         operator.set(Employee.UNASSIGNED);
     }
@@ -110,13 +114,16 @@ public abstract class Station {
         if (oldOperator == Employee.PLAYER) {
             unassignPlayer();
         }
-        if (newOperator != Employee.UNASSIGNED) {
+        boolean isAssigned = newOperator != Employee.UNASSIGNED;
+        boolean isPlayer = newOperator == Employee.PLAYER;
+        if (isAssigned) {
             newOperator.getStation().ifPresent(Station::unassign);
             newOperator.assign(this);
         }
-        if (newOperator == Employee.PLAYER) {
+        if (isPlayer) {
             assignPlayer();
         }
+        automatic = isAssigned && !isPlayer;
     }
 
 }

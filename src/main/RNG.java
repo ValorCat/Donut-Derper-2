@@ -1,8 +1,12 @@
 package main;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * @author Anthony Morrell
@@ -11,6 +15,16 @@ import java.util.Random;
 public final class RNG {
 
     private static Random random = new Random();
+    private static List<String> names;
+
+    static {
+        try {
+            names = Files.lines(Paths.get(Main.NAME_LIST)).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+            names = List.of("?");
+        }
+    }
 
     private RNG() {}
 
@@ -47,6 +61,10 @@ public final class RNG {
 
     public static long range(long low, long high) {
         return (long) (random.nextDouble() * (high - low) + low);
+    }
+
+    public static String name() {
+        return choose(names);
     }
 
 }

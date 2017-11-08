@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import main.UILinker;
 
 import java.util.Optional;
 
@@ -13,16 +14,21 @@ import java.util.Optional;
  */
 public class Employee {
 
-    public static final Employee PLAYER = new Employee("You", Job.FOUNDER);
-    public static final Employee UNASSIGNED = new Employee("Unassigned", Job.NONE);
+    public static final Employee PLAYER = new Employee("You", Job.FOUNDER, Location.NONE);
+    public static final Employee UNASSIGNED = new Employee("Unassigned", Job.NONE, Location.NONE);
 
     private StringProperty name;
     private ObjectProperty<Job> job;
+    private ObjectProperty<Location> location;
+    private StringProperty pay;
     private Station station;
 
-    public Employee(String name, Job job) {
+    public Employee(String name, Job job, Location location) {
         this.name = new SimpleStringProperty(name);
         this.job = new SimpleObjectProperty<>(job);
+        this.location = new SimpleObjectProperty<>(location);
+        this.pay = new SimpleStringProperty(UILinker.asMoney(job.WAGE));
+        this.job.addListener((obs, oldValue, newValue) -> pay.set(UILinker.asMoney(newValue.WAGE)));
     }
 
     public void promote() {
@@ -52,6 +58,26 @@ public class Employee {
 
     public void setJob(Job job) {
         this.job.set(job);
+    }
+
+    public Location getLocation() {
+        return location.get();
+    }
+
+    public ObjectProperty<Location> locationProperty() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location.set(location);
+    }
+
+    public String getPay() {
+        return pay.get();
+    }
+
+    public StringProperty payProperty() {
+        return pay;
     }
 
     public Optional<Station> getStation() {

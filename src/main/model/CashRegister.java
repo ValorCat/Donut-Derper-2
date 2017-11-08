@@ -13,6 +13,10 @@ public class CashRegister extends Station {
 
     private DoubleProperty balance;
 
+    {
+        skill = Job.Skill.USE_REGISTER;
+    }
+
     public CashRegister(double speed, double sellValue) {
         super(speed, sellValue);
         this.balance = new SimpleDoubleProperty(0);
@@ -38,6 +42,9 @@ public class CashRegister extends Station {
         super.update();
         if (isInUse() && location.getCustomers() == 0) {
             super.finish();
+        }
+        if (!isInUse() && automatic && location.getCustomers() > 0) {
+            begin();
         }
     }
 

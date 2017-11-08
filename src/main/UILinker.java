@@ -1,27 +1,24 @@
 package main;
 
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.binding.StringExpression;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.scene.control.*;
 import main.model.*;
 
 import java.text.NumberFormat;
+import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static javafx.beans.binding.Bindings.*;
-import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.beans.binding.Bindings.createStringBinding;
+import static javafx.beans.binding.Bindings.format;
 
 /**
  * @author Anthony Morrell
@@ -40,6 +37,10 @@ public final class UILinker {
     }
 
     public static <T> void linkItems(ChoiceBox<T> uiElement, ObservableValue<ObservableList<T>> source) {
+        link(uiElement.itemsProperty(), source);
+    }
+
+    public static <T> void linkItems(TableView<T> uiElement, ObservableValue<ObservableList<T>> source) {
         link(uiElement.itemsProperty(), source);
     }
 
@@ -138,16 +139,29 @@ public final class UILinker {
         return f.outputTypeProperty();
     }
 
-    public static ObjectBinding<ObservableList<Employee>> getPossibleOperators(Station s) {
-        return createObjectBinding(() -> {
-            ObservableList<Employee> options = observableArrayList(s.getLocation().getRoster());
-            options.add(Employee.UNASSIGNED);
-            return options;
-        }, s.getLocation().rosterProperty());
+    public static ObservableValue<ObservableList<Employee>> getPossibleOperators(Station s) {
+        FilteredList<Employee> list = s.getLocation().rosterProperty()
+                .filtered(e -> e.getJob().SKILLS.contains(s.getSkill()));
+        SortedList<Employee> sorted = list.sorted((o1, o2) -> {
+            if (o1 == Employee.UNASSIGNED) {
+                return Integer.MAX_VALUE;
+            } else if (o2 == Employee.UNASSIGNED) {
+                return Integer.MIN_VALUE;
+            } else {
+                return o1.getJob().NAME.compareTo(o2.getJob().NAME);
+            }
+        });
+        return new SimpleListProperty<>(sorted);
     }
 
     public static DoubleProperty getProgress(Station s) {
         return s.progressProperty();
+    }
+
+    public static ListProperty<Employee> getRoster(Location loc) {
+        FilteredList<Employee> roster = loc.getRoster().filtered(e -> e != Employee.UNASSIGNED);
+        SortedList<Employee> sorted = roster.sorted(Comparator.comparing(Employee::getName));
+        return new SimpleListProperty<>(sorted);
     }
 
     public static StringBinding getSellButtonText(Station s) {
@@ -166,7 +180,7 @@ public final class UILinker {
         return wrap(l.totalBalanceProperty(), UILinker::asMoney);
     }
 
-    private static String asMoney(Number amount) {
+    public static String asMoney(Number amount) {
         return NumberFormat.getCurrencyInstance().format(amount);
     }
 

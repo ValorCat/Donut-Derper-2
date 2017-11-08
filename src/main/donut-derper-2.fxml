@@ -328,52 +328,55 @@
                                           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <TitledPane collapsible="false" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                                          <TitledPane collapsible="false" text=" Employees" GridPane.columnIndex="1" GridPane.valignment="TOP">
                                              <content>
                                                 <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
                                                    <children>
-                                                      <HBox disable="true" spacing="15.0">
-                                                         <children>
-                                                            <Button fx:id="dismissEmployeeButton" mnemonicParsing="false" onAction="#onDismissSelectedEmployees" text="Dismiss">
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor></Button>
-                                                            <Button fx:id="promoteEmployeeButton" mnemonicParsing="false" onAction="#onPromoteSelectedEmployees" text="Promote">
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor></Button>
-                                                         </children>
-                                                      </HBox>
+                                                      <TitledPane collapsible="false" text="Hiring">
+                                                        <content>
+                                                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                               <children>
+                                                                  <ChoiceBox fx:id="hireList" prefWidth="150.0" />
+                                                                  <Button fx:id="hireButton" mnemonicParsing="false" onAction="#onHireNewEmployee" text="Hire" />
+                                                               </children>
+                                                            </HBox>
+                                                        </content>
+                                                      </TitledPane>
                                                       <TableView fx:id="employeeList" prefHeight="200.0" prefWidth="200.0">
                                                         <columns>
-                                                            <TableColumn prefWidth="35.0" sortable="false">
+                                                            <TableColumn prefWidth="35.0" sortable="false" visible="false">
                                                                <graphic>
                                                                   <CheckBox alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" />
                                                                </graphic>
                                                             </TableColumn>
-                                                          <TableColumn editable="false" prefWidth="148.0" text="Name" />
-                                                          <TableColumn editable="false" prefWidth="150.0" text="Position" />
-                                                            <TableColumn editable="false" prefWidth="116.0" text="Pay" />
+                                                          <TableColumn editable="false" prefWidth="114.0" text="Name" />
+                                                          <TableColumn editable="false" prefWidth="116.0" text="Position" />
+                                                            <TableColumn editable="false" prefWidth="108.0" text="Branch" />
+                                                            <TableColumn editable="false" prefWidth="65.0" text="Pay" />
                                                         </columns>
                                                       </TableView>
+                                                      <HBox alignment="CENTER_LEFT" disable="true" spacing="15.0">
+                                                         <children>
+                                                            <Label text="Manage:" />
+                                                            <Button fx:id="promoteEmployeeButton" mnemonicParsing="false" onAction="#onPromoteSelectedEmployees" text="Promote">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <font>
+                                                                  <Font size="10.0" />
+                                                               </font></Button>
+                                                            <Button fx:id="dismissEmployeeButton" mnemonicParsing="false" onAction="#onDismissSelectedEmployees" text="Dismiss">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <font>
+                                                                  <Font size="10.0" />
+                                                               </font></Button>
+                                                         </children>
+                                                      </HBox>
                                                    </children>
                                                 </VBox>
                                              </content>
-                                             <graphic>
-                                                <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" spacing="15.0">
-                                                   <children>
-                                                      <Label text="Employee Roster" />
-                                                      <Button fx:id="hireEmployeeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onHireNewEmployee" text="Hire">
-                                                         <font>
-                                                            <Font size="9.0" />
-                                                         </font>
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                      </Button>
-                                                   </children>
-                                                </HBox>
-                                             </graphic>
                                           </TitledPane>
                                           <VBox spacing="10.0">
                                              <children>

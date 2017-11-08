@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import main.model.*;
 
@@ -42,10 +43,12 @@ public class Controller implements Initializable {
     @FXML public Label totalBalance;
     @FXML public ChoiceBox<Account> depositAccount;
     @FXML public Accordion accountList;
-    @FXML public Button hireEmployeeButton;
+
+    @FXML public TableView<Employee> employeeList;
     @FXML public Button dismissEmployeeButton;
     @FXML public Button promoteEmployeeButton;
-    @FXML public TableView<Employee> employeeList;
+    @FXML public ChoiceBox<Job> hireList;
+    @FXML public Button hireButton;
 
     // ordering
     @FXML public ChoiceBox<IngredientDescription> orderItem;
@@ -58,6 +61,8 @@ public class Controller implements Initializable {
         linkItems(currentLocation, getLocations());
         linkText(grossDonutCount, getGrossDonuts());
         linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
+        linkItems(hireList, Job.entryLevelJobsProperty());
+        hireList.setValue(Job.getEntryLevelJobs().get(0));
     }
 
     private void bindLocationSpecific(Location loc) {
@@ -71,6 +76,15 @@ public class Controller implements Initializable {
         linkItems(depositAccount, getAccounts(loc));
         linkChoice(depositAccount, getDepositAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
         linkPanes(accountList, loc.getAccountPanes());
+        setupRoster(loc);
+    }
+
+    private void setupRoster(Location loc) {
+        linkItems(employeeList, getRoster(loc));
+        employeeList.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
+        employeeList.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("job"));
+        employeeList.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("location"));
+        employeeList.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("pay"));
     }
 
     public void onManualCheckout(ActionEvent event) {
@@ -85,16 +99,18 @@ public class Controller implements Initializable {
 
     }
 
-    public void onHireNewEmployee(ActionEvent event) {
-
-    }
-
     public void onPromoteSelectedEmployees(ActionEvent event) {
 
     }
 
     public void onDismissSelectedEmployees(ActionEvent event) {
 
+    }
+
+    public void onHireNewEmployee(ActionEvent event) {
+        Job job = hireList.getValue();
+        Employee emp = new Employee(RNG.name(), job, Game.location());
+        Game.location().getRoster().add(emp);
     }
 
 }

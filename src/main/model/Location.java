@@ -15,11 +15,13 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public class Location {
 
+    public static final Location NONE = new Location("--", 0);
+
     private StringProperty name;
     private double appeal = 1;                       // modifies rate of customer entry
-    private int lowStockTolerance = 12;              // min donuts before customers will enter
+    private int lowStockTolerance = 5;               // min donuts before customers will enter
     private long slowServiceTolerance = (long) 5e9;  // min nanoseconds w/o service before customers walk out
-    private double baseEnterChance = 0.0015;          // base chance of customer entry per tick
+    private double baseEnterChance = 0.002;          // base chance of customer entry per tick
     private double leaveChance = 0.006;              // base chance of customer walking out per tick
     private double appealBoostPerPerson = .01;       // effect of one happy customer on appeal
     private double maxAppealDropPerPerson = 0.02;    // max effect of one unhappy customer on appeal
@@ -68,7 +70,7 @@ public class Location {
         addAccount(new Account("Savings", .011, this));
         this.depositAccount = new SimpleObjectProperty<>(accounts.get(0));
         this.wageSourceAccount = new SimpleObjectProperty<>(accounts.get(0));
-        this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER));
+        this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER, Employee.UNASSIGNED));
     }
 
     public void update(long now, long last) {

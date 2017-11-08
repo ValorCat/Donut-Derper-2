@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import main.model.DonutType;
 import main.model.Game;
 import main.model.Location;
 
@@ -17,7 +18,8 @@ import java.io.IOException;
  */
 public class Main extends Application {
 
-    private final static String WINDOW_TITLE = "Donut Derper II: Back to the Bakery";
+    private static final String WINDOW_TITLE = "Donut Derper II: Back to the Bakery";
+    public static final String NAME_LIST = "src/names.txt";
 
     public static void main(String[] args) {
         launch(args);
@@ -27,7 +29,15 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             AnchorPane window = FXMLLoader.load(Main.class.getResource("donut-derper-2.fxml"));
-            primaryStage.setScene(new Scene(window));
+            Scene scene = new Scene(window);
+            scene.setOnKeyPressed(e -> {
+                switch (e.getCode()) {
+                    case D:
+                        Game.location().updateDonuts(new DonutType("Plain", 1));
+                        break;
+                }
+            });
+            primaryStage.setScene(scene);
             primaryStage.setTitle(WINDOW_TITLE);
             primaryStage.show();
 
