@@ -277,7 +277,8 @@ public class Location {
     }
 
     private void payEmployees() {
-        wageSourceAccount.get().updateBalance(-totalWages.get());
+        Account account = wageSourceAccount.get();
+        account.updateBalance(-totalWages.get());
     }
 
     private void depositInterest() {

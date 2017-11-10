@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import main.model.*;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static main.UILinker.*;
@@ -39,7 +40,8 @@ public class Controller implements Initializable {
     @FXML public Button addProductButton;
 
     // finances
-    @FXML public ProgressIndicator timeToPayday;
+    @FXML public ProgressIndicator percentToPayday;
+    @FXML public Label timeToPayday;
     @FXML public Label totalWages;
     @FXML public ChoiceBox<Account> salarySource;
     @FXML public Label totalBalance;
@@ -62,10 +64,12 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         linkItems(currentLocation, getLocations());
         linkText(grossDonutCount, getGrossDonuts());
-        linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
-        linkProgress(timeToPayday, Account.payPeriodProgressProperty());
-        linkItems(hireList, Job.entryLevelJobsProperty());
+        linkProgress(percentToPayday, Account.payPeriodProgressProperty());
+        linkText(timeToPayday, getTimeToPayday());
+        linkItems(hireList, getHireableJobs());
         hireList.setValue(Job.getEntryLevelJobs().get(0));
+        link(hireButton.textProperty(), getHireButtonText(hireList.valueProperty()));
+        linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
     }
 
     private void bindLocationSpecific(Location loc) {
@@ -82,6 +86,7 @@ public class Controller implements Initializable {
         linkItems(salarySource, getAccounts(loc));
         linkChoice(salarySource, getWageSourceAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
         linkPanes(accountList, loc.getAccountPanes());
+        link(hireButton.disableProperty(), getHireButtonDisable(hireList.valueProperty(), loc));
         setupRoster(loc);
     }
 
@@ -117,8 +122,13 @@ public class Controller implements Initializable {
 
     public void onHireNewEmployee(ActionEvent event) {
         Job job = hireList.getValue();
+        Job superior = job.SUPERIOR;
+        List<Job> jobs = Job.getEntryLevelJobs();
         Employee emp = new Employee(RNG.name(), job, Game.location());
         Game.location().getRoster().add(emp);
+        if (superior != null && !jobs.contains(superior)) {
+            jobs.add(superior);
+        }
     }
 
 }

@@ -36,6 +36,9 @@ public class Main extends Application {
                     case D:
                         Game.location().updateDonuts(new DonutType("Plain", 1));
                         break;
+                    case M:
+                        Game.location().getDepositAccount().updateBalance(1);
+                        break;
                 }
             });
             primaryStage.setScene(scene);

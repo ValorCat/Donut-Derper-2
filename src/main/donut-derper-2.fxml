@@ -386,10 +386,10 @@
                                                          <children>
                                                             <HBox spacing="12.0">
                                                                <children>
-                                                                  <ProgressIndicator fx:id="timeToPayday" progress="0.0" />
+                                                                  <ProgressIndicator fx:id="percentToPayday" progress="0.0" />
                                                                   <VBox alignment="CENTER_LEFT" spacing="5.0">
                                                                      <children>
-                                                                        <Label text="Payday in 0 seconds" />
+                                                                        <Label fx:id="timeToPayday" text="Payday in 0 seconds" />
                                                                         <Label fx:id="totalWages" text="-$0.00" />
                                                                      </children>
                                                                   </VBox>

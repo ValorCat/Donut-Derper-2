@@ -18,8 +18,7 @@ import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static javafx.beans.binding.Bindings.createStringBinding;
-import static javafx.beans.binding.Bindings.format;
+import static javafx.beans.binding.Bindings.*;
 
 /**
  * @author Anthony Morrell
@@ -112,6 +111,25 @@ public final class UILinker {
         return Game.game.grossDonutsProperty().asString();
     }
 
+    public static BooleanBinding getHireButtonDisable(ObjectProperty<Job> selected, Location l) {
+        return createBooleanBinding(
+                () -> l.getTotalBalance() < selected.get().WAGE,
+                selected, l.totalBalanceProperty()
+        );
+    }
+
+    public static StringBinding getHireButtonText(ObjectProperty<Job> selected) {
+        return createStringBinding(
+                () -> String.format("Hire - %s/pp", asMoney(selected.get().WAGE)),
+                selected);
+    }
+
+    public static ListProperty<Job> getHireableJobs() {
+        ObservableList<Job> jobs = Job.getEntryLevelJobs();
+        SortedList<Job> sorted = jobs.sorted();
+        return new SimpleListProperty<>(sorted);
+    }
+
     public static StringExpression getInterest(Account a) {
         return format("Interest: %.2f%%  (%s)",
                 a.interestRateProperty().multiply(100),
@@ -175,6 +193,10 @@ public final class UILinker {
 
     public static StringBinding getStockedDonuts(Location l) {
         return l.donutStockProperty().asString();
+    }
+
+    public static StringExpression getTimeToPayday() {
+        return format("Payday in %d seconds", Account.payPeriodSecondsProperty());
     }
 
     public static BooleanBinding getTimerVisible(Station s) {

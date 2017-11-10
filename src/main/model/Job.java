@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import java.util.List;
 import java.util.Set;
 
-import static javafx.collections.FXCollections.*;
+import static javafx.collections.FXCollections.observableArrayList;
 import static main.model.Job.Skill.*;
 
 /**
@@ -32,9 +32,7 @@ public class Job {
         Job cashier = new Job("Cashier", 12, assistMan, USE_REGISTER);
 
         JOB_TREE = assistMan;
-        ENTRY_LEVEL_JOBS = new SimpleListProperty<>(observableArrayList(List.of(
-                cashier, jnrCook
-        )));
+        ENTRY_LEVEL_JOBS = new SimpleListProperty<>(observableArrayList(List.of(cashier, jnrCook)));
     }
 
     public enum Skill { USE_FRYER, USE_REGISTER }

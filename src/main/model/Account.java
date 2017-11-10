@@ -1,9 +1,6 @@
 package main.model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 /**
  * @author Anthony Morrell
@@ -16,7 +13,8 @@ public class Account {
 
     private static long untilInterestDeposit = INTEREST_INTERVAL;
     private static long untilPayday = PAYDAY_INTERVAL;
-    private static DoubleProperty payPeriodProgress = new SimpleDoubleProperty(0);
+    private static DoubleProperty payPeriodProgress = new SimpleDoubleProperty();
+    private static IntegerProperty payPeriodSeconds = new SimpleIntegerProperty();
 
     private StringProperty name;
     private DoubleProperty balance;
@@ -87,6 +85,7 @@ public class Account {
     public static boolean readyForPayday(long delta) {
         untilPayday -= delta;
         payPeriodProgress.set((PAYDAY_INTERVAL - untilPayday) / (double) PAYDAY_INTERVAL);
+        payPeriodSeconds.set((int) (untilPayday / (long) 1e9));
         if (untilPayday <= 0) {
             untilPayday = PAYDAY_INTERVAL;
             return true;
@@ -96,6 +95,10 @@ public class Account {
 
     public static DoubleProperty payPeriodProgressProperty() {
         return payPeriodProgress;
+    }
+
+    public static IntegerProperty payPeriodSecondsProperty() {
+        return payPeriodSeconds;
     }
 
 }
