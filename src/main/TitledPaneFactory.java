@@ -38,7 +38,7 @@ public final class TitledPaneFactory {
         timer.setMinHeight(TIMER_HEIGHT);
         timer.setMaxHeight(TIMER_HEIGHT);
         timer.setMouseTransparent(true);
-        link(timer.progressProperty(), getProgress(sta));
+        linkProgress(timer, getProgress(sta));
         link(timer.visibleProperty(), getTimerVisible(sta));
 
         Label operatorName = new Label("", timer);

@@ -384,13 +384,13 @@
                                                    <content>
                                                       <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
                                                          <children>
-                                                            <HBox fx:id="paydayTracker" spacing="12.0">
+                                                            <HBox spacing="12.0">
                                                                <children>
-                                                                  <ProgressIndicator progress="0.0" />
+                                                                  <ProgressIndicator fx:id="timeToPayday" progress="0.0" />
                                                                   <VBox alignment="CENTER_LEFT" spacing="5.0">
                                                                      <children>
                                                                         <Label text="Payday in 0 seconds" />
-                                                                        <Label text="-$0.00" />
+                                                                        <Label fx:id="totalWages" text="-$0.00" />
                                                                      </children>
                                                                   </VBox>
                                                                </children>

@@ -1,11 +1,12 @@
 package main;
 
+import javafx.beans.property.ListProperty;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import main.model.*;
 
 import java.net.URL;
@@ -38,7 +39,8 @@ public class Controller implements Initializable {
     @FXML public Button addProductButton;
 
     // finances
-    @FXML public HBox paydayTracker;
+    @FXML public ProgressIndicator timeToPayday;
+    @FXML public Label totalWages;
     @FXML public ChoiceBox<Account> salarySource;
     @FXML public Label totalBalance;
     @FXML public ChoiceBox<Account> depositAccount;
@@ -61,6 +63,7 @@ public class Controller implements Initializable {
         linkItems(currentLocation, getLocations());
         linkText(grossDonutCount, getGrossDonuts());
         linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
+        linkProgress(timeToPayday, Account.payPeriodProgressProperty());
         linkItems(hireList, Job.entryLevelJobsProperty());
         hireList.setValue(Job.getEntryLevelJobs().get(0));
     }
@@ -72,15 +75,20 @@ public class Controller implements Initializable {
         linkText(donutCount, getStockedDonuts(loc));
         linkPanes(registerList, loc.getRegisters().getPanes());
         linkPanes(fryerList, loc.getFryers().getPanes());
+        linkText(totalWages, getTotalWages(loc));
         linkText(totalBalance, getTotalBalance(loc));
         linkItems(depositAccount, getAccounts(loc));
         linkChoice(depositAccount, getDepositAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
+        linkItems(salarySource, getAccounts(loc));
+        linkChoice(salarySource, getWageSourceAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
         linkPanes(accountList, loc.getAccountPanes());
         setupRoster(loc);
     }
 
     private void setupRoster(Location loc) {
-        linkItems(employeeList, getRoster(loc));
+        ListProperty<Employee> roster = getRoster(loc);
+        linkItems(employeeList, roster);
+        ((SortedList<Employee>) roster.get()).comparatorProperty().bind(employeeList.comparatorProperty());
         employeeList.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeList.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("job"));
         employeeList.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("location"));

@@ -57,7 +57,7 @@ public class CashRegister extends Station {
     }
 
     public void collect() {
-        location.getDepositAccount().addBalance(balance.get());
+        location.getDepositAccount().updateBalance(balance.get());
         balance.set(0);
     }
 

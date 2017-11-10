@@ -4,6 +4,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -34,6 +35,10 @@ public final class UILinker {
 
     public static void linkText(Label uiElement, StringExpression source) {
         link(uiElement.textProperty(), source);
+    }
+
+    public static void linkProgress(ProgressIndicator uiElement, ObservableDoubleValue source) {
+        link(uiElement.progressProperty(), source);
     }
 
     public static <T> void linkItems(ChoiceBox<T> uiElement, ObservableValue<ObservableList<T>> source) {
@@ -108,10 +113,10 @@ public final class UILinker {
     }
 
     public static StringExpression getInterest(Account a) {
-        return format("Interest: %.2f%%  (+%s)",
+        return format("Interest: %.2f%%  (%s)",
                 a.interestRateProperty().multiply(100),
                 createStringBinding(
-                        () -> asMoney(a.getBalance() * a.getInterestRate()),
+                        () -> asMoneySigned(a.getInterest()),
                         a.balanceProperty(), a.interestRateProperty()));
     }
 
@@ -180,8 +185,20 @@ public final class UILinker {
         return wrap(l.totalBalanceProperty(), UILinker::asMoney);
     }
 
+    public static StringBinding getTotalWages(Location l) {
+        return wrap(l.totalWagesProperty(), amount -> "-" + asMoney(amount));
+    }
+
+    public static ObjectProperty<Account> getWageSourceAccount(Location l) {
+        return l.wageSourceAccountProperty();
+    }
+
     public static String asMoney(Number amount) {
         return NumberFormat.getCurrencyInstance().format(amount);
+    }
+    public static String asMoneySigned(Number amount) {
+        String value = asMoney(amount);
+        return value.startsWith("-") ? value : "+" + value;
     }
 
     private static <T> StringBinding wrap(ObservableValue<T> source, Function<T,String> wrapper) {

@@ -35,9 +35,7 @@ public abstract class Station {
     }
 
     public void finish() {
-        if (!automatic) {
-            inUse.set(false);
-        }
+        inUse.set(false);
         progress.set(0);
     }
 

@@ -73,10 +73,15 @@ public class Location {
         this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER, Employee.UNASSIGNED));
     }
 
-    public void update(long now, long last) {
+    public void update(long now, long last, boolean isInterestDay, boolean isPayday) {
         updateCustomers(now, last);
         updateStations();
-        updateAccounts(now, last);
+        if (isInterestDay) {
+            depositInterest();
+        }
+        if (isPayday) {
+            payEmployees();
+        }
     }
 
     public void enterCustomer() {
@@ -271,12 +276,8 @@ public class Location {
         fryers.update();
     }
 
-    private void updateAccounts(long now, long last) {
-        Account.untilInterestDeposit -= now - last;
-        if (Account.untilInterestDeposit <= 0) {
-            depositInterest();
-            Account.untilInterestDeposit = Account.INTEREST_INTERVAL;
-        }
+    private void payEmployees() {
+        wageSourceAccount.get().updateBalance(-totalWages.get());
     }
 
     private void depositInterest() {

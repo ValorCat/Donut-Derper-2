@@ -29,10 +29,14 @@ public class Employee {
         this.location = new SimpleObjectProperty<>(location);
         this.pay = new SimpleStringProperty(UILinker.asMoney(job.WAGE));
         this.job.addListener((obs, oldValue, newValue) -> pay.set(UILinker.asMoney(newValue.WAGE)));
+        if (location != Location.NONE) {
+            location.updateTotalWages(job.WAGE);
+        }
     }
 
     public void promote() {
         assert isPromotable();
+        location.get().updateTotalWages(job.get().SUPERIOR.WAGE - job.get().WAGE);
         job.set(job.get().SUPERIOR);
     }
 

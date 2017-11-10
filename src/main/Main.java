@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import main.model.Account;
 import main.model.DonutType;
 import main.model.Game;
 import main.model.Location;
@@ -63,8 +64,10 @@ public class Main extends Application {
     }
 
     private static void tick(long now, long last) {
+        boolean isInterestDay = Account.readyForInterestDeposit(now - last);
+        boolean isPayday = Account.readyForPayday(now - last);
         for (Location l : Game.game.getLocations()) {
-            l.update(now, last);
+            l.update(now, last, isInterestDay, isPayday);
         }
     }
 
