@@ -109,17 +109,22 @@ public abstract class Station {
     }
 
     private void setOperatorImpl(Employee oldOperator, Employee newOperator) {
-        if (oldOperator == Employee.PLAYER) {
-            unassignPlayer();
-        }
+        boolean wasAssigned = oldOperator != Employee.UNASSIGNED;
+        boolean wasPlayer = oldOperator == Employee.PLAYER;
         boolean isAssigned = newOperator != Employee.UNASSIGNED;
         boolean isPlayer = newOperator == Employee.PLAYER;
+        if (wasAssigned) {
+            oldOperator.unsetStation();
+            if (wasPlayer) {
+                unassignPlayer();
+            }
+        }
         if (isAssigned) {
             newOperator.getStation().ifPresent(Station::unassign);
-            newOperator.assign(this);
-        }
-        if (isPlayer) {
-            assignPlayer();
+            newOperator.setStation(this);
+            if (isPlayer) {
+                assignPlayer();
+            }
         }
         automatic = isAssigned && !isPlayer;
     }

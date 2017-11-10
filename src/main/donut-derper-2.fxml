@@ -81,7 +81,7 @@
                                              <graphic>
                                                 <Label fx:id="customerCount" graphicTextGap="10.0" text="0 / 0">
                                                    <font>
-                                                      <Font size="15.0" />
+                                                      <Font size="16.0" />
                                                    </font>
                                                    <graphic>
                                                       <Button fx:id="manualSellButton" focusTraversable="false" mnemonicParsing="false" onAction="#onManualCheckout" text="Check Out">
@@ -165,7 +165,7 @@
                                                       </Button>
                                                    </graphic>
                                                    <font>
-                                                      <Font size="15.0" />
+                                                      <Font size="16.0" />
                                                    </font>
                                                 </Label>
                                              </graphic>

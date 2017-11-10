@@ -88,8 +88,12 @@ public class Employee {
         return Optional.ofNullable(this.station);
     }
 
-    public void assign(Station newStation) {
+    public void setStation(Station newStation) {
         this.station = newStation;
+    }
+
+    public void unsetStation() {
+        this.station = null;
     }
 
     public String toString() {

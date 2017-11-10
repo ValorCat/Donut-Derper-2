@@ -77,7 +77,7 @@ public final class UILinker {
     }
 
     public static BooleanBinding getAssignSelfVisible(Station s) {
-        return s.operatorProperty().isEqualTo(Employee.UNASSIGNED);
+        return s.operatorProperty().isNotEqualTo(Employee.PLAYER);
     }
 
     public static StringBinding getBalance(CashRegister r) {
