@@ -102,6 +102,10 @@ public final class UILinker {
         return l.depositAccountProperty();
     }
 
+    public static BooleanBinding getEmployeesSelected(TableView<Employee> employees) {
+        return employees.getSelectionModel().selectedItemProperty().isNull();
+    }
+
     public static BooleanBinding getFryButtonDisable(Location l) {
         return l.getFryers().playerHasStationProperty().not()
                 .or(l.getFryers().playerStationInUseProperty());

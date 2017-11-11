@@ -69,6 +69,13 @@ public class Controller implements Initializable {
         linkItems(hireList, getHireableJobs());
         hireList.setValue(Job.getEntryLevelJobs().get(0));
         link(hireButton.textProperty(), getHireButtonText(hireList.valueProperty()));
+        employeeList.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("name"));
+        employeeList.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("job"));
+        employeeList.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("location"));
+        employeeList.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("pay"));
+        employeeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        link(promoteEmployeeButton.disableProperty(), getEmployeesSelected(employeeList));
+        link(dismissEmployeeButton.disableProperty(), getEmployeesSelected(employeeList));
         linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
     }
 
@@ -94,10 +101,6 @@ public class Controller implements Initializable {
         ListProperty<Employee> roster = getRoster(loc);
         linkItems(employeeList, roster);
         ((SortedList<Employee>) roster.get()).comparatorProperty().bind(employeeList.comparatorProperty());
-        employeeList.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
-        employeeList.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("job"));
-        employeeList.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("location"));
-        employeeList.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("pay"));
     }
 
     public void onManualCheckout(ActionEvent event) {
@@ -113,11 +116,25 @@ public class Controller implements Initializable {
     }
 
     public void onPromoteSelectedEmployees(ActionEvent event) {
-
+        List<Job> jobs = Job.getEntryLevelJobs();
+        for (Employee emp : employeeList.getSelectionModel().getSelectedItems()) {
+            if (emp.isPromotable()) {
+                emp.promote();
+                Job superior = emp.getJob().SUPERIOR;
+                if (superior != null && !jobs.contains(superior)) {
+                    jobs.add(superior);
+                }
+            }
+        }
     }
 
     public void onDismissSelectedEmployees(ActionEvent event) {
-
+        Employee[] selected = employeeList.getSelectionModel().getSelectedItems().toArray(new Employee[0]);
+        for (Employee emp : selected) {
+            if (emp != Employee.PLAYER) {
+                Game.location().dismiss(emp);
+            }
+        }
     }
 
     public void onHireNewEmployee(ActionEvent event) {

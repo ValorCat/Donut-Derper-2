@@ -112,6 +112,12 @@ public class Location {
         }
     }
 
+    public void dismiss(Employee emp) {
+        assert roster.contains(emp);
+        roster.remove(emp);
+        updateTotalWages(-emp.getJob().WAGE);
+    }
+
     public void updateTotalBalance(double amount) {
         totalBalance.set(totalBalance.get() + amount);
     }
