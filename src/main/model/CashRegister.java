@@ -17,8 +17,8 @@ public class CashRegister extends Station {
         skill = Job.Skill.USE_REGISTER;
     }
 
-    public CashRegister(double speed, double sellValue) {
-        super(speed, sellValue);
+    public CashRegister(double baseSpeed, double sellValue) {
+        super(baseSpeed, sellValue);
         this.balance = new SimpleDoubleProperty(0);
     }
 

@@ -20,11 +20,10 @@ public class Location {
     private StringProperty name;
     private double appeal = 1;                       // modifies rate of customer entry
     private int lowStockTolerance = 5;               // min donuts before customers will enter
-    private long slowServiceTolerance = (long) 5e9;  // min nanoseconds w/o service before customers walk out
-    private double baseEnterChance = 0.002;          // base chance of customer entry per tick
-    private double leaveChance = 0.006;              // base chance of customer walking out per tick
-    private double appealBoostPerPerson = .01;       // effect of one happy customer on appeal
-    private double maxAppealDropPerPerson = 0.02;    // max effect of one unhappy customer on appeal
+    private long slowServiceTolerance = (long) 6e9;  // min nanoseconds w/o service before customers walk out
+    private double baseEnterChance = .002;           // base chance of customer entry per tick
+    private double leaveChance = .006;               // base chance of customer walking out per tick
+    private double appealBoostPerPerson = .02;       // effect of one happy customer on appeal
 
     private IntegerProperty customers;
     private IntegerProperty maxCapacity;
@@ -96,9 +95,6 @@ public class Location {
 
     public void leaveCustomer() {
         assert customers.get() > 0;
-        if (customersLeaving) {
-            appeal -= RNG.range(maxAppealDropPerPerson);
-        }
         customers.set(customers.get() - 1);
     }
 
@@ -114,6 +110,7 @@ public class Location {
 
     public void dismiss(Employee emp) {
         assert roster.contains(emp);
+        emp.getStation().ifPresent(s -> s.setOperator(Employee.UNASSIGNED));
         roster.remove(emp);
         updateTotalWages(-emp.getJob().WAGE);
     }

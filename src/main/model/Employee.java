@@ -38,6 +38,11 @@ public class Employee {
         assert isPromotable();
         location.get().updateTotalWages(job.get().SUPERIOR.WAGE - job.get().WAGE);
         job.set(job.get().SUPERIOR);
+        getStation().ifPresent(s -> s.setOperatorSpeed(s.operatorProperty()));
+    }
+
+    public double getSkill(Job.Skill skill) {
+        return job.get().getSkill(skill);
     }
 
     public boolean isPromotable() {
@@ -97,11 +102,7 @@ public class Employee {
     }
 
     public String toString() {
-        if (job.get() == Job.NONE) {
-            return name.get();
-        } else {
-            return String.format("%s (%s)", name.get(), job.get());
-        }
+        return name.get();
     }
 
 }

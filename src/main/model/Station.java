@@ -1,6 +1,9 @@
 package main.model;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
 
 /**
  * @author Anthony Morrell
@@ -11,16 +14,19 @@ public abstract class Station {
     private ObjectProperty<Employee> operator;
     private DoubleProperty progress;
     private DoubleProperty sellValue;
-    private double speed;
+    private ObservableDoubleValue operatorSpeed;
+    private ObservableDoubleValue speed;
+    private double baseSpeed;
     protected BooleanProperty inUse;
     protected boolean automatic;
     protected Location location;
     protected Job.Skill skill;
 
-    public Station(double speed, double sellValue) {
+    public Station(double baseSpeed, double sellValue) {
         this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED);
         this.operator.addListener((obs, oldValue, newValue) -> setOperatorImpl(oldValue, newValue));
-        this.speed = speed;
+        this.baseSpeed = baseSpeed;
+        setOperatorSpeed(operator);
         this.progress = new SimpleDoubleProperty();
         this.sellValue = new SimpleDoubleProperty(sellValue);
         this.inUse = new SimpleBooleanProperty();
@@ -41,11 +47,18 @@ public abstract class Station {
 
     public void update() {
         if (inUse.get() && (operator.get() != Employee.UNASSIGNED)) {
-            progress.set(progress.get() + speed / 60);
+            progress.set(progress.get() + speed.get() / 60);
             if (progress.get() >= 1) {
                 finish();
             }
         }
+    }
+
+    public void setOperatorSpeed(ObservableValue<Employee> newOperator) {
+        this.operatorSpeed = Bindings.createDoubleBinding(
+                () -> newOperator.getValue().getSkill(skill),
+                newOperator, newOperator.getValue().jobProperty());
+        this.speed = Bindings.createDoubleBinding(() -> baseSpeed * operatorSpeed.get(), operatorSpeed);
     }
 
     public boolean isInUse() {
@@ -122,6 +135,7 @@ public abstract class Station {
         if (isAssigned) {
             newOperator.getStation().ifPresent(Station::unassign);
             newOperator.setStation(this);
+            setOperatorSpeed(operator);
             if (isPlayer) {
                 assignPlayer();
             }

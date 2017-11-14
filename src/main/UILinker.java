@@ -168,7 +168,7 @@ public final class UILinker {
 
     public static ObservableValue<ObservableList<Employee>> getPossibleOperators(Station s) {
         FilteredList<Employee> list = s.getLocation().rosterProperty()
-                .filtered(e -> e.getJob().SKILLS.contains(s.getSkill()));
+                .filtered(e -> e.getJob().isAssignable(s.getSkill()));
         SortedList<Employee> sorted = list.sorted((o1, o2) -> {
             if (o1 == Employee.UNASSIGNED) {
                 return Integer.MAX_VALUE;
