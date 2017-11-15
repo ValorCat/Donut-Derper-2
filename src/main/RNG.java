@@ -1,8 +1,9 @@
 package main;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -14,13 +15,15 @@ import java.util.stream.Collectors;
  */
 public final class RNG {
 
+    private static final String NAMES = "names.txt";
     private static Random random = new Random();
     private static List<String> names;
 
     static {
-        try {
-            names = Files.lines(Paths.get(Main.NAME_LIST)).collect(Collectors.toList());
+        try (InputStream stream = RNG.class.getResourceAsStream(NAMES)) {
+            names = new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.toList());
         } catch (IOException e) {
+            System.err.printf("Failed to read %s for %s\n", NAMES, RNG.class.getName());
             e.printStackTrace();
             names = List.of("?");
         }

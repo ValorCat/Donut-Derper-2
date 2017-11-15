@@ -20,7 +20,6 @@ import java.io.IOException;
 public class Main extends Application {
 
     private static final String WINDOW_TITLE = "Donut Derper II: Back to the Bakery";
-    public static final String NAME_LIST = "src/names.txt";
 
     public static void main(String[] args) {
         launch(args);
