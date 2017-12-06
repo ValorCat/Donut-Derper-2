@@ -1,7 +1,11 @@
-package main.model;
+package main;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import main.model.CashRegister;
+import main.model.Employee;
+import main.model.Fryer;
+import main.model.Location;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -18,21 +22,33 @@ public final class Game {
     private LongProperty grossDonuts;
 
     private Game() {
-        this.locations = new SimpleListProperty<>(observableArrayList(
+        locations = new SimpleListProperty<>(observableArrayList(
                 new Location("Tony's Bakery", 8),
                 new Location("Second Place", 12)
         ));
-        this.currentLocation = new SimpleObjectProperty<>(locations.get(0));
-        this.grossDonuts = new SimpleLongProperty(0);
+        currentLocation = new SimpleObjectProperty<>(locations.get(0));
+        grossDonuts = new SimpleLongProperty();
 
-        currentLocation.get().getRegisters().add(CashRegister.INITIAL);
-        currentLocation.get().getFryers().add(Fryer.INITIAL);
-        currentLocation.get().getFryers().assignToPlayer(Fryer.INITIAL);
+        getCurrentLocation().getRegisters().add(CashRegister.INITIAL);
+        getCurrentLocation().getFryers().add(Fryer.INITIAL);
+        getCurrentLocation().getFryers().assignToPlayer(Fryer.INITIAL);
         Fryer.INITIAL.setOperator(Employee.PLAYER);
     }
 
+    private Location getCurrentLocation() {
+        return currentLocation.get();
+    }
+
     public void addDonuts(int amount) {
-        grossDonuts.set(grossDonuts.get() + amount);
+        setGrossDonuts(getGrossDonuts() + amount);
+    }
+
+    private long getGrossDonuts() {
+        return grossDonuts.get();
+    }
+
+    private void setGrossDonuts(long grossDonuts) {
+        this.grossDonuts.set(grossDonuts);
     }
 
     public ObservableList<Location> getLocations() {
@@ -43,16 +59,8 @@ public final class Game {
         return locations;
     }
 
-    public Location getCurrentLocation() {
-        return currentLocation.get();
-    }
-
     public ObjectProperty<Location> currentLocationProperty() {
         return currentLocation;
-    }
-
-    public long getGrossDonuts() {
-        return grossDonuts.get();
     }
 
     public LongProperty grossDonutsProperty() {
@@ -60,7 +68,7 @@ public final class Game {
     }
 
     public static Location location() {
-        return game.currentLocation.get();
+        return game.getCurrentLocation();
     }
 
 }

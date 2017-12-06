@@ -23,7 +23,7 @@ public class Account {
 
     public Account(String name, double interestRate, Location location) {
         this.name = new SimpleStringProperty(name);
-        this.balance = new SimpleDoubleProperty(0.0);
+        this.balance = new SimpleDoubleProperty();
         this.interestRate = new SimpleDoubleProperty(interestRate);
         this.location = location;
     }
@@ -32,28 +32,8 @@ public class Account {
         updateBalance(getInterest());
     }
 
-    public String getName() {
-        return name.get();
-    }
-
-    public StringProperty nameProperty() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public double getBalance() {
-        return balance.get();
-    }
-
-    public DoubleProperty balanceProperty() {
-        return balance;
-    }
-
     public void updateBalance(double amount) {
-        balance.set(balance.get() + amount);
+        setBalance(getBalance() + amount);
         location.updateTotalBalance(amount);
     }
 
@@ -61,16 +41,32 @@ public class Account {
         return balance.get() > 0 ? balance.get() * interestRate.get() : 0;
     }
 
-    public double getInterestRate() {
-        return interestRate.get();
+    public String getName() {
+        return name.get();
     }
 
-    public DoubleProperty interestRateProperty() {
+    public final StringProperty nameProperty() {
+        return name;
+    }
+
+    private double getBalance() {
+        return balance.get();
+    }
+
+    private void setBalance(double balance) {
+        this.balance.set(balance);
+    }
+
+    public final DoubleProperty balanceProperty() {
+        return balance;
+    }
+
+    public final DoubleProperty interestRateProperty() {
         return interestRate;
     }
 
     public String toString() {
-        return name.get();
+        return getName();
     }
 
     public static boolean readyForInterestDeposit(long delta) {

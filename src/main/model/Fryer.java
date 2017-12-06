@@ -22,17 +22,14 @@ public class Fryer extends Station {
     private ObjectProperty<DonutTypeDescription> outputType;
     private IntegerProperty outputAmount;
 
-    {
-        skill = Job.Skill.USE_FRYER;
-    }
-
     public Fryer(double baseSpeed, int donutsPerBatch, double sellValue) {
         super(baseSpeed, sellValue);
-        this.outputType = new SimpleObjectProperty<>(DonutType.PLAIN);
-        this.outputAmount = new SimpleIntegerProperty(donutsPerBatch);
-        this.output = Bindings.createObjectBinding(
-                () -> new DonutType(outputType.get(), outputAmount.get()),
+        outputType = new SimpleObjectProperty<>(DonutType.PLAIN);
+        outputAmount = new SimpleIntegerProperty(donutsPerBatch);
+        output = Bindings.createObjectBinding(
+                () -> new DonutType(getOutputType(), getOutputAmount()),
                 outputType, outputAmount);
+        skill = Job.Skill.USE_FRYER;
     }
 
     public void finish() {
@@ -63,10 +60,6 @@ public class Fryer extends Station {
         return outputType;
     }
 
-    public void setOutputType(DonutTypeDescription outputType) {
-        this.outputType.set(outputType);
-    }
-
     public int getOutputAmount() {
         return outputAmount.get();
     }
@@ -75,12 +68,10 @@ public class Fryer extends Station {
         return outputAmount;
     }
 
-    public void setOutputAmount(int outputAmount) {
-        this.outputAmount.set(outputAmount);
-    }
-
     private DonutType getOutput() {
         return new DonutType(output.getValue());
     }
+
+
 
 }

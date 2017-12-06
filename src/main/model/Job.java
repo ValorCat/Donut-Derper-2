@@ -18,11 +18,10 @@ import static main.model.Job.Skill.USE_REGISTER;
  */
 public class Job {
 
-    private static final ListProperty<Job> ENTRY_LEVEL_JOBS;
-
     public static final Job FOUNDER = new Job("Founder", 0, null,
             skills(USE_FRYER, 1, USE_REGISTER, 1));
     public static final Job NONE = new Job("--", 0, null, skills());
+    private static final ListProperty<Job> ENTRY_LEVEL_JOBS;
 
     static {
         Job mngr = new Job("Branch Manager", 15, null, skills(USE_FRYER, .35, USE_REGISTER, 1));
@@ -36,42 +35,48 @@ public class Job {
         ENTRY_LEVEL_JOBS = new SimpleListProperty<>(observableArrayList(List.of(cashier, jnrCook)));
     }
 
-    public enum Skill { USE_FRYER, USE_REGISTER }
-
-    public final String NAME;
-    public final Job SUPERIOR;
-    public final Map<Skill,Double> SKILLS;
-    public final double WAGE;
+    private String name;
+    private Job superior;
+    private Map<Skill,Double> skills;
+    private double wage;
 
     public Job(String name, double wage, Job superior, Map<Skill,Double> skills) {
-        this.NAME = name;
-        this.SUPERIOR = superior;
-        this.SKILLS = skills;
-        this.WAGE = wage;
+        this.name = name;
+        this.superior = superior;
+        this.skills = skills;
+        this.wage = wage;
     }
 
-    public boolean hasSkill(Skill skill) {
-        return getSkill(skill) > 0;
+    public String getName() {
+        return name;
+    }
+
+    public Job getSuperior() {
+        return superior;
+    }
+
+    public double getWage() {
+        return wage;
     }
 
     public boolean isAssignable(Skill skill) {
         return this == Job.NONE || hasSkill(skill);
     }
 
+    public boolean hasSkill(Skill skill) {
+        return getSkill(skill) > 0;
+    }
+
     public double getSkill(Skill skill) {
-        return SKILLS.getOrDefault(skill, 0d);
+        return skills.getOrDefault(skill, 0d);
     }
 
     public String toString() {
-        return NAME;
+        return name;
     }
 
     public static ObservableList<Job> getEntryLevelJobs() {
         return ENTRY_LEVEL_JOBS.get();
-    }
-
-    public static ListProperty<Job> entryLevelJobsProperty() {
-        return ENTRY_LEVEL_JOBS;
     }
 
     private static Map<Skill,Double> skills(Object... values) {
@@ -88,5 +93,7 @@ public class Job {
         }
         return skills;
     }
+
+    public enum Skill { USE_FRYER, USE_REGISTER }
 
 }

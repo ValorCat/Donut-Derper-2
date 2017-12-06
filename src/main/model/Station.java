@@ -1,6 +1,7 @@
 package main.model;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
@@ -11,114 +12,25 @@ import javafx.beans.value.ObservableValue;
  */
 public abstract class Station {
 
+    protected BooleanProperty inUse;
+    protected boolean automatic;
+    protected Location location;
+    protected Job.Skill skill;
     private ObjectProperty<Employee> operator;
     private DoubleProperty progress;
     private DoubleProperty sellValue;
     private ObservableDoubleValue operatorSpeed;
     private ObservableDoubleValue speed;
     private double baseSpeed;
-    protected BooleanProperty inUse;
-    protected boolean automatic;
-    protected Location location;
-    protected Job.Skill skill;
 
     public Station(double baseSpeed, double sellValue) {
-        this.operator = new SimpleObjectProperty<>(Employee.UNASSIGNED);
-        this.operator.addListener((obs, oldValue, newValue) -> setOperatorImpl(oldValue, newValue));
+        operator = new SimpleObjectProperty<>(Employee.UNASSIGNED);
+        operator.addListener((obs, oldValue, newValue) -> setOperatorImpl(oldValue, newValue));
         this.baseSpeed = baseSpeed;
         setOperatorSpeed(operator);
-        this.progress = new SimpleDoubleProperty();
+        progress = new SimpleDoubleProperty();
         this.sellValue = new SimpleDoubleProperty(sellValue);
-        this.inUse = new SimpleBooleanProperty();
-    }
-
-    protected abstract void assignPlayer();
-    protected abstract void unassignPlayer();
-
-    public void begin() {
-        inUse.set(true);
-        progress.set(0);
-    }
-
-    public void finish() {
-        inUse.set(false);
-        progress.set(0);
-    }
-
-    public void update() {
-        if (inUse.get() && (operator.get() != Employee.UNASSIGNED)) {
-            progress.set(progress.get() + speed.get() / 60);
-            if (progress.get() >= 1) {
-                finish();
-            }
-        }
-    }
-
-    public void setOperatorSpeed(ObservableValue<Employee> newOperator) {
-        this.operatorSpeed = Bindings.createDoubleBinding(
-                () -> newOperator.getValue().getSkill(skill),
-                newOperator, newOperator.getValue().jobProperty());
-        this.speed = Bindings.createDoubleBinding(() -> baseSpeed * operatorSpeed.get(), operatorSpeed);
-    }
-
-    public boolean isInUse() {
-        return inUse.get();
-    }
-
-    public BooleanProperty inUseProperty() {
-        return inUse;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public Employee getOperator() {
-        return operator.get();
-    }
-
-    public ObjectProperty<Employee> operatorProperty() {
-        return operator;
-    }
-
-    public void setOperator(Employee operator) {
-        this.operator.set(operator);
-    }
-
-    public double getProgress() {
-        return progress.get();
-    }
-
-    public DoubleProperty progressProperty() {
-        return progress;
-    }
-
-    public void setProgress(double progress) {
-        this.progress.set(progress);
-    }
-
-    public double getSellValue() {
-        return sellValue.get();
-    }
-
-    public DoubleProperty sellValueProperty() {
-        return sellValue;
-    }
-
-    public void setSellValue(double sellValue) {
-        this.sellValue.set(sellValue);
-    }
-
-    public Job.Skill getSkill() {
-        return skill;
-    }
-
-    private void unassign() {
-        operator.set(Employee.UNASSIGNED);
+        inUse = new SimpleBooleanProperty();
     }
 
     private void setOperatorImpl(Employee oldOperator, Employee newOperator) {
@@ -141,6 +53,105 @@ public abstract class Station {
             }
         }
         automatic = isAssigned && !isPlayer;
+    }
+
+    protected abstract void unassignPlayer();
+
+    protected abstract void assignPlayer();
+
+    public void begin() {
+        setInUse(true);
+        setProgress(0);
+    }
+
+    public void update() {
+        if (inUse.get() && (operator.get() != Employee.UNASSIGNED)) {
+            setProgress(getProgress() + getSpeed() / 60);
+            if (getProgress() >= 1) {
+                finish();
+            }
+        }
+    }
+
+    public double getProgress() {
+        return progress.get();
+    }
+
+    private double getSpeed() {
+        return speed.get();
+    }
+
+    public void finish() {
+        setInUse(false);
+        setProgress(0);
+    }
+
+    public void setProgress(double progress) {
+        this.progress.set(progress);
+    }
+
+    public boolean isInUse() {
+        return inUse.get();
+    }
+
+    private void setInUse(boolean inUse) {
+        this.inUse.set(inUse);
+    }
+
+    public final BooleanProperty inUseProperty() {
+        return inUse;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Employee getOperator() {
+        return operator.get();
+    }
+
+    public void setOperator(Employee operator) {
+        this.operator.set(operator);
+    }
+
+    public final ObjectProperty<Employee> operatorProperty() {
+        return operator;
+    }
+
+    public final DoubleProperty progressProperty() {
+        return progress;
+    }
+
+    public double getSellValue() {
+        return sellValue.get();
+    }
+
+    public final DoubleProperty sellValueProperty() {
+        return sellValue;
+    }
+
+    public Job.Skill getSkill() {
+        return skill;
+    }
+
+    private double getOperatorSpeed() {
+        return operatorSpeed.get();
+    }
+
+    public void setOperatorSpeed(ObservableValue<Employee> newOperator) {
+        DoubleBinding operatorSpeed = Bindings.createDoubleBinding(
+                () -> newOperator.getValue().getSkill(skill),
+                newOperator, newOperator.getValue().jobProperty());
+        this.operatorSpeed = operatorSpeed;
+        speed = operatorSpeed.multiply(baseSpeed);
+    }
+
+    private void unassign() {
+        operator.set(Employee.UNASSIGNED);
     }
 
 }

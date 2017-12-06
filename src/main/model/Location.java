@@ -4,6 +4,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TitledPane;
+import main.Game;
 import main.RNG;
 import main.ui.TitledPaneFactory;
 
@@ -48,28 +49,28 @@ public class Location {
 
     public Location(String name, int maxCapacity) {
         this.name = new SimpleStringProperty(name);
-        this.customers = new SimpleIntegerProperty();
+        customers = new SimpleIntegerProperty();
         this.maxCapacity = new SimpleIntegerProperty(maxCapacity);
-        this.occupancy = customers.add(0.0).divide(this.maxCapacity);
+        occupancy = customers.add(0.0).divide(this.maxCapacity);
 
-        this.donutStock = new SimpleIntegerProperty();
-        this.donuts = new Inventory<>(
+        donutStock = new SimpleIntegerProperty();
+        donuts = new Inventory<>(
                 new DonutType("Plain", 0));
-        this.ingredients = new Inventory<>(
+        ingredients = new Inventory<>(
                 new Ingredient("Flour", 2000),
                 new Ingredient("Sugar", 1000));
-        this.registers = new StationGroup<>(this);
-        this.fryers = new StationGroup<>(this);
+        registers = new StationGroup<>(this);
+        fryers = new StationGroup<>(this);
 
-        this.totalBalance = new SimpleDoubleProperty();
-        this.totalWages = new SimpleDoubleProperty();
-        this.accounts = new SimpleListProperty<>(observableArrayList());
-        this.accountPanes = observableArrayList();
+        totalBalance = new SimpleDoubleProperty();
+        totalWages = new SimpleDoubleProperty();
+        accounts = new SimpleListProperty<>(observableArrayList());
+        accountPanes = observableArrayList();
         addAccount(new Account("Checking", .007, this));
         addAccount(new Account("Savings", .011, this));
-        this.depositAccount = new SimpleObjectProperty<>(accounts.get(0));
-        this.wageSourceAccount = new SimpleObjectProperty<>(accounts.get(0));
-        this.roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER, Employee.UNASSIGNED));
+        depositAccount = new SimpleObjectProperty<>(accounts.get(0));
+        wageSourceAccount = new SimpleObjectProperty<>(accounts.get(0));
+        roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER, Employee.UNASSIGNED));
     }
 
     public void update(long now, long last, boolean isInterestDay, boolean isPayday) {
@@ -101,8 +102,8 @@ public class Location {
     public void updateDonuts(DonutType newDonuts) {
         int addition = newDonuts.getAmount();
         int newTotal = donutStock.get() + addition;
-        this.donutStock.set(newTotal < 0 ? 0 : newTotal);
-        this.donuts.update(newDonuts);
+        donutStock.set(newTotal < 0 ? 0 : newTotal);
+        donuts.update(newDonuts);
         if (addition > 0) {
             Game.game.addDonuts(addition);
         }
@@ -112,7 +113,7 @@ public class Location {
         assert roster.contains(emp);
         emp.getStation().ifPresent(s -> s.setOperator(Employee.UNASSIGNED));
         roster.remove(emp);
-        updateTotalWages(-emp.getJob().WAGE);
+        updateTotalWages(-emp.getJob().getWage());
     }
 
     public void updateTotalBalance(double amount) {
@@ -127,7 +128,7 @@ public class Location {
         return name.get();
     }
 
-    public StringProperty nameProperty() {
+    public final StringProperty nameProperty() {
         return name;
     }
 
@@ -143,7 +144,7 @@ public class Location {
         return customers.get();
     }
 
-    public IntegerProperty customersProperty() {
+    public final IntegerProperty customersProperty() {
         return customers;
     }
 
@@ -151,27 +152,23 @@ public class Location {
         return maxCapacity.get();
     }
 
-    public IntegerProperty maxCapacityProperty() {
+    public final IntegerProperty maxCapacityProperty() {
         return maxCapacity;
     }
 
-    public void setMaxCapacity(int maxCapacity) {
-        this.maxCapacity.set(maxCapacity);
-    }
-
     public void setLastCheckOut() {
-        this.lastCheckOut = System.nanoTime();
+        lastCheckOut = System.nanoTime();
     }
 
     public void boostAppeal(double amount) {
-        this.appeal += amount;
+        appeal += amount;
     }
 
     public ObservableList<Employee> getRoster() {
         return roster.get();
     }
 
-    public ListProperty<Employee> rosterProperty() {
+    public final ListProperty<Employee> rosterProperty() {
         return roster;
     }
 
@@ -187,7 +184,7 @@ public class Location {
         return donutStock.get();
     }
 
-    public IntegerProperty donutStockProperty() {
+    public final IntegerProperty donutStockProperty() {
         return donutStock;
     }
 
@@ -203,7 +200,7 @@ public class Location {
         return totalBalance.get();
     }
 
-    public DoubleProperty totalBalanceProperty() {
+    public final DoubleProperty totalBalanceProperty() {
         return totalBalance;
     }
 
@@ -211,7 +208,7 @@ public class Location {
         return totalWages.get();
     }
 
-    public DoubleProperty totalWagesProperty() {
+    public final DoubleProperty totalWagesProperty() {
         return totalWages;
     }
 
@@ -219,15 +216,11 @@ public class Location {
         return accounts.get();
     }
 
-    public ListProperty<Account> accountsProperty() {
+    public final ListProperty<Account> accountsProperty() {
         return accounts;
     }
 
-    public Account getWageSourceAccount() {
-        return wageSourceAccount.get();
-    }
-
-    public ObjectProperty<Account> wageSourceAccountProperty() {
+    public final ObjectProperty<Account> wageSourceAccountProperty() {
         return wageSourceAccount;
     }
 
@@ -235,7 +228,7 @@ public class Location {
         return depositAccount.get();
     }
 
-    public ObjectProperty<Account> depositAccountProperty() {
+    public final ObjectProperty<Account> depositAccountProperty() {
         return depositAccount;
     }
 

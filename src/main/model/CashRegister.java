@@ -13,13 +13,18 @@ public class CashRegister extends Station {
 
     private DoubleProperty balance;
 
-    {
+    public CashRegister(double baseSpeed, double sellValue) {
+        super(baseSpeed, sellValue);
+        balance = new SimpleDoubleProperty();
         skill = Job.Skill.USE_REGISTER;
     }
 
-    public CashRegister(double baseSpeed, double sellValue) {
-        super(baseSpeed, sellValue);
-        this.balance = new SimpleDoubleProperty(0);
+    public void assignPlayer() {
+        location.getRegisters().assignToPlayer(this);
+    }
+
+    public void unassignPlayer() {
+        location.getRegisters().unassignPlayer();
     }
 
     public void begin() {
@@ -48,12 +53,14 @@ public class CashRegister extends Station {
         }
     }
 
-    public void assignPlayer() {
-        location.getRegisters().assignToPlayer(this);
+    private DonutType getRandomDonutType(int amount) {
+        assert location.getDonutStock() > 0 : "no donuts in stock";
+        DonutType random = location.getDonuts().getRandom();
+        return new DonutType(random.getData(), amount);
     }
 
-    public void unassignPlayer() {
-        location.getRegisters().unassignPlayer();
+    private void addBalance(double amount) {
+        setBalance(getBalance() + amount);
     }
 
     public void collect() {
@@ -61,22 +68,16 @@ public class CashRegister extends Station {
         balance.set(0);
     }
 
-    public double getBalance() {
+    private double getBalance() {
         return balance.get();
     }
 
-    public DoubleProperty balanceProperty() {
+    private void setBalance(double balance) {
+        this.balance.set(balance);
+    }
+
+    public final DoubleProperty balanceProperty() {
         return balance;
-    }
-
-    private void addBalance(double amount) {
-        balance.set(balance.get() + amount);
-    }
-
-    private DonutType getRandomDonutType(int amount) {
-        assert location.getDonutStock() > 0 : "no donuts in stock";
-        DonutType random = location.getDonuts().getRandom();
-        return new DonutType(random.getData(), amount);
     }
 
 }

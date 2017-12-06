@@ -8,7 +8,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.model.Account;
 import main.model.DonutType;
-import main.model.Game;
 import main.model.Location;
 
 import java.io.IOException;
@@ -21,10 +20,6 @@ public class Main extends Application {
 
     private static final String WINDOW_TITLE = "Donut Derper II: Back to the Bakery";
     private static final String FXML_SOURCE = "ui/donut-derper-2.fxml";
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -46,17 +41,11 @@ public class Main extends Application {
             primaryStage.show();
 
             AnimationTimer loop = new AnimationTimer() {
-
                 private long lastTimeStamp = -1;
-
                 public void handle(long now) {
-                    if (lastTimeStamp == -1) {
-                        lastTimeStamp = now;
-                    }
-                    tick(now, lastTimeStamp);
+                    tick(now, lastTimeStamp == -1 ? now : lastTimeStamp);
                     lastTimeStamp = now;
                 }
-
             };
 
             loop.start();
@@ -72,6 +61,10 @@ public class Main extends Application {
         for (Location l : Game.game.getLocations()) {
             l.update(now, last, isInterestDay, isPayday);
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
 }

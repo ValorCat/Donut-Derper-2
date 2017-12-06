@@ -29,7 +29,7 @@ public class IngredientDescription {
         return name.get();
     }
 
-    public StringProperty nameProperty() {
+    public final StringProperty nameProperty() {
         return name;
     }
 
@@ -37,7 +37,7 @@ public class IngredientDescription {
         return baseCost.get();
     }
 
-    public DoubleProperty baseCostProperty() {
+    public final DoubleProperty baseCostProperty() {
         return baseCost;
     }
 
@@ -45,12 +45,12 @@ public class IngredientDescription {
         return unit.get();
     }
 
-    public StringProperty unitProperty() {
+    public final StringProperty unitProperty() {
         return unit;
     }
 
     public String toString() {
-        return name.get();
+        return getName();
     }
 
 }

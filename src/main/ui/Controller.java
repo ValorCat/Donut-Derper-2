@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import main.Game;
 import main.RNG;
 import main.model.*;
 
@@ -87,6 +88,8 @@ public class Controller implements Initializable {
         linkPanes(registerList, loc.getRegisters().getPanes());
         linkPanes(fryerList, loc.getFryers().getPanes());
 
+        ingredientList.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>(""));
+
         linkText(totalWages, getTotalWages(loc));
         linkText(totalBalance, getTotalBalance(loc));
         linkItems(depositAccount, getAccounts(loc));
@@ -121,7 +124,7 @@ public class Controller implements Initializable {
         for (Employee emp : employeeList.getSelectionModel().getSelectedItems()) {
             if (emp.isPromotable()) {
                 emp.promote();
-                Job superior = emp.getJob().SUPERIOR;
+                Job superior = emp.getJob().getSuperior();
                 if (superior != null && !jobs.contains(superior)) {
                     jobs.add(superior);
                 }
@@ -140,7 +143,7 @@ public class Controller implements Initializable {
 
     public void onHireNewEmployee() {
         Job job = hireList.getValue();
-        Job superior = job.SUPERIOR;
+        Job superior = job.getSuperior();
         List<Job> jobs = Job.getEntryLevelJobs();
         Employee emp = new Employee(RNG.name(), job, Game.location());
         Game.location().getRoster().add(emp);

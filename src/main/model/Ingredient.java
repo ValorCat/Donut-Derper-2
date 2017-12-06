@@ -3,7 +3,7 @@ package main.model;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 
-import static javafx.collections.FXCollections.*;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * @author Anthony Morrell
@@ -29,11 +29,11 @@ public class Ingredient extends Consumable<IngredientDescription, Double> {
     }
 
     public Ingredient(Ingredient other) {
-        super(other.data, other.amount.get());
+        super(other.data, other.getAmount());
     }
 
     public void update(Double modifier) {
-        amount.set(amount.get() + modifier);
+        setAmount(getAmount() + modifier);
     }
 
 }

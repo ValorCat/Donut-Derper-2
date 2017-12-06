@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.*;
+import main.Game;
 import main.model.*;
 
 import java.text.NumberFormat;
@@ -117,14 +118,14 @@ public final class UILinker {
 
     public static BooleanBinding getHireButtonDisable(ObjectProperty<Job> selected, Location l) {
         return createBooleanBinding(
-                () -> l.getTotalBalance() < selected.get().WAGE,
+                () -> l.getTotalBalance() < selected.get().getWage(),
                 selected, l.totalBalanceProperty()
         );
     }
 
     public static StringBinding getHireButtonText(ObjectProperty<Job> selected) {
         return createStringBinding(
-                () -> String.format("Hire - %s/pp", asMoney(selected.get().WAGE)),
+                () -> String.format("Hire - %s/pp", asMoney(selected.get().getWage())),
                 selected);
     }
 
@@ -175,7 +176,7 @@ public final class UILinker {
             } else if (o2 == Employee.UNASSIGNED) {
                 return Integer.MIN_VALUE;
             } else {
-                return o1.getJob().NAME.compareTo(o2.getJob().NAME);
+                return o1.getJob().getName().compareTo(o2.getJob().getName());
             }
         });
         return new SimpleListProperty<>(sorted);

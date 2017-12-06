@@ -31,19 +31,14 @@ public final class RNG {
 
     private RNG() {}
 
-    public static boolean chance(double p) {
-        return random.nextDouble() < p;
-    }
-
     public static void chance(double p, Runnable func) {
         if (chance(p)) {
             func.run();
         }
     }
 
-    public static <E> E choose(List<E> domain) {
-        assert !domain.isEmpty();
-        return domain.get(random.nextInt(domain.size()));
+    public static boolean chance(double p) {
+        return random.nextDouble() < p;
     }
 
     public static <E> Optional<E> chooseNullable(List<E> domain) {
@@ -52,6 +47,11 @@ public final class RNG {
         } else {
             return Optional.of(choose(domain));
         }
+    }
+
+    public static <E> E choose(List<E> domain) {
+        assert !domain.isEmpty();
+        return domain.get(random.nextInt(domain.size()));
     }
 
     public static double range(double max) {

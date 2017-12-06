@@ -5,9 +5,9 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
 import main.RNG;
 
-import java.util.*;
+import java.util.Iterator;
 
-import static javafx.collections.FXCollections.*;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * @author Anthony Morrell
@@ -17,7 +17,7 @@ public class Inventory<
         Item extends Consumable<?, Unit>,
         Unit extends Number & Comparable<Unit>> {
 
-    private final ListProperty<Item> stock;
+    private ListProperty<Item> stock;
 
     public Inventory() {
         this.stock = new SimpleListProperty<>(observableArrayList());
@@ -48,10 +48,6 @@ public class Inventory<
 
     public ObservableList<Item> getStock() {
         return stock.get();
-    }
-
-    public ListProperty<Item> stockProperty() {
-        return stock;
     }
 
 }

@@ -35,15 +35,17 @@ public class DonutType extends Consumable<DonutTypeDescription, Integer> {
     }
 
     public DonutType(DonutType other) {
-        super(other.data, other.amount.get());
+        super(other.data, other.getAmount());
     }
 
     public void update(Integer modifier) {
-        amount.set(amount.get() + modifier);
+        setAmount(getAmount() + modifier);
     }
 
     public String toString() {
         return data.getName();
     }
+
+
 
 }

@@ -27,62 +27,22 @@ public class Employee {
         this.name = new SimpleStringProperty(name);
         this.job = new SimpleObjectProperty<>(job);
         this.location = new SimpleObjectProperty<>(location);
-        this.pay = new SimpleStringProperty(UILinker.asMoney(job.WAGE));
-        this.job.addListener((obs, oldValue, newValue) -> pay.set(UILinker.asMoney(newValue.WAGE)));
+        this.pay = new SimpleStringProperty(UILinker.asMoney(job.getWage()));
+        this.job.addListener((obs, oldValue, newValue) -> pay.set(UILinker.asMoney(newValue.getWage())));
         if (location != Location.NONE) {
-            location.updateTotalWages(job.WAGE);
+            location.updateTotalWages(job.getWage());
         }
     }
 
     public void promote() {
         assert isPromotable();
-        location.get().updateTotalWages(job.get().SUPERIOR.WAGE - job.get().WAGE);
-        job.set(job.get().SUPERIOR);
+        location.get().updateTotalWages(job.get().getSuperior().getWage() - job.get().getWage());
+        setJob(getJob().getSuperior());
         getStation().ifPresent(s -> s.setOperatorSpeed(s.operatorProperty()));
     }
 
-    public double getSkill(Job.Skill skill) {
-        return job.get().getSkill(skill);
-    }
-
     public boolean isPromotable() {
-        return job.get().SUPERIOR != null;
-    }
-
-    public String getName() {
-        return name.get();
-    }
-
-    public StringProperty nameProperty() {
-        return name;
-    }
-
-    public Job getJob() {
-        return job.get();
-    }
-
-    public ObjectProperty<Job> jobProperty() {
-        return job;
-    }
-
-    public Location getLocation() {
-        return location.get();
-    }
-
-    public ObjectProperty<Location> locationProperty() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location.set(location);
-    }
-
-    public String getPay() {
-        return pay.get();
-    }
-
-    public StringProperty payProperty() {
-        return pay;
+        return job.get().getSuperior() != null;
     }
 
     public Optional<Station> getStation() {
@@ -93,12 +53,56 @@ public class Employee {
         this.station = newStation;
     }
 
+    public double getSkill(Job.Skill skill) {
+        return job.get().getSkill(skill);
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public final StringProperty nameProperty() {
+        return name;
+    }
+
+    public Job getJob() {
+        return job.get();
+    }
+
+    public final ObjectProperty<Job> jobProperty() {
+        return job;
+    }
+
+    public Location getLocation() {
+        return location.get();
+    }
+
+    public void setLocation(Location location) {
+        this.location.set(location);
+    }
+
+    public final ObjectProperty<Location> locationProperty() {
+        return location;
+    }
+
+    public String getPay() {
+        return pay.get();
+    }
+
+    public final StringProperty payProperty() {
+        return pay;
+    }
+
     public void unsetStation() {
         this.station = null;
     }
 
     public String toString() {
         return name.get();
+    }
+
+    private void setJob(Job job) {
+        this.job.set(job);
     }
 
 }
