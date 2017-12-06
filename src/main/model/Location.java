@@ -5,7 +5,7 @@ import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TitledPane;
 import main.RNG;
-import main.TitledPaneFactory;
+import main.ui.TitledPaneFactory;
 
 import static javafx.collections.FXCollections.observableArrayList;
 

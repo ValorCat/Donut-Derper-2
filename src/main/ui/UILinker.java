@@ -1,4 +1,4 @@
-package main;
+package main.ui;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringBinding;

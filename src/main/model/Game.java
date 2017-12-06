@@ -2,7 +2,6 @@ package main.model;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
-import main.Controller;
 
 import static javafx.collections.FXCollections.observableArrayList;
 

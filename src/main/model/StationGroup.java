@@ -3,7 +3,7 @@ package main.model;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TitledPane;
-import main.TitledPaneFactory;
+import main.ui.TitledPaneFactory;
 
 import java.util.Optional;
 

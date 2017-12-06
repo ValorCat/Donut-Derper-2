@@ -4,7 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import main.UILinker;
+import main.ui.UILinker;
 
 import java.util.Optional;
 
@@ -63,10 +63,6 @@ public class Employee {
 
     public ObjectProperty<Job> jobProperty() {
         return job;
-    }
-
-    public void setJob(Job job) {
-        this.job.set(job);
     }
 
     public Location getLocation() {

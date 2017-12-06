@@ -20,6 +20,7 @@ import java.io.IOException;
 public class Main extends Application {
 
     private static final String WINDOW_TITLE = "Donut Derper II: Back to the Bakery";
+    private static final String FXML_SOURCE = "ui/donut-derper-2.fxml";
 
     public static void main(String[] args) {
         launch(args);
@@ -28,7 +29,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            AnchorPane window = FXMLLoader.load(Main.class.getResource("donut-derper-2.fxml"));
+            AnchorPane window = FXMLLoader.load(Main.class.getResource(FXML_SOURCE));
             Scene scene = new Scene(window);
             scene.setOnKeyPressed(e -> {
                 switch (e.getCode()) {

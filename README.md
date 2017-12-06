@@ -10,7 +10,7 @@ These are likely, but not guaranteed, to be implemented in the order shown.
 
   1. **Ingredients**
   1. **Equipment enhancements** - buying, selling, space constraints
-  1. **Advanced donut**s - recipes, costs, supply and demand
+  1. **Advanced donuts** - recipes, costs, supply and demand
   1. **Better bank accounts** - transferring $$, withdrawal fees
   1. **Better customers** - comments, bulk requests
   1. **Events** - random effects like customer floods, employees quitting, etc.

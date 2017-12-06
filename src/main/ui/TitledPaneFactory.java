@@ -1,4 +1,4 @@
-package main;
+package main.ui;
 
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import main.model.*;
 
-import static main.UILinker.*;
+import static main.ui.UILinker.*;
 
 /**
  * @author Anthony Morrell

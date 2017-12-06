@@ -1,19 +1,19 @@
-package main;
+package main.ui;
 
 import javafx.beans.property.ListProperty;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import main.RNG;
 import main.model.*;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static main.UILinker.*;
+import static main.ui.UILinker.*;
 
 /**
  * @author Anthony Morrell
@@ -86,6 +86,7 @@ public class Controller implements Initializable {
         linkText(donutCount, getStockedDonuts(loc));
         linkPanes(registerList, loc.getRegisters().getPanes());
         linkPanes(fryerList, loc.getFryers().getPanes());
+
         linkText(totalWages, getTotalWages(loc));
         linkText(totalBalance, getTotalBalance(loc));
         linkItems(depositAccount, getAccounts(loc));
@@ -103,19 +104,19 @@ public class Controller implements Initializable {
         ((SortedList<Employee>) roster.get()).comparatorProperty().bind(employeeList.comparatorProperty());
     }
 
-    public void onManualCheckout(ActionEvent event) {
+    public void onManualCheckout() {
         Game.location().getRegisters().getPlayerOperated().ifPresent(CashRegister::begin);
     }
 
-    public void onManualFry(ActionEvent event) {
+    public void onManualFry() {
         Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::begin);
     }
 
-    public void onCreateProduct(ActionEvent event) {
+    public void onCreateProduct() {
 
     }
 
-    public void onPromoteSelectedEmployees(ActionEvent event) {
+    public void onPromoteSelectedEmployees() {
         List<Job> jobs = Job.getEntryLevelJobs();
         for (Employee emp : employeeList.getSelectionModel().getSelectedItems()) {
             if (emp.isPromotable()) {
@@ -128,7 +129,7 @@ public class Controller implements Initializable {
         }
     }
 
-    public void onDismissSelectedEmployees(ActionEvent event) {
+    public void onDismissSelectedEmployees() {
         Employee[] selected = employeeList.getSelectionModel().getSelectedItems().toArray(new Employee[0]);
         for (Employee emp : selected) {
             if (emp != Employee.PLAYER) {
@@ -137,7 +138,7 @@ public class Controller implements Initializable {
         }
     }
 
-    public void onHireNewEmployee(ActionEvent event) {
+    public void onHireNewEmployee() {
         Job job = hireList.getValue();
         Job superior = job.SUPERIOR;
         List<Job> jobs = Job.getEntryLevelJobs();
