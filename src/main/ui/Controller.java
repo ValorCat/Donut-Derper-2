@@ -5,7 +5,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import main.Game;
 import main.RNG;
 import main.model.*;
@@ -56,7 +55,7 @@ public class Controller implements Initializable {
     @FXML public Button hireButton;
 
     // ordering
-    @FXML public ChoiceBox<IngredientDescription> orderItem;
+    @FXML public ChoiceBox<IngredientType> orderItem;
     @FXML public Button orderButton;
     @FXML public Label orderAmount;
     @FXML public Label orderCost;
@@ -65,18 +64,17 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         linkItems(currentLocation, getLocations());
         linkText(grossDonutCount, getGrossDonuts());
+        linkColumns(ingredientList, "name", "amount");
         linkProgress(percentToPayday, Account.payPeriodProgressProperty());
         linkText(timeToPayday, getTimeToPayday());
         linkItems(hireList, getHireableJobs());
         hireList.setValue(Job.getEntryLevelJobs().get(0));
         link(hireButton.textProperty(), getHireButtonText(hireList.valueProperty()));
-        employeeList.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("name"));
-        employeeList.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("job"));
-        employeeList.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("location"));
-        employeeList.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("pay"));
+        linkColumns(employeeList, "name", "job", "location", "pay");
         employeeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         link(promoteEmployeeButton.disableProperty(), getEmployeesSelected(employeeList));
         link(dismissEmployeeButton.disableProperty(), getEmployeesSelected(employeeList));
+        linkItems(orderItem, IngredientType.typesProperty());
         linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
     }
 
@@ -87,9 +85,7 @@ public class Controller implements Initializable {
         linkText(donutCount, getStockedDonuts(loc));
         linkPanes(registerList, loc.getRegisters().getPanes());
         linkPanes(fryerList, loc.getFryers().getPanes());
-
-        ingredientList.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>(""));
-
+        ingredientList.setItems(loc.getIngredients());
         linkText(totalWages, getTotalWages(loc));
         linkText(totalBalance, getTotalBalance(loc));
         linkItems(depositAccount, getAccounts(loc));

@@ -1,11 +1,9 @@
 package main.model;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 
 /**
  * @author Anthony Morrell
@@ -16,25 +14,19 @@ public class Fryer extends Station {
     public static final Fryer INITIAL = new Fryer(0.6, 1, 0);
     public static final String OUTPUT_FORMAT = "%d %s Donut(s)";
 
-    // output must be an ObservableValue, and not an ObjectProperty, for its
-    // binding to work in the constructor
-    private ObservableValue<DonutType> output;
-    private ObjectProperty<DonutTypeDescription> outputType;
+    private ObjectProperty<DonutType> outputType;
     private IntegerProperty outputAmount;
 
     public Fryer(double baseSpeed, int donutsPerBatch, double sellValue) {
         super(baseSpeed, sellValue);
         outputType = new SimpleObjectProperty<>(DonutType.PLAIN);
         outputAmount = new SimpleIntegerProperty(donutsPerBatch);
-        output = Bindings.createObjectBinding(
-                () -> new DonutType(getOutputType(), getOutputAmount()),
-                outputType, outputAmount);
         skill = Job.Skill.USE_FRYER;
     }
 
     public void finish() {
         super.finish();
-        location.updateDonuts(getOutput());
+        location.addDonuts(new DonutBatch(getOutputType(), getOutputAmount()));
     }
 
     public void update() {
@@ -52,11 +44,11 @@ public class Fryer extends Station {
         location.getFryers().unassignPlayer();
     }
 
-    public DonutTypeDescription getOutputType() {
+    public DonutType getOutputType() {
         return outputType.get();
     }
 
-    public ObjectProperty<DonutTypeDescription> outputTypeProperty() {
+    public ObjectProperty<DonutType> outputTypeProperty() {
         return outputType;
     }
 
@@ -67,11 +59,5 @@ public class Fryer extends Station {
     public IntegerProperty outputAmountProperty() {
         return outputAmount;
     }
-
-    private DonutType getOutput() {
-        return new DonutType(output.getValue());
-    }
-
-
 
 }

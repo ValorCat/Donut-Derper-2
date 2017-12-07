@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import main.Game;
 import main.model.*;
 
@@ -59,6 +60,12 @@ public final class UILinker {
         uiElement.valueProperty().bindBidirectional(modelElement);
         if (initial != null) {
             uiElement.setValue(initial);
+        }
+    }
+
+    public static void linkColumns(TableView<?> table, String... properties) {
+        for (int i = 0; i < properties.length; i++) {
+            table.getColumns().get(i).setCellValueFactory(new PropertyValueFactory<>(properties[i]));
         }
     }
 
@@ -163,7 +170,7 @@ public final class UILinker {
         return format(Fryer.OUTPUT_FORMAT, f.outputAmountProperty(), f.outputTypeProperty());
     }
 
-    public static ObjectProperty<DonutTypeDescription> getOutputType(Fryer f) {
+    public static ObjectProperty<DonutType> getOutputType(Fryer f) {
         return f.outputTypeProperty();
     }
 

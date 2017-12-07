@@ -92,12 +92,12 @@ public final class TitledPaneFactory {
         linkText(output, getOutputText(fryer));
         header.getChildren().add(output);
 
-        ChoiceBox<DonutTypeDescription> typeSelect = new ChoiceBox<>();
+        ChoiceBox<DonutType> typeSelect = new ChoiceBox<>();
         typeSelect.setCursor(Cursor.HAND);
         Label type = new Label("Output:", typeSelect);
         type.setGraphicTextGap(TEXT_GAP);
         type.setContentDisplay(ContentDisplay.RIGHT);
-        linkItems(typeSelect, DonutType.DONUT_TYPES);
+        linkItems(typeSelect, DonutType.typesProperty());
         linkChoice(typeSelect, getOutputType(fryer));
         body.getChildren().add(1, type);
     }

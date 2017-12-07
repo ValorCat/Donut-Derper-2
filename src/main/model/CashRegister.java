@@ -35,9 +35,9 @@ public class CashRegister extends Station {
     public void finish() {
         super.finish();
         if (location.getCustomers() > 0 && location.getDonutStock() > 0) {
-            DonutType random = getRandomDonutType(-1);
-            location.updateDonuts(random);
-            addBalance(random.getData().getCost());
+            DonutType type = location.getDonuts().pickRandomType();
+            location.removeDonuts(new DonutBatch(type, 1));
+            addBalance(type.getCost());
             location.leaveCustomer();
             location.boostAppeal(location.getAppealBoostPerPerson());
         }
@@ -51,12 +51,6 @@ public class CashRegister extends Station {
         if (!isInUse() && automatic && location.getCustomers() > 0) {
             begin();
         }
-    }
-
-    private DonutType getRandomDonutType(int amount) {
-        assert location.getDonutStock() > 0 : "no donuts in stock";
-        DonutType random = location.getDonuts().getRandom();
-        return new DonutType(random.getData(), amount);
     }
 
     private void addBalance(double amount) {

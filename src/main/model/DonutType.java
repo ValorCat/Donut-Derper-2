@@ -1,51 +1,66 @@
 package main.model;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
- * @author Anthony Morrell
- * @since 10/29/2017
+ * @since 12/6/2017
  */
-public class DonutType extends Consumable<DonutTypeDescription, Integer> {
+public class DonutType {
 
-    public static final ListProperty<DonutTypeDescription> DONUT_TYPES = new SimpleListProperty<>(observableArrayList(
-            new DonutTypeDescription("Plain", 1.2,
-                    new Ingredient("Flour", 0.085),
-                    new Ingredient("Sugar", 0.01)),
-            new DonutTypeDescription("Chocolate", 1.5,
-                    new Ingredient("Flour", 0.085),
-                    new Ingredient("Sugar", 0.01))
+    private static ListProperty<DonutType> types = new SimpleListProperty<>(observableArrayList(
+            new DonutType("Plain", 1.2),
+            new DonutType("Chocolate", 1.5)
     ));
 
-    public static final DonutTypeDescription PLAIN = DONUT_TYPES.get(0);
+    public static final DonutType PLAIN = types.get(0);
+    private static int nextId = 0;
 
-    {
-        this.minimum = 1;
+    private StringProperty name;
+    private DoubleProperty cost;
+    private int hashcode;
+
+    public DonutType(String name, double cost) {
+        this.name = new SimpleStringProperty(name);
+        this.cost = new SimpleDoubleProperty(cost);
+        hashcode = nextId++;
     }
 
-    public DonutType(DonutTypeDescription descr, int amount) {
-        super(descr, amount);
+    public String getName() {
+        return name.get();
     }
 
-    public DonutType(String dataName, int amount) {
-        super(dataName, amount, DONUT_TYPES.get(), DonutTypeDescription::getName);
+    public final StringProperty nameProperty() {
+        return name;
     }
 
-    public DonutType(DonutType other) {
-        super(other.data, other.getAmount());
+    public void setName(String name) {
+        this.name.set(name);
     }
 
-    public void update(Integer modifier) {
-        setAmount(getAmount() + modifier);
+    public double getCost() {
+        return cost.get();
+    }
+
+    public final DoubleProperty costProperty() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost.set(cost);
     }
 
     public String toString() {
-        return data.getName();
+        return getName();
     }
 
+    public int hashCode() {
+        return hashcode;
+    }
 
+    public static ListProperty<DonutType> typesProperty() {
+        return types;
+    }
 
 }

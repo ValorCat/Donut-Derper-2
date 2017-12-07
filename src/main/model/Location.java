@@ -34,8 +34,8 @@ public class Location {
     private boolean customersLeaving;
 
     private IntegerProperty donutStock;
-    private Inventory<DonutType,Integer> donuts;
-    private Inventory<Ingredient,Double> ingredients;
+    private DonutInventory donuts;
+    private ListProperty<Ingredient> ingredients;
     private StationGroup<CashRegister> registers;
     private StationGroup<Fryer> fryers;
 
@@ -54,11 +54,11 @@ public class Location {
         occupancy = customers.add(0.0).divide(this.maxCapacity);
 
         donutStock = new SimpleIntegerProperty();
-        donuts = new Inventory<>(
-                new DonutType("Plain", 0));
-        ingredients = new Inventory<>(
-                new Ingredient("Flour", 2000),
-                new Ingredient("Sugar", 1000));
+        donuts = new DonutInventory(DonutType.PLAIN);
+        ingredients = new SimpleListProperty<>(observableArrayList(
+                new Ingredient(IngredientType.FLOUR, 1000),
+                new Ingredient(IngredientType.SUGAR, 1000)
+        ));
         registers = new StationGroup<>(this);
         fryers = new StationGroup<>(this);
 
@@ -99,14 +99,19 @@ public class Location {
         customers.set(customers.get() - 1);
     }
 
-    public void updateDonuts(DonutType newDonuts) {
-        int addition = newDonuts.getAmount();
-        int newTotal = donutStock.get() + addition;
-        donutStock.set(newTotal < 0 ? 0 : newTotal);
-        donuts.update(newDonuts);
-        if (addition > 0) {
-            Game.game.addDonuts(addition);
-        }
+    public void addDonuts(DonutBatch batch) {
+        setDonutStock(getDonutStock() + batch.getAmount());
+        Game.game.addDonuts(batch.getAmount());
+        donuts.add(batch);
+    }
+
+    public void removeDonuts(DonutBatch batch) {
+        setDonutStock(getDonutStock() - batch.getAmount());
+        donuts.remove(batch);
+    }
+
+    private void setDonutStock(int donutStock) {
+        this.donutStock.set(Math.max(0, donutStock));
     }
 
     public void dismiss(Employee emp) {
@@ -188,11 +193,11 @@ public class Location {
         return donutStock;
     }
 
-    public Inventory<Ingredient, Double> getIngredients() {
+    public ObservableList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public Inventory<DonutType, Integer> getDonuts() {
+    public DonutInventory getDonuts() {
         return donuts;
     }
 

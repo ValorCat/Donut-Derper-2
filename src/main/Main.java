@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.model.Account;
+import main.model.DonutBatch;
 import main.model.DonutType;
 import main.model.Location;
 
@@ -29,7 +30,7 @@ public class Main extends Application {
             scene.setOnKeyPressed(e -> {
                 switch (e.getCode()) {
                     case D:
-                        Game.location().updateDonuts(new DonutType("Plain", 1));
+                        Game.location().addDonuts(new DonutBatch(DonutType.PLAIN, 1));
                         break;
                     case M:
                         Game.location().getDepositAccount().updateBalance(1);

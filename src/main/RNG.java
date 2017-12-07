@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +50,11 @@ public final class RNG {
     public static <E> E choose(List<E> domain) {
         assert !domain.isEmpty();
         return domain.get(random.nextInt(domain.size()));
+    }
+
+    public static <E> E choose(Set<E> domain) {
+        assert !domain.isEmpty();
+        return new ArrayList<>(domain).get(random.nextInt(domain.size()));
     }
 
     public static double range(double max) {

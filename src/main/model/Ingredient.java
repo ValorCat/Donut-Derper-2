@@ -1,39 +1,32 @@
 package main.model;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-
-import static javafx.collections.FXCollections.observableArrayList;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
 
 /**
- * @author Anthony Morrell
- * @since 10/29/2017
+ * @since 12/6/2017
  */
-public class Ingredient extends Consumable<IngredientDescription, Double> {
+public class Ingredient {
 
-    public static final ListProperty<IngredientDescription> ALL_INGREDIENTS = new SimpleListProperty<>(observableArrayList(
-            new IngredientDescription("Flour", .5, "lb."),
-            new IngredientDescription("Sugar", .3, "lb.")
-    ));
+    private final IngredientType type;
+    private final IntegerProperty amount;
 
-    {
-        this.minimum = 0.01;
+    public Ingredient(IngredientType type, int amount) {
+        this.type = type;
+        this.amount = new SimpleIntegerProperty(amount);
     }
 
-    public Ingredient(IngredientDescription descr, double amount) {
-        super(descr, amount);
+    public final StringProperty nameProperty() {
+        return type.nameProperty();
     }
 
-    public Ingredient(String dataName, double amount) {
-        super(dataName, amount, ALL_INGREDIENTS.get(), IngredientDescription::getName);
+    public int getAmount() {
+        return amount.get();
     }
 
-    public Ingredient(Ingredient other) {
-        super(other.data, other.getAmount());
-    }
-
-    public void update(Double modifier) {
-        setAmount(getAmount() + modifier);
+    public final IntegerProperty amountProperty() {
+        return amount;
     }
 
 }
