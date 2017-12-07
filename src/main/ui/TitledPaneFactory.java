@@ -110,7 +110,7 @@ public final class TitledPaneFactory {
         collectButton.setOnAction(a -> register.collect());
         collectButton.setFont(COLLECT_FONT);
         collectButton.setCursor(Cursor.HAND);
-        link(collectButton.disableProperty(), getCollectButtonDisable(register));
+        linkDisable(collectButton, getCollectButtonDisable(register));
 
         Label balance = new Label("", collectButton);
         balance.setGraphicTextGap(TEXT_GAP);

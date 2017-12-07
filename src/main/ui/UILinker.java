@@ -4,12 +4,14 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import main.Game;
@@ -61,6 +63,10 @@ public final class UILinker {
         if (initial != null) {
             uiElement.setValue(initial);
         }
+    }
+
+    public static void linkDisable(Node uiElement, ObservableBooleanValue modelElement) {
+        link(uiElement.disableProperty(), modelElement);
     }
 
     public static void linkColumns(TableView<?> table, String... properties) {
@@ -172,6 +178,10 @@ public final class UILinker {
 
     public static ObjectProperty<DonutType> getOutputType(Fryer f) {
         return f.outputTypeProperty();
+    }
+
+    public static DoubleProperty getPayPeriodProgress() {
+        return Account.payPeriodProgressProperty();
     }
 
     public static ObservableValue<ObservableList<Employee>> getPossibleOperators(Station s) {

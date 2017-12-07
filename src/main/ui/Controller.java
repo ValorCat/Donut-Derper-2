@@ -62,30 +62,54 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        linkItems(currentLocation, getLocations());
-        linkText(grossDonutCount, getGrossDonuts());
-        linkColumns(ingredientList, "name", "amount");
-        linkProgress(percentToPayday, Account.payPeriodProgressProperty());
+        // finances tab
+        linkProgress(percentToPayday, getPayPeriodProgress());
         linkText(timeToPayday, getTimeToPayday());
+        initializeEmployeeManager();
+
+        // location selector
+        linkItems(currentLocation, getLocations());
+        linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
+
+        // other
+        linkColumns(ingredientList, "name", "amount");
+        linkItems(orderItem, IngredientType.typesProperty());
+        linkText(grossDonutCount, getGrossDonuts());
+    }
+
+    private void initializeEmployeeManager() {
+        // hire employee selector
         linkItems(hireList, getHireableJobs());
         hireList.setValue(Job.getEntryLevelJobs().get(0));
         link(hireButton.textProperty(), getHireButtonText(hireList.valueProperty()));
+
+        // employee table and buttons
         linkColumns(employeeList, "name", "job", "location", "pay");
         employeeList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        link(promoteEmployeeButton.disableProperty(), getEmployeesSelected(employeeList));
-        link(dismissEmployeeButton.disableProperty(), getEmployeesSelected(employeeList));
-        linkItems(orderItem, IngredientType.typesProperty());
-        linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
+        linkDisable(promoteEmployeeButton, getEmployeesSelected(employeeList));
+        linkDisable(dismissEmployeeButton, getEmployeesSelected(employeeList));
     }
 
     private void bindLocationSpecific(Location loc) {
-        link(manualSellButton.disableProperty(), getCheckoutButtonDisable(loc));
-        link(manualFryButton.disableProperty(), getFryButtonDisable(loc));
+        setupStoreTab(loc);
+        setupInventoryTab(loc);
+        setupFinancesTab(loc);
+    }
+
+    private void setupStoreTab(Location loc) {
+        linkDisable(manualSellButton, getCheckoutButtonDisable(loc));
+        linkDisable(manualFryButton, getFryButtonDisable(loc));
         linkText(customerCount, getCustomerCount(loc));
         linkText(donutCount, getStockedDonuts(loc));
         linkPanes(registerList, loc.getRegisters().getPanes());
         linkPanes(fryerList, loc.getFryers().getPanes());
+    }
+
+    private void setupInventoryTab(Location loc) {
         ingredientList.setItems(loc.getIngredients());
+    }
+
+    private void setupFinancesTab(Location loc) {
         linkText(totalWages, getTotalWages(loc));
         linkText(totalBalance, getTotalBalance(loc));
         linkItems(depositAccount, getAccounts(loc));
@@ -93,11 +117,11 @@ public class Controller implements Initializable {
         linkItems(salarySource, getAccounts(loc));
         linkChoice(salarySource, getWageSourceAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
         linkPanes(accountList, loc.getAccountPanes());
-        link(hireButton.disableProperty(), getHireButtonDisable(hireList.valueProperty(), loc));
         setupRoster(loc);
     }
 
     private void setupRoster(Location loc) {
+        linkDisable(hireButton, getHireButtonDisable(hireList.valueProperty(), loc));
         ListProperty<Employee> roster = getRoster(loc);
         linkItems(employeeList, roster);
         ((SortedList<Employee>) roster.get()).comparatorProperty().bind(employeeList.comparatorProperty());
