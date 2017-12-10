@@ -1,6 +1,7 @@
 package main.model;
 
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -10,8 +11,8 @@ import static javafx.collections.FXCollections.observableArrayList;
 public class IngredientType {
 
     private static ListProperty<IngredientType> types = new SimpleListProperty<>(observableArrayList(
-            new IngredientType("Flour", .5, "lb."),
-            new IngredientType("Sugar", .3, "lb.")
+            new IngredientType("Flour", .5, "tbsp."),
+            new IngredientType("Sugar", .3, "teasp.")
     ));
 
     public static final IngredientType FLOUR = types.get(0);
@@ -50,16 +51,16 @@ public class IngredientType {
         return unit.get();
     }
 
-    public final StringProperty unitProperty() {
-        return unit;
-    }
-
     public String toString() {
         return getName();
     }
 
     public int hashCode() {
         return hashcode;
+    }
+
+    public static ObservableList<IngredientType> getTypes() {
+        return types.get();
     }
 
     public static ListProperty<IngredientType> typesProperty() {

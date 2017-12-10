@@ -173,11 +173,12 @@ public final class UILinker {
     }
 
     public static StringExpression getOutputText(Fryer f) {
-        return format(Fryer.OUTPUT_FORMAT, f.outputAmountProperty(), f.outputTypeProperty());
+        return format(Fryer.OUTPUT_FORMAT, f.currentDonutOutputProperty(),
+                f.maxDonutOutputProperty(), f.donutTypeProperty());
     }
 
     public static ObjectProperty<DonutType> getOutputType(Fryer f) {
-        return f.outputTypeProperty();
+        return f.donutTypeProperty();
     }
 
     public static DoubleProperty getPayPeriodProgress() {

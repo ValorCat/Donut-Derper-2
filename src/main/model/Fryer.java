@@ -12,28 +12,37 @@ import javafx.beans.property.SimpleObjectProperty;
 public class Fryer extends Station {
 
     public static final Fryer INITIAL = new Fryer(0.6, 1, 0);
-    public static final String OUTPUT_FORMAT = "%d %s Donut(s)";
+    public static final String OUTPUT_FORMAT = "%d / %d %s Donuts";
 
-    private ObjectProperty<DonutType> outputType;
-    private IntegerProperty outputAmount;
+    private ObjectProperty<DonutType> donutType;
+    private IntegerProperty maxDonutOutput;
+    private IntegerProperty currentDonutOutput;
 
     public Fryer(double baseSpeed, int donutsPerBatch, double sellValue) {
         super(baseSpeed, sellValue);
-        outputType = new SimpleObjectProperty<>(DonutType.PLAIN);
-        outputAmount = new SimpleIntegerProperty(donutsPerBatch);
+        donutType = new SimpleObjectProperty<>(DonutType.PLAIN);
+        maxDonutOutput = new SimpleIntegerProperty(donutsPerBatch);
+        currentDonutOutput = new SimpleIntegerProperty();
         skill = Job.Skill.USE_FRYER;
+    }
+
+    protected boolean canBegin() {
+        return getDonutType().getRecipe().stream()
+                .allMatch(recipePart -> location.hasIngredient(recipePart));
+    }
+
+    public void begin() {
+        super.begin();
+        setCurrentDonutOutput(computeBatchSize());
+        for (IngredientBatch recipePart : getDonutType().getRecipe()) {
+            location.removeIngredient(recipePart.times(getCurrentDonutOutput()));
+        }
     }
 
     public void finish() {
         super.finish();
-        location.addDonuts(new DonutBatch(getOutputType(), getOutputAmount()));
-    }
-
-    public void update() {
-        super.update();
-        if (!isInUse() && automatic) {
-            inUse.set(true);
-        }
+        location.addDonuts(new DonutBatch(getDonutType(), getMaxDonutOutput()));
+        setCurrentDonutOutput(0);
     }
 
     public void assignPlayer() {
@@ -44,20 +53,42 @@ public class Fryer extends Station {
         location.getFryers().unassignPlayer();
     }
 
-    public DonutType getOutputType() {
-        return outputType.get();
+    public DonutType getDonutType() {
+        return donutType.get();
     }
 
-    public ObjectProperty<DonutType> outputTypeProperty() {
-        return outputType;
+    public ObjectProperty<DonutType> donutTypeProperty() {
+        return donutType;
     }
 
-    public int getOutputAmount() {
-        return outputAmount.get();
+    public int getMaxDonutOutput() {
+        return maxDonutOutput.get();
     }
 
-    public IntegerProperty outputAmountProperty() {
-        return outputAmount;
+    public IntegerProperty maxDonutOutputProperty() {
+        return maxDonutOutput;
+    }
+
+    public int getCurrentDonutOutput() {
+        return currentDonutOutput.get();
+    }
+
+    public final IntegerProperty currentDonutOutputProperty() {
+        return currentDonutOutput;
+    }
+
+    private void setCurrentDonutOutput(int currentDonutOutput) {
+        this.currentDonutOutput.set(currentDonutOutput);
+    }
+
+    private int computeBatchSize() {
+        int actualSize = getMaxDonutOutput();
+        for (IngredientBatch recipeItem : getDonutType().getRecipe()) {
+            int amountNeeded = recipeItem.getAmount() * actualSize;
+            int amountInStock = location.getIngredientAmount(recipeItem.getType());
+            actualSize = Math.min(actualSize, amountInStock / amountNeeded);
+        }
+        return actualSize;
     }
 
 }

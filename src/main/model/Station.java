@@ -59,17 +59,32 @@ public abstract class Station {
 
     protected abstract void assignPlayer();
 
+    protected abstract boolean canBegin();
+
+    public void attemptToBegin() {
+        if (canBegin()) {
+            begin();
+        }
+    }
+
     public void begin() {
         setInUse(true);
         setProgress(0);
     }
 
+    public void finish() {
+        setInUse(false);
+        setProgress(0);
+    }
+
     public void update() {
-        if (inUse.get() && (operator.get() != Employee.UNASSIGNED)) {
+        if (isInUse() && getOperator() != Employee.UNASSIGNED) {
             setProgress(getProgress() + getSpeed() / 60);
             if (getProgress() >= 1) {
                 finish();
             }
+        } else if (!isInUse() && automatic) {
+            attemptToBegin();
         }
     }
 
@@ -79,11 +94,6 @@ public abstract class Station {
 
     private double getSpeed() {
         return speed.get();
-    }
-
-    public void finish() {
-        setInUse(false);
-        setProgress(0);
     }
 
     public void setProgress(double progress) {

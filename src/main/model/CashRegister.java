@@ -27,6 +27,10 @@ public class CashRegister extends Station {
         location.getRegisters().unassignPlayer();
     }
 
+    protected boolean canBegin() {
+        return location.getCustomers() > 0;
+    }
+
     public void begin() {
         super.begin();
         location.setLastCheckOut();
@@ -47,9 +51,6 @@ public class CashRegister extends Station {
         super.update();
         if (isInUse() && location.getCustomers() == 0) {
             super.finish();
-        }
-        if (!isInUse() && automatic && location.getCustomers() > 0) {
-            begin();
         }
     }
 

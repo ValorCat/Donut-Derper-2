@@ -28,7 +28,7 @@ public class Job {
         Job assistMan = new Job("Assistant Manager", 10, mngr, skills(USE_FRYER, .5, USE_REGISTER, .7));
         Job snrCook = new Job("Senior Fry Cook", 8, assistMan, skills(USE_FRYER, .7, USE_REGISTER, .2));
         Job cook = new Job("Fry Cook", 5, snrCook, skills(USE_FRYER, .45));
-        Job jnrCook = new Job("Junior Fry Cook", 2, cook, skills(USE_FRYER, .2));
+        Job jnrCook = new Job("Junior Fry Cook", 2, cook, skills(USE_FRYER, .25));
         Job snrCashier = new Job("Senior Cashier", 8, assistMan, skills(USE_REGISTER, .5));
         Job cashier = new Job("Cashier", 4, snrCashier, skills(USE_REGISTER, .3));
 

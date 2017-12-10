@@ -35,7 +35,7 @@ public class Location {
 
     private IntegerProperty donutStock;
     private DonutInventory donuts;
-    private ListProperty<Ingredient> ingredients;
+    private ListProperty<IngredientBatch> ingredients;
     private StationGroup<CashRegister> registers;
     private StationGroup<Fryer> fryers;
 
@@ -56,8 +56,8 @@ public class Location {
         donutStock = new SimpleIntegerProperty();
         donuts = new DonutInventory(DonutType.PLAIN);
         ingredients = new SimpleListProperty<>(observableArrayList(
-                new Ingredient(IngredientType.FLOUR, 1000),
-                new Ingredient(IngredientType.SUGAR, 1000)
+                new IngredientBatch(IngredientType.FLOUR, 100),
+                new IngredientBatch(IngredientType.SUGAR, 100)
         ));
         registers = new StationGroup<>(this);
         fryers = new StationGroup<>(this);
@@ -137,10 +137,6 @@ public class Location {
         return name;
     }
 
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
     public double getAppealBoostPerPerson() {
         return appealBoostPerPerson;
     }
@@ -193,8 +189,35 @@ public class Location {
         return donutStock;
     }
 
-    public ObservableList<Ingredient> getIngredients() {
+    public ObservableList<IngredientBatch> getIngredients() {
         return ingredients;
+    }
+
+    public int getIngredientAmount(IngredientType type) {
+        for (IngredientBatch stock : ingredients) {
+            if (stock.getType() == type) {
+                return stock.getAmount();
+            }
+        }
+        return 0;
+    }
+
+    public boolean hasIngredient(IngredientBatch batch) {
+        for (IngredientBatch stock : ingredients) {
+            if (stock.getType() == batch.getType()) {
+                return stock.getAmount() > batch.getAmount();
+            }
+        }
+        return false;
+    }
+
+    public void removeIngredient(IngredientBatch batch) {
+        for (int i = 0; i < ingredients.size(); i++) {
+            IngredientBatch stock = ingredients.get(i);
+            if (stock.getType() == batch.getType()) {
+                ingredients.set(i, new IngredientBatch(stock, batch.getAmount()));
+            }
+        }
     }
 
     public DonutInventory getDonuts() {

@@ -34,7 +34,7 @@ public class Controller implements Initializable {
     @FXML public Accordion fryerList;
 
     // inventory
-    @FXML public TableView<Ingredient> ingredientList;
+    @FXML public TableView<IngredientBatch> ingredientList;
     @FXML public Label donutCountDetailed;
     @FXML public Accordion productList;
     @FXML public Button addProductButton;
@@ -128,11 +128,11 @@ public class Controller implements Initializable {
     }
 
     public void onManualCheckout() {
-        Game.location().getRegisters().getPlayerOperated().ifPresent(CashRegister::begin);
+        Game.location().getRegisters().getPlayerOperated().ifPresent(CashRegister::attemptToBegin);
     }
 
     public void onManualFry() {
-        Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::begin);
+        Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::attemptToBegin);
     }
 
     public void onCreateProduct() {
