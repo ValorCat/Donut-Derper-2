@@ -6,6 +6,15 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TitledPane;
 import main.Game;
 import main.RNG;
+import main.model.donut.DonutBatch;
+import main.model.donut.DonutInventory;
+import main.model.donut.DonutType;
+import main.model.ingredient.IngredientBatch;
+import main.model.ingredient.IngredientInventory;
+import main.model.ingredient.IngredientType;
+import main.model.station.CashRegister;
+import main.model.station.Fryer;
+import main.model.station.StationGroup;
 import main.ui.TitledPaneFactory;
 
 import static javafx.collections.FXCollections.observableArrayList;
@@ -35,7 +44,7 @@ public class Location {
 
     private IntegerProperty donutStock;
     private DonutInventory donuts;
-    private ListProperty<IngredientBatch> ingredients;
+    private IngredientInventory ingredients;
     private StationGroup<CashRegister> registers;
     private StationGroup<Fryer> fryers;
 
@@ -55,10 +64,10 @@ public class Location {
 
         donutStock = new SimpleIntegerProperty();
         donuts = new DonutInventory(DonutType.PLAIN);
-        ingredients = new SimpleListProperty<>(observableArrayList(
+        ingredients = new IngredientInventory(
                 new IngredientBatch(IngredientType.FLOUR, 100),
                 new IngredientBatch(IngredientType.SUGAR, 100)
-        ));
+        );
         registers = new StationGroup<>(this);
         fryers = new StationGroup<>(this);
 
@@ -84,7 +93,7 @@ public class Location {
         }
     }
 
-    public void enterCustomer() {
+    private void enterCustomer() {
         assert customers.get() < maxCapacity.get();
         if (customers.get() == 0) {
             // ensure customers don't immediately leave upon entering
@@ -189,35 +198,8 @@ public class Location {
         return donutStock;
     }
 
-    public ObservableList<IngredientBatch> getIngredients() {
+    public IngredientInventory getIngredients() {
         return ingredients;
-    }
-
-    public int getIngredientAmount(IngredientType type) {
-        for (IngredientBatch stock : ingredients) {
-            if (stock.getType() == type) {
-                return stock.getAmount();
-            }
-        }
-        return 0;
-    }
-
-    public boolean hasIngredient(IngredientBatch batch) {
-        for (IngredientBatch stock : ingredients) {
-            if (stock.getType() == batch.getType()) {
-                return stock.getAmount() > batch.getAmount();
-            }
-        }
-        return false;
-    }
-
-    public void removeIngredient(IngredientBatch batch) {
-        for (int i = 0; i < ingredients.size(); i++) {
-            IngredientBatch stock = ingredients.get(i);
-            if (stock.getType() == batch.getType()) {
-                ingredients.set(i, new IngredientBatch(stock, batch.getAmount()));
-            }
-        }
     }
 
     public DonutInventory getDonuts() {

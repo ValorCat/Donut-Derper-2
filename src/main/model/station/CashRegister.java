@@ -1,7 +1,10 @@
-package main.model;
+package main.model.station;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import main.model.Job;
+import main.model.donut.DonutBatch;
+import main.model.donut.DonutType;
 
 /**
  * @author Anthony Morrell

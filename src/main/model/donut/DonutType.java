@@ -1,6 +1,7 @@
-package main.model;
+package main.model.donut;
 
 import javafx.beans.property.*;
+import main.model.ingredient.IngredientBatch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +14,7 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public class DonutType {
 
-    private static ListProperty<DonutType> types = new SimpleListProperty<>(observableArrayList(
+    private static final ListProperty<DonutType> types = new SimpleListProperty<>(observableArrayList(
             new DonutType("Plain", 1.2,
                     IngredientBatch.of("Flour", 4),
                     IngredientBatch.of("Sugar", 1)),
@@ -26,7 +27,7 @@ public class DonutType {
     private StringProperty name;
     private DoubleProperty cost;
     private List<IngredientBatch> recipe;
-    private int hashcode;
+    private final int hashcode;
 
     public DonutType(String name, double cost, IngredientBatch... recipe) {
         this.name = new SimpleStringProperty(name);
@@ -35,7 +36,7 @@ public class DonutType {
         hashcode = nextId++;
     }
 
-    public String getName() {
+    private String getName() {
         return name.get();
     }
 

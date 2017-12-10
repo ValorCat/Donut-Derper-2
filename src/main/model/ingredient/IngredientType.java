@@ -1,4 +1,4 @@
-package main.model;
+package main.model.ingredient;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -10,7 +10,7 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public class IngredientType {
 
-    private static ListProperty<IngredientType> types = new SimpleListProperty<>(observableArrayList(
+    private static final ListProperty<IngredientType> types = new SimpleListProperty<>(observableArrayList(
             new IngredientType("Flour", .5, "tbsp."),
             new IngredientType("Sugar", .3, "teasp.")
     ));
@@ -22,7 +22,7 @@ public class IngredientType {
     private StringProperty name;
     private DoubleProperty baseValue;
     private StringProperty unit;
-    private int hashcode;
+    private final int hashcode;
 
     public IngredientType(String name, double baseValue, String unit) {
         this.name = new SimpleStringProperty(name);
@@ -49,6 +49,10 @@ public class IngredientType {
 
     public String getUnit() {
         return unit.get();
+    }
+
+    public boolean isOfType(IngredientBatch ingredient) {
+        return ingredient.getType() == this;
     }
 
     public String toString() {

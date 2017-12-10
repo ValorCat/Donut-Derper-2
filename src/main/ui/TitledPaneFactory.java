@@ -9,6 +9,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import main.model.*;
+import main.model.donut.DonutType;
+import main.model.station.CashRegister;
+import main.model.station.Fryer;
+import main.model.station.Station;
 
 import static main.ui.UILinker.*;
 
@@ -133,6 +137,7 @@ public final class TitledPaneFactory {
         return pane;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void setAnchors(Node node, Double top, Double bottom, Double left, Double right) {
         if (top != null)
             AnchorPane.setTopAnchor(node, top);

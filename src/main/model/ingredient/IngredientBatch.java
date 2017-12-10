@@ -1,4 +1,4 @@
-package main.model;
+package main.model.ingredient;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
@@ -11,8 +11,8 @@ import javafx.beans.property.StringProperty;
  */
 public class IngredientBatch {
 
-    private final IngredientType type;
-    private final IntegerProperty amount;
+    protected final IngredientType type;
+    protected final IntegerProperty amount;
 
     public IngredientBatch(IngredientType type, int amount) {
         amount = Math.max(0, amount);
@@ -37,15 +37,19 @@ public class IngredientBatch {
     }
 
     public StringProperty amountProperty() {
-        // we return a property rather than a StringExpression because the TableView's
-        // PropertyValueFactory only works with ReadOnlyProperty implementors
+        // return a StringProperty rather than a StringExpression because the TableView's
+        // PropertyValueFactory only works with ReadOnlyProperty and not any ObservableValue
         StringProperty property = new SimpleStringProperty();
         property.bind(Bindings.format("%d %s", amount, type.getUnit()));
         return property;
     }
 
-    public IngredientBatch times(int multiple) {
-        return new IngredientBatch(type, getAmount() * multiple);
+    public boolean isSameTypeAs(IngredientBatch other) {
+        return type == other.type;
+    }
+
+    public boolean hasLessThan(IngredientBatch other) {
+        return getAmount() <= other.getAmount();
     }
 
     public static IngredientBatch of(String typeName, int amount) {

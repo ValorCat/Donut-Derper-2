@@ -1,10 +1,13 @@
-package main.model;
+package main.model.station;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
+import main.model.Employee;
+import main.model.Job;
+import main.model.Location;
 
 /**
  * @author Anthony Morrell
@@ -88,7 +91,7 @@ public abstract class Station {
         }
     }
 
-    public double getProgress() {
+    private double getProgress() {
         return progress.get();
     }
 
@@ -96,11 +99,11 @@ public abstract class Station {
         return speed.get();
     }
 
-    public void setProgress(double progress) {
+    private void setProgress(double progress) {
         this.progress.set(progress);
     }
 
-    public boolean isInUse() {
+    boolean isInUse() {
         return inUse.get();
     }
 
@@ -120,7 +123,7 @@ public abstract class Station {
         this.location = location;
     }
 
-    public Employee getOperator() {
+    private Employee getOperator() {
         return operator.get();
     }
 

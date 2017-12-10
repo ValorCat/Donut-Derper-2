@@ -1,4 +1,4 @@
-package main.model;
+package main.model.donut;
 
 /**
  * @since 12/6/2017

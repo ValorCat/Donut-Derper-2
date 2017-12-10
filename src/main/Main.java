@@ -7,8 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.model.Account;
-import main.model.DonutBatch;
-import main.model.DonutType;
+import main.model.donut.DonutBatch;
+import main.model.donut.DonutType;
 import main.model.Location;
 
 import java.io.IOException;

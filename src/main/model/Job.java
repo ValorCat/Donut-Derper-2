@@ -60,11 +60,7 @@ public class Job {
     }
 
     public boolean isAssignable(Skill skill) {
-        return this == Job.NONE || hasSkill(skill);
-    }
-
-    public boolean hasSkill(Skill skill) {
-        return getSkill(skill) > 0;
+        return this == NONE || getSkill(skill) > 0;
     }
 
     public double getSkill(Skill skill) {

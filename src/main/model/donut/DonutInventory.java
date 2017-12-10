@@ -1,4 +1,4 @@
-package main.model;
+package main.model.donut;
 
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -26,7 +26,7 @@ public class DonutInventory {
 
     public void remove(DonutBatch batch) {
         stock.merge(batch.getType(), batch.getAmount(),
-                (currAmount, newBatch) -> Math.max(0, currAmount - newBatch));
+                (currAmount, toRemove) -> Math.max(0, currAmount - toRemove));
     }
 
     public DonutType pickRandomType() {

@@ -1,8 +1,9 @@
-package main.model;
+package main.model.station;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TitledPane;
+import main.model.Location;
 import main.ui.TitledPaneFactory;
 
 import java.util.Optional;
@@ -70,11 +71,11 @@ public class StationGroup<S extends Station> {
         return playerStationInUse;
     }
 
-    public void setPlayerOperated(S playerOperated) {
+    private void setPlayerOperated(S playerOperated) {
         this.playerOperated.set(playerOperated);
     }
 
-    public void setPlayerHasStation(boolean playerHasStation) {
+    private void setPlayerHasStation(boolean playerHasStation) {
         this.playerHasStation.set(playerHasStation);
     }
 

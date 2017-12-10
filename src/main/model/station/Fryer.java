@@ -1,9 +1,15 @@
-package main.model;
+package main.model.station;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import main.model.Job;
+import main.model.Location;
+import main.model.donut.DonutBatch;
+import main.model.donut.DonutType;
+import main.model.ingredient.IngredientBatch;
+import main.model.ingredient.IngredientInventory;
 
 /**
  * @author Anthony Morrell
@@ -17,6 +23,7 @@ public class Fryer extends Station {
     private ObjectProperty<DonutType> donutType;
     private IntegerProperty maxDonutOutput;
     private IntegerProperty currentDonutOutput;
+    private IngredientInventory ingredients;
 
     public Fryer(double baseSpeed, int donutsPerBatch, double sellValue) {
         super(baseSpeed, sellValue);
@@ -27,16 +34,13 @@ public class Fryer extends Station {
     }
 
     protected boolean canBegin() {
-        return getDonutType().getRecipe().stream()
-                .allMatch(recipePart -> location.hasIngredient(recipePart));
+        return getDonutType().getRecipe().stream().allMatch(ingredients::hasAtLeast);
     }
 
     public void begin() {
         super.begin();
         setCurrentDonutOutput(computeBatchSize());
-        for (IngredientBatch recipePart : getDonutType().getRecipe()) {
-            location.removeIngredient(recipePart.times(getCurrentDonutOutput()));
-        }
+        ingredients.remove(getDonutType().getRecipe(), getCurrentDonutOutput());
     }
 
     public void finish() {
@@ -53,7 +57,7 @@ public class Fryer extends Station {
         location.getFryers().unassignPlayer();
     }
 
-    public DonutType getDonutType() {
+    private DonutType getDonutType() {
         return donutType.get();
     }
 
@@ -61,7 +65,7 @@ public class Fryer extends Station {
         return donutType;
     }
 
-    public int getMaxDonutOutput() {
+    private int getMaxDonutOutput() {
         return maxDonutOutput.get();
     }
 
@@ -69,12 +73,18 @@ public class Fryer extends Station {
         return maxDonutOutput;
     }
 
-    public int getCurrentDonutOutput() {
+    private int getCurrentDonutOutput() {
         return currentDonutOutput.get();
     }
 
     public final IntegerProperty currentDonutOutputProperty() {
         return currentDonutOutput;
+    }
+
+    @Override
+    public void setLocation(Location location) {
+        super.setLocation(location);
+        ingredients = location.getIngredients();
     }
 
     private void setCurrentDonutOutput(int currentDonutOutput) {
@@ -85,7 +95,7 @@ public class Fryer extends Station {
         int actualSize = getMaxDonutOutput();
         for (IngredientBatch recipeItem : getDonutType().getRecipe()) {
             int amountNeeded = recipeItem.getAmount() * actualSize;
-            int amountInStock = location.getIngredientAmount(recipeItem.getType());
+            int amountInStock = ingredients.getAmount(recipeItem.getType());
             actualSize = Math.min(actualSize, amountInStock / amountNeeded);
         }
         return actualSize;

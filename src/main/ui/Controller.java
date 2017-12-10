@@ -8,6 +8,10 @@ import javafx.scene.control.*;
 import main.Game;
 import main.RNG;
 import main.model.*;
+import main.model.ingredient.IngredientStock;
+import main.model.ingredient.IngredientType;
+import main.model.station.CashRegister;
+import main.model.station.Fryer;
 
 import java.net.URL;
 import java.util.List;
@@ -34,7 +38,7 @@ public class Controller implements Initializable {
     @FXML public Accordion fryerList;
 
     // inventory
-    @FXML public TableView<IngredientBatch> ingredientList;
+    @FXML public TableView<IngredientStock> ingredientList;
     @FXML public Label donutCountDetailed;
     @FXML public Accordion productList;
     @FXML public Button addProductButton;
@@ -106,7 +110,7 @@ public class Controller implements Initializable {
     }
 
     private void setupInventoryTab(Location loc) {
-        ingredientList.setItems(loc.getIngredients());
+        ingredientList.setItems(loc.getIngredients().getStock());
     }
 
     private void setupFinancesTab(Location loc) {

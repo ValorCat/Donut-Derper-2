@@ -2,9 +2,9 @@ package main;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
-import main.model.CashRegister;
+import main.model.station.CashRegister;
 import main.model.Employee;
-import main.model.Fryer;
+import main.model.station.Fryer;
 import main.model.Location;
 
 import static javafx.collections.FXCollections.observableArrayList;

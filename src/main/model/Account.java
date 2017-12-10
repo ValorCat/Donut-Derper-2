@@ -41,7 +41,7 @@ public class Account {
         return balance.get() > 0 ? balance.get() * interestRate.get() : 0;
     }
 
-    public String getName() {
+    private String getName() {
         return name.get();
     }
 

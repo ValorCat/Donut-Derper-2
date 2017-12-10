@@ -16,6 +16,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import main.Game;
 import main.model.*;
+import main.model.donut.DonutType;
+import main.model.station.CashRegister;
+import main.model.station.Fryer;
+import main.model.station.Station;
 
 import java.text.NumberFormat;
 import java.util.Comparator;
@@ -241,7 +245,7 @@ public final class UILinker {
     public static String asMoney(Number amount) {
         return NumberFormat.getCurrencyInstance().format(amount);
     }
-    public static String asMoneySigned(Number amount) {
+    private static String asMoneySigned(Number amount) {
         String value = asMoney(amount);
         return value.startsWith("-") ? value : "+" + value;
     }
