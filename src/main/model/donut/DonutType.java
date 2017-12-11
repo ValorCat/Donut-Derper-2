@@ -16,7 +16,10 @@ public class DonutType {
 
     private static final ListProperty<DonutType> types = new SimpleListProperty<>(observableArrayList(
             new DonutType("Plain", 1.2,
-                    IngredientBatch.of("Flour", 4),
+                    IngredientBatch.of("All-Purpose Flour", 4),
+                    IngredientBatch.of("Butter", 2),
+                    IngredientBatch.of("Eggs", 1),
+                    IngredientBatch.of("Whole Milk", 1),
                     IngredientBatch.of("Sugar", 1)),
             new DonutType("Chocolate", 1.5)
     ));

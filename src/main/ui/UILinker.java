@@ -15,14 +15,20 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import main.Game;
-import main.model.*;
+import main.model.Account;
+import main.model.Employee;
+import main.model.Job;
+import main.model.Location;
 import main.model.donut.DonutType;
+import main.model.ingredient.IngredientBatch;
 import main.model.station.CashRegister;
 import main.model.station.Fryer;
 import main.model.station.Station;
 
 import java.text.NumberFormat;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -152,6 +158,13 @@ public final class UILinker {
         return new SimpleListProperty<>(sorted);
     }
 
+    public static StringExpression getIngredientAmount(IngredientBatch i) {
+        return createStringBinding(
+                () -> getScaledUnitValue(i.getAmount(), i.getType().getUnits(), i.getType().getDecimalThreshold()),
+                i.amountProperty()
+        );
+    }
+
     public static StringExpression getInterest(Account a) {
         return format("Interest: %.2f%%  (%s)",
                 a.interestRateProperty().multiply(100),
@@ -267,6 +280,24 @@ public final class UILinker {
                 panes.addAll(change.getAddedSubList());
             }
         }
+    }
+
+    private static String getScaledUnitValue(int value, SortedMap<Integer,String> units, int decimalThreshold) {
+        Map.Entry<Integer, String> last = null;
+        for (Map.Entry<Integer, String> mapping : units.entrySet()) {
+            if (value < mapping.getKey()) {
+                break;
+            }
+            last = mapping;
+        }
+        assert last != null;
+        double computedValue = value == 0 || last.getKey() == 0
+                ? value
+                : (double) value / last.getKey();
+        boolean canRoundToInt = computedValue - (int) computedValue < 0.1;
+        return (value < decimalThreshold) || canRoundToInt
+                ? String.format("%d %s", (int) computedValue, last.getValue())
+                : String.format("%.1f %s", computedValue, last.getValue());
     }
 
 }

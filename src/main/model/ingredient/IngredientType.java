@@ -3,6 +3,10 @@ package main.model.ingredient;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
@@ -10,24 +14,51 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public class IngredientType {
 
+    private static final SortedMap<Integer, String> FLUID_UNITS = new TreeMap<>(Map.of(
+            0, "tsp.",
+            3, "tbsp.",
+            6, "fl. oz.",
+            48, "cups",
+            96, "pints",
+            192, "qt.",
+            768, "gal."
+    ));
     private static final ListProperty<IngredientType> types = new SimpleListProperty<>(observableArrayList(
-            new IngredientType("Flour", .5, "tbsp."),
-            new IngredientType("Sugar", .3, "teasp.")
+            new IngredientType("All-Purpose Flour", 0, 144, new TreeMap<>(Map.of(
+                    0, "tsp.",
+                    3, "tbsp.",
+                    48, "cup",
+                    181, "lb."))),
+            new IngredientType("Butter", 0, 192, new TreeMap<>(Map.of(
+                    0, "tsp.",
+                    3, "tbsp.",
+                    24, "sticks",
+                    192, "qt."))),
+            new IngredientType("Eggs", 0, Integer.MAX_VALUE, new TreeMap<>(Map.of(
+                    0, "1/12 egg",
+                    12, "eggs",
+                    144, "cartons"))),
+            new IngredientType("Sugar", 0, 48, new TreeMap<>(Map.of(
+                    0, "tsp.",
+                    3, "tbsp.",
+                    48, "cup",
+                    109, "lb."))),
+            new IngredientType("Whole Milk", 0, 144, FLUID_UNITS)
     ));
 
-    public static final IngredientType FLOUR = types.get(0);
-    public static final IngredientType SUGAR = types.get(1);
     private static int nextId = 0;
 
     private StringProperty name;
     private DoubleProperty baseValue;
-    private StringProperty unit;
+    private SortedMap<Integer,String> units;
+    private int decimalThreshold;
     private final int hashcode;
 
-    public IngredientType(String name, double baseValue, String unit) {
+    public IngredientType(String name, double baseValue, int decimalThreshold, SortedMap<Integer,String> units) {
         this.name = new SimpleStringProperty(name);
         this.baseValue = new SimpleDoubleProperty(baseValue);
-        this.unit = new SimpleStringProperty(unit);
+        this.units = units;
+        this.decimalThreshold = decimalThreshold;
         hashcode = nextId++;
     }
 
@@ -47,8 +78,12 @@ public class IngredientType {
         return baseValue;
     }
 
-    public String getUnit() {
-        return unit.get();
+    public SortedMap<Integer, String> getUnits() {
+        return units;
+    }
+
+    public int getDecimalThreshold() {
+        return decimalThreshold;
     }
 
     public boolean isOfType(IngredientBatch ingredient) {

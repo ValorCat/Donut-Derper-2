@@ -7,7 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import main.Game;
 import main.RNG;
-import main.model.*;
+import main.model.Account;
+import main.model.Employee;
+import main.model.Job;
+import main.model.Location;
 import main.model.ingredient.IngredientStock;
 import main.model.ingredient.IngredientType;
 import main.model.station.CashRegister;
@@ -76,7 +79,7 @@ public class Controller implements Initializable {
         linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
 
         // other
-        linkColumns(ingredientList, "name", "amount");
+        linkColumns(ingredientList, "name", "amountText", "amount");
         linkItems(orderItem, IngredientType.typesProperty());
         linkText(grossDonutCount, getGrossDonuts());
     }

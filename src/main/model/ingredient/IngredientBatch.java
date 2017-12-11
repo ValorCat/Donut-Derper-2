@@ -1,10 +1,11 @@
 package main.model.ingredient;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import static main.ui.UILinker.getIngredientAmount;
 
 /**
  * @since 12/6/2017
@@ -36,11 +37,15 @@ public class IngredientBatch {
         return amount.get();
     }
 
-    public StringProperty amountProperty() {
+    public final IntegerProperty amountProperty() {
+        return amount;
+    }
+
+    public StringProperty amountTextProperty() {
         // return a StringProperty rather than a StringExpression because the TableView's
         // PropertyValueFactory only works with ReadOnlyProperty and not any ObservableValue
         StringProperty property = new SimpleStringProperty();
-        property.bind(Bindings.format("%d %s", amount, type.getUnit()));
+        property.bind(getIngredientAmount(this));
         return property;
     }
 

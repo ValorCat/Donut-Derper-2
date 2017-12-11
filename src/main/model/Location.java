@@ -11,7 +11,6 @@ import main.model.donut.DonutInventory;
 import main.model.donut.DonutType;
 import main.model.ingredient.IngredientBatch;
 import main.model.ingredient.IngredientInventory;
-import main.model.ingredient.IngredientType;
 import main.model.station.CashRegister;
 import main.model.station.Fryer;
 import main.model.station.StationGroup;
@@ -65,8 +64,11 @@ public class Location {
         donutStock = new SimpleIntegerProperty();
         donuts = new DonutInventory(DonutType.PLAIN);
         ingredients = new IngredientInventory(
-                new IngredientBatch(IngredientType.FLOUR, 100),
-                new IngredientBatch(IngredientType.SUGAR, 100)
+                IngredientBatch.of("All-Purpose Flour", 10 * 181),
+                IngredientBatch.of("Butter", 12 * 24),
+                IngredientBatch.of("Eggs", 6 * 144),
+                IngredientBatch.of("Sugar", 109),
+                IngredientBatch.of("Whole Milk", 2 * 768)
         );
         registers = new StationGroup<>(this);
         fryers = new StationGroup<>(this);
