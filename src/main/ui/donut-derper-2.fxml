@@ -5,7 +5,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ui.Controller">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ui.Controller">
    <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <Tab closable="false" text="Branches">
          <AnchorPane>
@@ -34,13 +34,13 @@
                                     <Font size="16.0" />
                                  </font>
                                  <graphic>
-                                    <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="407.0">
+                                    <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="300.0">
                                        <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="5.0" layoutY="15.0" text="Unassigned" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                           <font>
                                              <Font size="12.0" />
                                           </font>
                                           <graphic>
-                                             <ProgressBar prefWidth="140.0" progress="0.0" />
+                                             <ProgressBar prefWidth="130.0" progress="0.0" />
                                           </graphic>
                                        </Label>
                                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="285.0" layoutY="13.0" text="\$0.00" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-9.0" AnchorPane.topAnchor="0.0">
@@ -103,13 +103,13 @@
                                        <Font size="16.0" />
                                    </font>
                                    <graphic>
-                                       <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="407.0">
+                                       <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" prefWidth="300.0">
                                            <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="5.0" layoutY="15.0" text="Unassigned" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                <font>
                                                    <Font size="12.0" />
                                                </font>
                                                <graphic>
-                                                   <ProgressBar prefWidth="140.0" progress="0.0" />
+                                                   <ProgressBar prefWidth="130.0" progress="0.0" />
                                                </graphic>
                                            </Label>
                                            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="285.0" layoutY="13.0" text="0 plain donuts" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-5.0" AnchorPane.topAnchor="0.0">
@@ -164,8 +164,8 @@
                 <Tab text="Inventory">
                     <GridPane hgap="10.0" minHeight="-Infinity" prefHeight="348.0" prefWidth="1000.0">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="354.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="606.0" minWidth="10.0" prefWidth="606.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="286.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="606.0" minWidth="10.0" prefWidth="473.99999999999994" />
                         </columnConstraints>
                         <rowConstraints>
                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -177,8 +177,8 @@
                             <VBox>
                                 <TableView fx:id="ingredientList" prefHeight="200.0" prefWidth="200.0">
                                     <columns>
-                                        <TableColumn prefWidth="105.99999749660492" text="Item" />
-                                        <TableColumn minWidth="8.0" prefWidth="113.3333511352539" text="In Stock" />
+                                        <TableColumn prefWidth="113.99996507167816" text="Item" />
+                                        <TableColumn minWidth="8.0" prefWidth="106.00001525878906" text="In Stock" />
                                  <TableColumn minWidth="8.0" prefWidth="82.66661071777344" text="Raw Amount" visible="false" />
                                     </columns>
                                 </TableView>
@@ -263,8 +263,8 @@
                 <Tab text="Finances">
                     <GridPane hgap="10.0">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="500.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="500.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="350.3333435058594" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="408.3333231608073" />
                         </columnConstraints>
                         <rowConstraints>
                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -282,10 +282,10 @@
                                 </TitledPane>
                                 <TableView fx:id="employeeList" prefHeight="200.0" prefWidth="200.0">
                                     <columns>
-                                        <TableColumn editable="false" prefWidth="114.0" text="Name" />
-                                        <TableColumn editable="false" prefWidth="116.0" text="Position" />
-                                        <TableColumn editable="false" prefWidth="108.0" text="Branch" />
-                                        <TableColumn editable="false" prefWidth="65.0" text="Pay" />
+                                        <TableColumn editable="false" prefWidth="105.99999749660492" text="Name" />
+                                        <TableColumn editable="false" prefWidth="104.44446563720703" text="Position" />
+                                        <TableColumn editable="false" prefWidth="106.44438171386719" text="Branch" />
+                                        <TableColumn editable="false" prefWidth="66.6666259765625" text="Pay" />
                                     </columns>
                                 </TableView>
                                 <HBox alignment="CENTER_LEFT" spacing="15.0">
@@ -309,8 +309,8 @@
                                 </HBox>
                             </VBox>
                         </TitledPane>
-                        <VBox spacing="10.0">
-                            <TitledPane collapsible="false" text="Employee Income" GridPane.valignment="TOP">
+                        <VBox maxWidth="-Infinity" prefWidth="350.0" spacing="10.0">
+                            <TitledPane collapsible="false" maxWidth="-Infinity" prefWidth="350.0" text="Employee Income" GridPane.valignment="TOP">
                                 <VBox layoutX="14.399999618530273" layoutY="9.399999618530273" spacing="10.0">
                                     <HBox spacing="12.0">
                                         <ProgressIndicator fx:id="percentToPayday" progress="0.0" />
@@ -330,9 +330,9 @@
                                     </Label>
                                 </VBox>
                             </TitledPane>
-                            <TitledPane collapsible="false">
+                            <TitledPane collapsible="false" maxWidth="-Infinity" prefWidth="350.0">
                                 <graphic>
-                                    <AnchorPane prefWidth="452.0">
+                                    <AnchorPane prefWidth="330.0">
                                         <Label text="Accounts" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                         <Label fx:id="totalBalance" layoutX="10.0" layoutY="10.0" text="\$0.00" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-5.0" AnchorPane.topAnchor="0.0" />
                                     </AnchorPane>
@@ -379,8 +379,8 @@
                 <Tab text="Ordering">
                     <GridPane hgap="10.0">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="500.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="500.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="360.44439697265625" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="399.5556030273437" />
                         </columnConstraints>
                         <padding>
                             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

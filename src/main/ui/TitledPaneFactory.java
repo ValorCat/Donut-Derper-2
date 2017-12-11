@@ -8,7 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import main.model.*;
+import main.model.Account;
+import main.model.Employee;
 import main.model.donut.DonutType;
 import main.model.station.CashRegister;
 import main.model.station.Fryer;
@@ -22,9 +23,9 @@ import static main.ui.UILinker.*;
  */
 public final class TitledPaneFactory {
 
-    private static final int HEADER_WIDTH = 407;
+    private static final int HEADER_WIDTH = 300;
     private static final int HEADER_HEIGHT = 20;
-    private static final int TIMER_WIDTH = 150;
+    private static final int TIMER_WIDTH = 130;
     private static final int TIMER_HEIGHT = 12;
     private static final int TEXT_GAP = 8;
     private static final int BODY_SPACING = 7;

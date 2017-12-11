@@ -7,9 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.model.Account;
+import main.model.Location;
 import main.model.donut.DonutBatch;
 import main.model.donut.DonutType;
-import main.model.Location;
 
 import java.io.IOException;
 
@@ -39,6 +39,7 @@ public class Main extends Application {
             });
             primaryStage.setScene(scene);
             primaryStage.setTitle(WINDOW_TITLE);
+            primaryStage.setResizable(false);
             primaryStage.show();
 
             AnimationTimer loop = new AnimationTimer() {
