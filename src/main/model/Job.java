@@ -24,11 +24,11 @@ public class Job {
     private static final ListProperty<Job> ENTRY_LEVEL_JOBS;
 
     static {
-        Job mngr = new Job("Branch Manager", 15, null, skills(USE_FRYER, .35, USE_REGISTER, 1));
-        Job assistMan = new Job("Assistant Manager", 10, mngr, skills(USE_FRYER, .5, USE_REGISTER, .7));
-        Job snrCook = new Job("Senior Fry Cook", 8, assistMan, skills(USE_FRYER, .7, USE_REGISTER, .2));
-        Job cook = new Job("Fry Cook", 5, snrCook, skills(USE_FRYER, .45));
-        Job jnrCook = new Job("Junior Fry Cook", 2, cook, skills(USE_FRYER, .25));
+        Job mngr = new Job("Branch Manager", 15, null, skills(USE_FRYER, .5, USE_REGISTER, 1));
+        Job assistMan = new Job("Assistant Manager", 10, mngr, skills(USE_FRYER, .6, USE_REGISTER, .7));
+        Job snrCook = new Job("Senior Fry Cook", 8, assistMan, skills(USE_FRYER, .9, USE_REGISTER, .2));
+        Job cook = new Job("Fry Cook", 5, snrCook, skills(USE_FRYER, .6));
+        Job jnrCook = new Job("Junior Fry Cook", 2, cook, skills(USE_FRYER, .4));
         Job snrCashier = new Job("Senior Cashier", 8, assistMan, skills(USE_REGISTER, .5));
         Job cashier = new Job("Cashier", 4, snrCashier, skills(USE_REGISTER, .3));
 

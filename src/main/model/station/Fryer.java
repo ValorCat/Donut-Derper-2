@@ -14,7 +14,7 @@ import main.model.ingredient.IngredientInventory;
  */
 public class Fryer extends Station {
 
-    public static final Fryer INITIAL = new Fryer(0.6, 1, 0);
+    public static final Fryer INITIAL = new Fryer(0.15, 4, 0);
     public static final String OUTPUT_FORMAT = "%d / %d %s Donuts";
     public static final String DESCRIPTION
             = "Consumes recipe ingredients and produces %d donuts/batch while operated by a fry cook.";

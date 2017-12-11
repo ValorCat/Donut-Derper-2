@@ -27,12 +27,12 @@ public class Location {
     public static final Location NONE = new Location("--", 0);
 
     private StringProperty name;
-    private double appeal = 1;                       // modifies rate of customer entry
-    private int lowStockTolerance = 5;               // min donuts before customers will enter
-    private long slowServiceTolerance = (long) 6e9;  // min nanoseconds w/o service before customers walk out
-    private double baseEnterChance = .002;           // base chance of customer entry per tick
-    private double leaveChance = .006;               // base chance of customer walking out per tick
-    private double appealBoostPerPerson = .02;       // effect of one happy customer on appeal
+    private double appeal = 1;                        // modifies rate of customer entry
+    private int lowStockTolerance = 10;               // min donuts before customers will enter
+    private long slowServiceTolerance = (long) 6.5e9; // min nanoseconds w/o service before customers walk out
+    private double baseEnterChance = .002;            // base chance of customer entry per tick
+    private double leaveChance = .006;                // base chance of customer walking out per tick
+    private double appealBoostPerPerson = .03;        // effect of one happy customer on appeal
 
     private IntegerProperty customers;
     private IntegerProperty maxCapacity;
@@ -65,9 +65,9 @@ public class Location {
         donuts = new DonutInventory(DonutType.PLAIN);
         ingredients = new IngredientInventory(
                 IngredientBatch.of("All-Purpose Flour", 10 * 181),
-                IngredientBatch.of("Butter", 12 * 24),
+                IngredientBatch.of("Butter", 15 * 24),
                 IngredientBatch.of("Eggs", 6 * 144),
-                IngredientBatch.of("Sugar", 109),
+                IngredientBatch.of("Sugar", 3 * 109),
                 IngredientBatch.of("Whole Milk", 2 * 768)
         );
         registers = new StationGroup<>(this);

@@ -22,8 +22,10 @@ These are likely, but not guaranteed, to be implemented in the order shown.
   
   - "Quick Assign" button to assign self to best, unassigned station
   - Ingredients and donuts expiring regularly if unused (not just a random event)
+  - Throwing out expired or undesirable donuts
   - Each employee has their own skill set that improves with time
   - Assigning employees specific duties from a list, like collecting cash from the registers and purchasing ingredients
+  - Sound effects, like a doorbell when customers enter and cash register opening when they pay
 
 ### Thanks
 Special thanks to Jack and Michael.

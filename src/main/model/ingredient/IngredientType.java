@@ -27,13 +27,13 @@ public class IngredientType {
             new IngredientType("All-Purpose Flour", 0, 144, new TreeMap<>(Map.of(
                     0, "tsp.",
                     3, "tbsp.",
-                    48, "cup",
+                    48, "cups",
                     181, "lb."))),
-            new IngredientType("Butter", 0, 192, new TreeMap<>(Map.of(
+            new IngredientType("Butter", 0, 96, new TreeMap<>(Map.of(
                     0, "tsp.",
                     3, "tbsp.",
                     24, "sticks",
-                    192, "qt."))),
+                    96, "lb."))),
             new IngredientType("Eggs", 0, Integer.MAX_VALUE, new TreeMap<>(Map.of(
                     0, "1/12 egg",
                     12, "eggs",
@@ -41,7 +41,7 @@ public class IngredientType {
             new IngredientType("Sugar", 0, 48, new TreeMap<>(Map.of(
                     0, "tsp.",
                     3, "tbsp.",
-                    48, "cup",
+                    48, "cups",
                     109, "lb."))),
             new IngredientType("Whole Milk", 0, 144, FLUID_UNITS)
     ));

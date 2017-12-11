@@ -22,14 +22,14 @@ public abstract class Station {
     private ObjectProperty<Employee> operator;
     private DoubleProperty progress;
     private DoubleProperty sellValue;
+    private DoubleProperty baseSpeed;
     private ObservableDoubleValue operatorSpeed;
     private ObservableDoubleValue speed;
-    private double baseSpeed;
 
     public Station(double baseSpeed, double sellValue) {
         operator = new SimpleObjectProperty<>(Employee.UNASSIGNED);
         operator.addListener((obs, oldValue, newValue) -> setOperatorImpl(oldValue, newValue));
-        this.baseSpeed = baseSpeed;
+        this.baseSpeed = new SimpleDoubleProperty(baseSpeed);
         setOperatorSpeed(operator);
         progress = new SimpleDoubleProperty();
         this.sellValue = new SimpleDoubleProperty(sellValue);
@@ -54,6 +54,9 @@ public abstract class Station {
             if (isPlayer) {
                 assignPlayer();
             }
+        } else if (isInUse()) {
+            // continue last operation when station is unassigned
+            speed = baseSpeed;
         }
         automatic = isAssigned && !isPlayer;
     }
@@ -81,12 +84,12 @@ public abstract class Station {
     }
 
     public void update() {
-        if (isInUse() && getOperator() != Employee.UNASSIGNED) {
+        if (isInUse()) {
             setProgress(getProgress() + getSpeed() / 60);
             if (getProgress() >= 1) {
                 finish();
             }
-        } else if (!isInUse() && automatic) {
+        } else if (automatic) {
             attemptToBegin();
         }
     }
