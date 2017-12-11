@@ -13,6 +13,7 @@ import main.model.donut.DonutType;
 public class CashRegister extends Station {
 
     public static final CashRegister INITIAL = new CashRegister(1.2, 0);
+    public static final String DESCRIPTION = "Checks out customers and stores the profits while operated by a cashier.";
 
     private DoubleProperty balance;
 

@@ -1,5 +1,6 @@
 package main.ui;
 
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -23,14 +24,14 @@ import static main.ui.UILinker.*;
  */
 public final class TitledPaneFactory {
 
-    private static final int HEADER_WIDTH = 300;
+    private static final int HEADER_WIDTH = 310;
     private static final int HEADER_HEIGHT = 20;
     private static final int TIMER_WIDTH = 130;
     private static final int TIMER_HEIGHT = 12;
     private static final int TEXT_GAP = 8;
     private static final int BODY_SPACING = 7;
-    private static final String ASSIGN_SELF = "Assign Self";
-    private static final int DESCRIPTION_MAX_WIDTH = 420;
+    private static final String ASSIGN_SELF = "< Assign Self";
+    private static final String MISSING_INGREDIENTS = "Missing Ingredients";
     private static final Font COLLECT_FONT = Font.font(9);
 
     private TitledPaneFactory() {}
@@ -62,11 +63,11 @@ public final class TitledPaneFactory {
 
         Button assignSelfButton = new Button(ASSIGN_SELF);
         assignSelfButton.setOnAction(e -> sta.setOperator(Employee.PLAYER));
+        assignSelfButton.setFont(Font.font(9));
         assignSelfButton.setCursor(Cursor.HAND);
         link(assignSelfButton.visibleProperty(), getAssignSelfVisible(sta));
 
         Label description = new Label();
-        description.setPrefWidth(DESCRIPTION_MAX_WIDTH);
         description.setWrapText(true);
 
         Button sellButton = new Button();
@@ -75,7 +76,9 @@ public final class TitledPaneFactory {
 
         AnchorPane header = new AnchorPane(operatorName);
         header.setPrefSize(HEADER_WIDTH, HEADER_HEIGHT);
-        VBox body = new VBox(BODY_SPACING, new HBox(TEXT_GAP, operator, assignSelfButton), description, sellButton);
+        HBox operatorRow = new HBox(TEXT_GAP, operator, assignSelfButton);
+        operatorRow.setAlignment(Pos.CENTER_LEFT);
+        VBox body = new VBox(BODY_SPACING, operatorRow, description, sellButton);
         pane.setContent(body);
         pane.setGraphic(header);
 
@@ -90,7 +93,7 @@ public final class TitledPaneFactory {
 
     private static void setupFryer(Fryer fryer, Pane header, VBox body, Label operator, Label description) {
         operator.setText("Fry Cook:");
-        description.setText("Produces 0 donuts/second while operated.");
+        description.textProperty().bind(getFryerDescription(fryer));
 
         Label output = new Label();
         setAnchors(output, 0d, 0d, null, 0d);
@@ -104,12 +107,19 @@ public final class TitledPaneFactory {
         type.setContentDisplay(ContentDisplay.RIGHT);
         linkItems(typeSelect, DonutType.typesProperty());
         linkChoice(typeSelect, getOutputType(fryer));
-        body.getChildren().add(1, type);
+
+        Label missingIngredients = new Label(MISSING_INGREDIENTS);
+        missingIngredients.setStyle("-fx-text-fill: orangered");
+        missingIngredients.visibleProperty().bind(fryer.isMissingIngredientsProperty());
+
+        HBox outputRow = new HBox(12, type, missingIngredients);
+        outputRow.setAlignment(Pos.CENTER_LEFT);
+        body.getChildren().add(1, outputRow);
     }
 
     private static void setupRegister(CashRegister register, Pane header, Label operator, Label description) {
         operator.setText("Cashier:");
-        description.setText("Checks out 0 customers/second while operated.");
+        description.setText(getRegisterDescription(register));
 
         Button collectButton = new Button("Collect");
         collectButton.setOnAction(a -> register.collect());

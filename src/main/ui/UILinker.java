@@ -90,6 +90,9 @@ public final class UILinker {
         panes.clear();
         panes.addAll(source);
         source.addListener((ListChangeListener<TitledPane>) change -> update(panes, change));
+        if (!source.isEmpty() && uiElement.getExpandedPane() == null) {
+            uiElement.setExpandedPane(source.get(0));
+        }
     }
 
     public static StringExpression getAccountHeader(Account a) {
@@ -133,6 +136,10 @@ public final class UILinker {
     public static BooleanBinding getFryButtonDisable(Location l) {
         return l.getFryers().playerHasStationProperty().not()
                 .or(l.getFryers().playerStationInUseProperty());
+    }
+
+    public static StringExpression getFryerDescription(Fryer f) {
+        return format(Fryer.DESCRIPTION, f.maxDonutOutputProperty());
     }
 
     public static StringBinding getGrossDonuts() {
@@ -219,6 +226,10 @@ public final class UILinker {
 
     public static DoubleProperty getProgress(Station s) {
         return s.progressProperty();
+    }
+
+    public static String getRegisterDescription(CashRegister r) {
+        return CashRegister.DESCRIPTION;
     }
 
     public static ListProperty<Employee> getRoster(Location loc) {

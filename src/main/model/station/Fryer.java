@@ -1,9 +1,6 @@
 package main.model.station;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import main.model.Job;
 import main.model.Location;
 import main.model.donut.DonutBatch;
@@ -19,10 +16,13 @@ public class Fryer extends Station {
 
     public static final Fryer INITIAL = new Fryer(0.6, 1, 0);
     public static final String OUTPUT_FORMAT = "%d / %d %s Donuts";
+    public static final String DESCRIPTION
+            = "Consumes recipe ingredients and produces %d donuts/batch while operated by a fry cook.";
 
     private ObjectProperty<DonutType> donutType;
     private IntegerProperty maxDonutOutput;
     private IntegerProperty currentDonutOutput;
+    private BooleanProperty isMissingIngredients;
     private IngredientInventory ingredients;
 
     public Fryer(double baseSpeed, int donutsPerBatch, double sellValue) {
@@ -30,11 +30,14 @@ public class Fryer extends Station {
         donutType = new SimpleObjectProperty<>(DonutType.PLAIN);
         maxDonutOutput = new SimpleIntegerProperty(donutsPerBatch);
         currentDonutOutput = new SimpleIntegerProperty();
+        isMissingIngredients = new SimpleBooleanProperty();
         skill = Job.Skill.USE_FRYER;
     }
 
     protected boolean canBegin() {
-        return getDonutType().getRecipe().stream().allMatch(ingredients::hasAtLeast);
+        boolean hasAllIngredients = getDonutType().getRecipe().stream().allMatch(ingredients::hasAtLeast);
+        setIsMissingIngredients(!hasAllIngredients);
+        return hasAllIngredients;
     }
 
     public void begin() {
@@ -79,6 +82,14 @@ public class Fryer extends Station {
 
     public final IntegerProperty currentDonutOutputProperty() {
         return currentDonutOutput;
+    }
+
+    public final BooleanProperty isMissingIngredientsProperty() {
+        return isMissingIngredients;
+    }
+
+    private void setIsMissingIngredients(boolean isMissingIngredients) {
+        this.isMissingIngredients.set(isMissingIngredients);
     }
 
     @Override

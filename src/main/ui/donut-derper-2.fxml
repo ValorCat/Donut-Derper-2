@@ -175,7 +175,7 @@
                         </padding>
                         <TitledPane collapsible="false" text="Ingredients" GridPane.valignment="TOP">
                             <VBox>
-                                <TableView fx:id="ingredientList" prefHeight="200.0" prefWidth="200.0">
+                                <TableView fx:id="ingredientList" focusTraversable="false" prefHeight="200.0" prefWidth="200.0">
                                     <columns>
                                         <TableColumn prefWidth="113.99996507167816" text="Item" />
                                         <TableColumn minWidth="8.0" prefWidth="106.00001525878906" text="In Stock" />
@@ -280,7 +280,7 @@
                                         <Button fx:id="hireButton" mnemonicParsing="false" onAction="#onHireNewEmployee" text="Hire" />
                                     </HBox>
                                 </TitledPane>
-                                <TableView fx:id="employeeList" prefHeight="200.0" prefWidth="200.0">
+                                <TableView fx:id="employeeList" focusTraversable="false" prefHeight="200.0" prefWidth="200.0">
                                     <columns>
                                         <TableColumn editable="false" prefWidth="105.99999749660492" text="Name" />
                                         <TableColumn editable="false" prefWidth="104.44446563720703" text="Position" />
@@ -428,7 +428,7 @@
             </TabPane>
             <Label contentDisplay="RIGHT" graphicTextGap="8.0" layoutX="773.0" layoutY="5.0" text="Branch:" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0">
                <graphic>
-                  <ChoiceBox fx:id="currentLocation" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="26.0" prefWidth="200.0">
+                  <ChoiceBox fx:id="currentLocation" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="26.0" prefWidth="200.0">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
