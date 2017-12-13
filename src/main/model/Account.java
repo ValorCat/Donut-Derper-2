@@ -38,7 +38,7 @@ public class Account {
     }
 
     public double getInterest() {
-        return balance.get() > 0 ? balance.get() * interestRate.get() : 0;
+        return getBalance() > 0 ? getBalance() * getInterestRate() : 0;
     }
 
     private String getName() {
@@ -59,6 +59,10 @@ public class Account {
 
     public final DoubleProperty balanceProperty() {
         return balance;
+    }
+
+    private double getInterestRate() {
+        return interestRate.get();
     }
 
     public final DoubleProperty interestRateProperty() {
