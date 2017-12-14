@@ -5,9 +5,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import main.model.station.Station;
-import main.ui.UILinker;
 
 import java.util.Optional;
+
+import static main.ui.Controller.onUpdate;
+import static main.ui.UILinker.asMoney;
 
 /**
  * @author Anthony Morrell
@@ -28,8 +30,8 @@ public class Employee {
         this.name = new SimpleStringProperty(name);
         this.job = new SimpleObjectProperty<>(job);
         this.location = new SimpleObjectProperty<>(location);
-        this.pay = new SimpleStringProperty(UILinker.asMoney(job.getWage()));
-        this.job.addListener((obs, oldValue, newValue) -> pay.set(UILinker.asMoney(newValue.getWage())));
+        this.pay = new SimpleStringProperty(asMoney(job.getWage()));
+        onUpdate(this.job, newJob -> pay.set(asMoney(newJob.getWage())));
         if (location != Location.NONE) {
             location.updateTotalWages(job.getWage());
         }

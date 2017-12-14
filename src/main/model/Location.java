@@ -30,7 +30,7 @@ public class Location {
     private double appeal = 1;                        // modifies rate of customer entry
     private int lowStockTolerance = 10;               // min donuts before customers will enter
     private long slowServiceTolerance = (long) 6.5e9; // min nanoseconds w/o service before customers walk out
-    private double baseEnterChance = .002;            // base chance of customer entry per tick
+    private double baseEnterChance = .0015;           // base chance of customer entry per tick
     private double leaveChance = .006;                // base chance of customer walking out per tick
     private double appealBoostPerPerson = .03;        // effect of one happy customer on appeal
 
@@ -95,7 +95,7 @@ public class Location {
         }
     }
 
-    private void enterCustomer() {
+    public void enterCustomer() {
         assert customers.get() < maxCapacity.get();
         if (customers.get() == 0) {
             // ensure customers don't immediately leave upon entering
@@ -138,10 +138,6 @@ public class Location {
 
     public void updateTotalWages(double amount) {
         totalWages.set(totalWages.get() + amount);
-    }
-
-    public String getName() {
-        return name.get();
     }
 
     public final StringProperty nameProperty() {
@@ -214,10 +210,6 @@ public class Location {
 
     public final DoubleProperty totalBalanceProperty() {
         return totalBalance;
-    }
-
-    public double getTotalWages() {
-        return totalWages.get();
     }
 
     public final DoubleProperty totalWagesProperty() {

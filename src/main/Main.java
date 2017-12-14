@@ -29,6 +29,9 @@ public class Main extends Application {
             Scene scene = new Scene(window);
             scene.setOnKeyPressed(e -> {
                 switch (e.getCode()) {
+                    case C:
+                        Game.location().enterCustomer();
+                        break;
                     case D:
                         Game.location().addDonuts(new DonutBatch(DonutType.PLAIN, 1));
                         break;

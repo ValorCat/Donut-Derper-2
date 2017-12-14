@@ -1,9 +1,11 @@
 package main.ui;
 
 import javafx.beans.property.ListProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import main.Game;
 import main.RNG;
@@ -19,6 +21,8 @@ import main.model.station.Fryer;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static main.ui.UILinker.*;
 
@@ -27,6 +31,11 @@ import static main.ui.UILinker.*;
  * @since 10/28/2017
  */
 public class Controller implements Initializable {
+
+    public static final String DEFAULT_TEXT_COLOR = "black";
+
+    private static final String FULL_STORE_COLOR = "forestgreen";
+    private static final String HIGH_WAGE_COLOR = "firebrick";
 
     // general
     @FXML public ChoiceBox<Location> currentLocation;
@@ -107,6 +116,8 @@ public class Controller implements Initializable {
         linkDisable(manualSellButton, getCheckoutButtonDisable(loc));
         linkDisable(manualFryButton, getFryButtonDisable(loc));
         linkText(customerCount, getCustomerCount(loc));
+        onUpdate(loc.customersProperty(), num -> setCSS(customerCount, "text-fill",
+                num.intValue() > 0 ? FULL_STORE_COLOR : DEFAULT_TEXT_COLOR));
         linkText(donutCount, getStockedDonuts(loc));
         linkPanes(registerList, loc.getRegisters().getPanes());
         linkPanes(fryerList, loc.getFryers().getPanes());
@@ -118,11 +129,14 @@ public class Controller implements Initializable {
 
     private void setupFinancesTab(Location loc) {
         linkText(totalWages, getTotalWages(loc));
+        onUpdate(canPayWages(loc), canPay -> setCSS(totalWages, "text-fill",
+                canPay ? DEFAULT_TEXT_COLOR : HIGH_WAGE_COLOR));
         linkText(totalBalance, getTotalBalance(loc));
+        Account firstAccount = getAccounts(loc).getValue().get(0);
         linkItems(depositAccount, getAccounts(loc));
-        linkChoice(depositAccount, getDepositAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
+        linkChoice(depositAccount, getDepositAccount(loc), firstAccount);
         linkItems(salarySource, getAccounts(loc));
-        linkChoice(salarySource, getWageSourceAccount(loc), getAccounts(loc).getValue().get(0), (a) -> {});
+        linkChoice(salarySource, getWageSourceAccount(loc), firstAccount);
         linkPanes(accountList, loc.getAccountPanes());
         setupRoster(loc);
     }
@@ -177,6 +191,18 @@ public class Controller implements Initializable {
         if (superior != null && !jobs.contains(superior)) {
             jobs.add(superior);
         }
+    }
+
+    public static <T> void onUpdate(ObservableValue<T> observable, Consumer<T> action) {
+        observable.addListener((obs, oldValue, newValue) -> action.accept(newValue));
+    }
+
+    public static <T> void onUpdate(ObservableValue<T> observable, BiConsumer<T,T> action) {
+        observable.addListener((obs, oldValue, newValue) -> action.accept(oldValue, newValue));
+    }
+
+    static void setCSS(Node uiElement, String property, String value) {
+        uiElement.setStyle("-fx-" + property + ": " + value);
     }
 
 }

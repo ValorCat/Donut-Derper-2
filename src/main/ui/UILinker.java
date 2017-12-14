@@ -1,11 +1,12 @@
 package main.ui;
 
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableNumberValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -33,6 +34,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static javafx.beans.binding.Bindings.*;
+import static main.ui.Controller.onUpdate;
 
 /**
  * @author Anthony Morrell
@@ -42,50 +44,51 @@ public final class UILinker {
 
     private UILinker() {}
 
-    public static <T> void link(Property<T> uiElement, ObservableValue<? extends T> source) {
+    static <T> void link(Property<T> uiElement, ObservableValue<? extends T> source) {
         uiElement.bind(source);
     }
 
-    public static void linkText(Label uiElement, StringExpression source) {
+    static void linkText(Label uiElement, ObservableValue<String> source) {
         link(uiElement.textProperty(), source);
     }
 
-    public static void linkProgress(ProgressIndicator uiElement, ObservableDoubleValue source) {
+    static void linkProgress(ProgressIndicator uiElement, ObservableDoubleValue source) {
         link(uiElement.progressProperty(), source);
     }
 
-    public static <T> void linkItems(ChoiceBox<T> uiElement, ObservableValue<ObservableList<T>> source) {
+    static <T> void linkItems(ChoiceBox<T> uiElement, ObservableValue<ObservableList<T>> source) {
         link(uiElement.itemsProperty(), source);
     }
 
-    public static <T> void linkItems(TableView<T> uiElement, ObservableValue<ObservableList<T>> source) {
+    static <T> void linkItems(TableView<T> uiElement, ObservableValue<ObservableList<T>> source) {
         link(uiElement.itemsProperty(), source);
     }
 
-    public static <T> void linkChoice(ChoiceBox<T> uiElement, Property<T> modelElement) {
-        linkChoice(uiElement, modelElement, null, (x) -> {});
-    }
-
-    public static <T> void linkChoice(ChoiceBox<T> uiElement, Property<T> modelElement, T initial, Consumer<T> action) {
-        uiElement.getSelectionModel().selectedItemProperty().addListener(
-                (obs, old, curr) -> action.accept(curr));
+    static <T> void linkChoice(ChoiceBox<T> uiElement, Property<T> modelElement) {
         uiElement.valueProperty().bindBidirectional(modelElement);
-        if (initial != null) {
-            uiElement.setValue(initial);
-        }
     }
 
-    public static void linkDisable(Node uiElement, ObservableBooleanValue modelElement) {
+    static <T> void linkChoice(ChoiceBox<T> uiElement, Property<T> modelElement, T initial) {
+        linkChoice(uiElement, modelElement);
+        uiElement.setValue(initial);
+    }
+
+    static <T> void linkChoice(ChoiceBox<T> uiElement, Property<T> modelElement, T initial, Consumer<T> action) {
+        onUpdate(uiElement.getSelectionModel().selectedItemProperty(), action);
+        linkChoice(uiElement, modelElement, initial);
+    }
+
+    static void linkDisable(Node uiElement, ObservableValue<Boolean> modelElement) {
         link(uiElement.disableProperty(), modelElement);
     }
 
-    public static void linkColumns(TableView<?> table, String... properties) {
+    static void linkColumns(TableView<?> table, String... properties) {
         for (int i = 0; i < properties.length; i++) {
             table.getColumns().get(i).setCellValueFactory(new PropertyValueFactory<>(properties[i]));
         }
     }
 
-    public static void linkPanes(Accordion uiElement, ObservableList<TitledPane> source) {
+    static void linkPanes(Accordion uiElement, ObservableList<TitledPane> source) {
         ObservableList<TitledPane> panes = uiElement.getPanes();
         panes.clear();
         panes.addAll(source);
@@ -93,6 +96,13 @@ public final class UILinker {
         if (!source.isEmpty() && uiElement.getExpandedPane() == null) {
             uiElement.setExpandedPane(source.get(0));
         }
+    }
+
+    public static Binding<Boolean> canPayWages(Location l) {
+        return new DeepBinding<>(
+                l.wageSourceAccountProperty(),
+                Account::balanceProperty,
+                bal -> greaterThanOrEqual((ObservableNumberValue) bal, l.totalWagesProperty()));
     }
 
     public static StringExpression getAccountHeader(Account a) {
@@ -107,7 +117,7 @@ public final class UILinker {
         return s.operatorProperty().isNotEqualTo(Employee.PLAYER);
     }
 
-    public static StringBinding getBalance(CashRegister r) {
+    public static Binding<String> getBalance(CashRegister r) {
         return wrap(r.balanceProperty(), UILinker::asMoney);
     }
 
@@ -192,7 +202,7 @@ public final class UILinker {
         return s.operatorProperty();
     }
 
-    public static StringBinding getOperatorName(Station s) {
+    public static Binding<String> getOperatorName(Station s) {
         return wrap(s.operatorProperty(), Employee::getName);
     }
 
@@ -238,7 +248,7 @@ public final class UILinker {
         return new SimpleListProperty<>(sorted);
     }
 
-    public static StringBinding getSellButtonText(Station s) {
+    public static Binding<String> getSellButtonText(Station s) {
         return wrap(s.sellValueProperty(), val -> "Sell - " + asMoney(val));
     }
 
@@ -254,11 +264,11 @@ public final class UILinker {
         return s.progressProperty().isNotEqualTo(0);
     }
 
-    public static StringBinding getTotalBalance(Location l) {
+    public static Binding<String> getTotalBalance(Location l) {
         return wrap(l.totalBalanceProperty(), UILinker::asMoney);
     }
 
-    public static StringBinding getTotalWages(Location l) {
+    public static Binding<String> getTotalWages(Location l) {
         return wrap(l.totalWagesProperty(), amount -> "-" + asMoney(amount));
     }
 
@@ -274,8 +284,8 @@ public final class UILinker {
         return value.startsWith("-") ? value : "+" + value;
     }
 
-    private static <T> StringBinding wrap(ObservableValue<T> source, Function<T,String> wrapper) {
-        return createStringBinding(() -> wrapper.apply(source.getValue()), source);
+    private static <T, R> Binding<R> wrap(ObservableValue<T> source, Function<T,R> wrapper) {
+        return createObjectBinding(() -> wrapper.apply(source.getValue()), source);
     }
 
     private static void update(ObservableList<TitledPane> panes, ListChangeListener.Change<? extends TitledPane> change) {

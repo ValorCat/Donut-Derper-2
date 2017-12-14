@@ -30,7 +30,7 @@ public class Job {
         Job cook = new Job("Fry Cook", 5, snrCook, skills(USE_FRYER, .6));
         Job jnrCook = new Job("Junior Fry Cook", 2, cook, skills(USE_FRYER, .4));
         Job snrCashier = new Job("Senior Cashier", 8, assistMan, skills(USE_REGISTER, .5));
-        Job cashier = new Job("Cashier", 4, snrCashier, skills(USE_REGISTER, .3));
+        Job cashier = new Job("Cashier", 4, snrCashier, skills(USE_REGISTER, .2));
 
         ENTRY_LEVEL_JOBS = new SimpleListProperty<>(observableArrayList(List.of(cashier, jnrCook)));
     }

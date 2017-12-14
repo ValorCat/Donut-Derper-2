@@ -16,6 +16,7 @@ import main.model.station.CashRegister;
 import main.model.station.Fryer;
 import main.model.station.Station;
 
+import static main.ui.Controller.*;
 import static main.ui.UILinker.*;
 
 /**
@@ -30,6 +31,9 @@ public final class TitledPaneFactory {
     private static final int TIMER_HEIGHT = 12;
     private static final int TEXT_GAP = 8;
     private static final int BODY_SPACING = 7;
+    private static final String FRYER_TIMER_COLOR = "darkorange";
+    private static final String REGISTER_TIMER_COLOR = "forestgreen";
+    private static final String REGISTER_FULL_COLOR = "forestgreen";
     private static final String ASSIGN_SELF = "< Assign Self";
     private static final String MISSING_INGREDIENTS = "Missing Ingredients";
     private static final Font COLLECT_FONT = Font.font(9);
@@ -83,15 +87,16 @@ public final class TitledPaneFactory {
         pane.setGraphic(header);
 
         if (sta instanceof Fryer) {
-            setupFryer((Fryer) sta, header, body, operator, description);
+            setupFryer((Fryer) sta, header, body, timer, operator, description);
         } else if (sta instanceof CashRegister) {
-            setupRegister((CashRegister) sta, header, operator, description);
+            setupRegister((CashRegister) sta, header, timer, operator, description);
         }
 
         return pane;
     }
 
-    private static void setupFryer(Fryer fryer, Pane header, VBox body, Label operator, Label description) {
+    private static void setupFryer(Fryer fryer, Pane header, VBox body, ProgressBar timer, Label operator, Label description) {
+        setCSS(timer, "accent", FRYER_TIMER_COLOR);
         operator.setText("Fry Cook:");
         description.textProperty().bind(getFryerDescription(fryer));
 
@@ -117,7 +122,8 @@ public final class TitledPaneFactory {
         body.getChildren().add(1, outputRow);
     }
 
-    private static void setupRegister(CashRegister register, Pane header, Label operator, Label description) {
+    private static void setupRegister(CashRegister register, Pane header, ProgressBar timer, Label operator, Label description) {
+        setCSS(timer, "accent", REGISTER_TIMER_COLOR);
         operator.setText("Cashier:");
         description.setText(getRegisterDescription(register));
 
@@ -132,6 +138,8 @@ public final class TitledPaneFactory {
         balance.setContentDisplay(ContentDisplay.RIGHT);
         setAnchors(balance, 0d, 0d, null, -8d);
         linkText(balance, getBalance(register));
+        onUpdate(register.balanceProperty(), bal -> setCSS(balance, "text-fill",
+                bal.doubleValue() > 0 ? REGISTER_FULL_COLOR : DEFAULT_TEXT_COLOR));
         header.getChildren().add(balance);
     }
 

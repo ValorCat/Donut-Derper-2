@@ -9,6 +9,8 @@ import main.model.Employee;
 import main.model.Job;
 import main.model.Location;
 
+import static main.ui.Controller.onUpdate;
+
 /**
  * @author Anthony Morrell
  * @since 10/29/2017
@@ -28,7 +30,7 @@ public abstract class Station {
 
     public Station(double baseSpeed, double sellValue) {
         operator = new SimpleObjectProperty<>(Employee.UNASSIGNED);
-        operator.addListener((obs, oldValue, newValue) -> setOperatorImpl(oldValue, newValue));
+        onUpdate(operator, this::setOperatorImpl);
         this.baseSpeed = new SimpleDoubleProperty(baseSpeed);
         setOperatorSpeed(operator);
         progress = new SimpleDoubleProperty();
