@@ -16,11 +16,11 @@ import static main.ui.Controller.onUpdate;
  * A DeepBinding represents a binding to an ObservableValue nested within another ObservableValue. The DeepBinding
  * updates whenever either ObservableValue updates.
  *
- *     Foo foo = new Foo();  // foo has property bar, bar has property another
+ *     Foo foo = new Foo();                                 // foo has property 'bar', bar has property 'another'
  *     Binding<Boolean> binding = new DeepBinding<>(
- *         foo.barProperty(),                           // the root value
- *         bar -> bar.anotherProperty(),                // the nested value
- *         anotherProperty -> anotherProperty.isNull()  // the actual binding on the nested value
+ *             foo.barProperty(),                           // the root value
+ *             bar -> bar.anotherProperty(),                // the nested value
+ *             anotherProperty -> anotherProperty.isNull()  // the actual binding on the nested value
  *     );
  *
  * Using method references, this can be condensed to:
@@ -32,8 +32,8 @@ import static main.ui.Controller.onUpdate;
  *
  *     Foo foo = new Foo();
  *     Binding<Boolean> = Bindings.createBooleanBinding(
- *         () -> foo.getBar().anotherProperty().isNull(),
- *         foo.barProperty(), foo.getBar().anotherProperty()
+ *             () -> foo.getBar().anotherProperty().isNull(),
+ *             foo.barProperty(), foo.getBar().anotherProperty()
  *     );
  *
  * Except that the binding will always reflect the current value of foo.getBar().getAnother(), even when foo.bar or
