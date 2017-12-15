@@ -57,16 +57,8 @@ public final class RNG {
         return new ArrayList<>(domain).get(random.nextInt(domain.size()));
     }
 
-    public static double range(double max) {
-        return range(0, max);
-    }
-
     public static double range(double low, double high) {
         return random.nextDouble() * (high - low) + low;
-    }
-
-    public static long range(long low, long high) {
-        return (long) (random.nextDouble() * (high - low) + low);
     }
 
     public static String name() {

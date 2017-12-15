@@ -2,17 +2,19 @@ package main.model;
 
 import javafx.beans.property.*;
 
+import static main.model.Time.*;
+
 /**
  * @author Anthony Morrell
  * @since 10/28/2017
  */
 public class Account {
 
-    private static final long INTEREST_INTERVAL = (long) 10e9; // nano seconds between interest deposits
-    private static final long PAYDAY_INTERVAL = (long) 60e9;   // nano seconds between employee payments
+    private static final Period INTEREST_LENGTH = duration (15); // time between interest deposits
+    private static final Period PAYDAY_LENGTH = duration(30);    // time between employee payments
 
-    private static long untilInterestDeposit = INTEREST_INTERVAL;
-    private static long untilPayday = PAYDAY_INTERVAL;
+    private static Moment nextInterestDeposit = INTEREST_LENGTH.fromNow();
+    private static Timer untilPayday = PAYDAY_LENGTH.asTimer();
     private static DoubleProperty payPeriodProgress = new SimpleDoubleProperty();
     private static IntegerProperty payPeriodSeconds = new SimpleIntegerProperty();
 
@@ -23,7 +25,7 @@ public class Account {
 
     public Account(String name, double interestRate, Location location) {
         this.name = new SimpleStringProperty(name);
-        this.balance = new SimpleDoubleProperty();
+        balance = new SimpleDoubleProperty();
         this.interestRate = new SimpleDoubleProperty(interestRate);
         this.location = location;
     }
@@ -73,21 +75,20 @@ public class Account {
         return getName();
     }
 
-    public static boolean readyForInterestDeposit(long delta) {
-        untilInterestDeposit -= delta;
-        if (untilInterestDeposit <= 0) {
-            untilInterestDeposit = INTEREST_INTERVAL;
+    public static boolean readyForInterestDeposit() {
+        if (nextInterestDeposit.hasPassed()) {
+            nextInterestDeposit.pushBack(INTEREST_LENGTH);
             return true;
         }
         return false;
     }
 
-    public static boolean readyForPayday(long delta) {
-        untilPayday -= delta;
-        payPeriodProgress.set((PAYDAY_INTERVAL - untilPayday) / (double) PAYDAY_INTERVAL);
-        payPeriodSeconds.set((int) (untilPayday / (long) 1e9));
-        if (untilPayday <= 0) {
-            untilPayday = PAYDAY_INTERVAL;
+    public static boolean readyForPayday(Period delta) {
+        untilPayday.update(delta);
+        setPayPeriodProgress(untilPayday.getProgress());
+        setPayPeriodSeconds(untilPayday.getSeconds());
+        if (untilPayday.isDone()) {
+            untilPayday.reset();
             return true;
         }
         return false;
@@ -101,4 +102,11 @@ public class Account {
         return payPeriodSeconds;
     }
 
+    private static void setPayPeriodProgress(double payPeriodProgress) {
+        Account.payPeriodProgress.set(payPeriodProgress);
+    }
+
+    private static void setPayPeriodSeconds(int payPeriodSeconds) {
+        Account.payPeriodSeconds.set(payPeriodSeconds);
+    }
 }

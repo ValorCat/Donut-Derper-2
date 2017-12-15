@@ -6,12 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import main.model.Account;
-import main.model.Location;
 import main.model.donut.DonutBatch;
 import main.model.donut.DonutType;
 
 import java.io.IOException;
+
+import static main.model.Time.tick;
 
 /**
  * @author Anthony Morrell
@@ -46,10 +46,8 @@ public class Main extends Application {
             primaryStage.show();
 
             AnimationTimer loop = new AnimationTimer() {
-                private long lastTimeStamp = -1;
                 public void handle(long now) {
-                    tick(now, lastTimeStamp == -1 ? now : lastTimeStamp);
-                    lastTimeStamp = now;
+                    tick(now);
                 }
             };
 
@@ -57,14 +55,6 @@ public class Main extends Application {
         } catch (IOException e) {
             System.out.println("Couldn't find FXML data:");
             e.printStackTrace();
-        }
-    }
-
-    private static void tick(long now, long last) {
-        boolean isInterestDay = Account.readyForInterestDeposit(now - last);
-        boolean isPayday = Account.readyForPayday(now - last);
-        for (Location l : Game.game.getLocations()) {
-            l.update(now, last, isInterestDay, isPayday);
         }
     }
 

@@ -2,10 +2,10 @@ package main;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
-import main.model.station.CashRegister;
 import main.model.Employee;
-import main.model.station.Fryer;
 import main.model.Location;
+import main.model.station.CashRegister;
+import main.model.station.Fryer;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -31,7 +31,6 @@ public final class Game {
 
         getCurrentLocation().getRegisters().add(CashRegister.INITIAL);
         getCurrentLocation().getFryers().add(Fryer.INITIAL);
-        getCurrentLocation().getFryers().assignToPlayer(Fryer.INITIAL);
         Fryer.INITIAL.setOperator(Employee.PLAYER);
     }
 

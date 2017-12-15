@@ -17,6 +17,7 @@ import main.model.station.StationGroup;
 import main.ui.TitledPaneFactory;
 
 import static javafx.collections.FXCollections.observableArrayList;
+import static main.model.Time.*;
 
 /**
  * @author Anthony Morrell
@@ -27,18 +28,18 @@ public class Location {
     public static final Location NONE = new Location("--", 0);
 
     private StringProperty name;
-    private double appeal = 1;                        // modifies rate of customer entry
-    private int lowStockTolerance = 10;               // min donuts before customers will enter
-    private long slowServiceTolerance = (long) 6.5e9; // min nanoseconds w/o service before customers walk out
-    private double baseEnterChance = .0015;           // base chance of customer entry per tick
-    private double leaveChance = .006;                // base chance of customer walking out per tick
-    private double appealBoostPerPerson = .03;        // effect of one happy customer on appeal
+    private double appeal = 1;                 // modifies rate of customer entry
+    private int lowStockTolerance = 10;        // min donuts before customers will enter
+    private Period slowServiceTolerance = duration(6.5); // min time w/o service before customers walk out
+    private double baseEnterChance = .0015;    // base chance of customer entry per tick
+    private double leaveChance = .006;         // base chance of customer walking out per tick
+    private double appealBoostPerPerson = .03; // effect of one happy customer on appeal
 
     private IntegerProperty customers;
     private IntegerProperty maxCapacity;
     private DoubleBinding occupancy;
-    private long lastCheckOut;
-    private long noCustomerTimeRemaining;
+    private Moment lastCheckOut;
+    private Moment canHaveCustomers;
     private boolean customersLeaving;
 
     private IntegerProperty donutStock;
@@ -60,6 +61,8 @@ public class Location {
         customers = new SimpleIntegerProperty();
         this.maxCapacity = new SimpleIntegerProperty(maxCapacity);
         occupancy = customers.add(0.0).divide(this.maxCapacity);
+        lastCheckOut = blankTime();
+        canHaveCustomers = blankTime();
 
         donutStock = new SimpleIntegerProperty();
         donuts = new DonutInventory(DonutType.PLAIN);
@@ -84,8 +87,8 @@ public class Location {
         roster = new SimpleListProperty<>(observableArrayList(Employee.PLAYER, Employee.UNASSIGNED));
     }
 
-    public void update(long now, long last, boolean isInterestDay, boolean isPayday) {
-        updateCustomers(now, last);
+    public void update(Moment now, Period delta, boolean isInterestDay, boolean isPayday) {
+        updateCustomers(now, delta);
         updateStations();
         if (isInterestDay) {
             depositInterest();
@@ -96,18 +99,18 @@ public class Location {
     }
 
     public void enterCustomer() {
-        assert customers.get() < maxCapacity.get();
-        if (customers.get() == 0) {
+        assert getCustomers() < getMaxCapacity();
+        if (getCustomers() == 0) {
             // ensure customers don't immediately leave upon entering
             // after a long break without anyone showing up
             setLastCheckOut();
         }
-        customers.set(customers.get() + 1);
+        setCustomers(getCustomers() + 1);
     }
 
     public void leaveCustomer() {
-        assert customers.get() > 0;
-        customers.set(customers.get() - 1);
+        assert getCustomers() > 0;
+        setCustomers(getCustomers() - 1);
     }
 
     public void addDonuts(DonutBatch batch) {
@@ -156,6 +159,10 @@ public class Location {
         return customers;
     }
 
+    private void setCustomers(int customers) {
+        this.customers.set(customers);
+    }
+
     public int getMaxCapacity() {
         return maxCapacity.get();
     }
@@ -165,7 +172,7 @@ public class Location {
     }
 
     public void setLastCheckOut() {
-        lastCheckOut = System.nanoTime();
+        lastCheckOut = now();
     }
 
     public void boostAppeal(double amount) {
@@ -212,6 +219,10 @@ public class Location {
         return totalBalance;
     }
 
+    private double getTotalWages() {
+        return totalWages.get();
+    }
+
     public final DoubleProperty totalWagesProperty() {
         return totalWages;
     }
@@ -222,6 +233,10 @@ public class Location {
 
     public final ListProperty<Account> accountsProperty() {
         return accounts;
+    }
+
+    private Account getWageSourceAccount() {
+        return wageSourceAccount.get();
     }
 
     public final ObjectProperty<Account> wageSourceAccountProperty() {
@@ -245,13 +260,13 @@ public class Location {
         return name.get();
     }
 
-    private void updateCustomers(long now, long last) {
-        boolean haveCustomers = customers.get() > 0;
-        boolean recentCheckout = (now - lastCheckOut) < slowServiceTolerance;
+    private void updateCustomers(Moment now, Period delta) {
+        boolean haveCustomers = getCustomers() > 0;
+        boolean recentCheckout = now.since(lastCheckOut).lessThan(slowServiceTolerance);
         if (customersLeaving) {
             if (!haveCustomers) {
                 customersLeaving = false;
-                noCustomerTimeRemaining = RNG.range((long) 3e9, (long) 8e9);
+                canHaveCustomers.pushBack(randomDuration(3, 8));
             } else if (recentCheckout) {
                 customersLeaving = false;
             } else {
@@ -266,9 +281,6 @@ public class Location {
             }
             RNG.chance(chance, this::enterCustomer);
         }
-        if (noCustomerTimeRemaining > 0) {
-            noCustomerTimeRemaining -= now - last;
-        }
     }
 
     private void updateStations() {
@@ -277,8 +289,8 @@ public class Location {
     }
 
     private void payEmployees() {
-        Account account = wageSourceAccount.get();
-        account.updateBalance(-totalWages.get());
+        Account account = getWageSourceAccount();
+        account.updateBalance(-getTotalWages());
     }
 
     private void depositInterest() {
@@ -286,7 +298,7 @@ public class Location {
     }
 
     private boolean customerCanEnter() {
-        return noCustomerTimeRemaining <= 0
+        return canHaveCustomers.hasPassed()
                 && occupancy.get() < 1
                 && donutStock.get() >= lowStockTolerance;
     }
