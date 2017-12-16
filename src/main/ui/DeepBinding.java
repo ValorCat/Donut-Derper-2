@@ -51,10 +51,21 @@ public class DeepBinding<T,U,R> extends ObjectBinding<R> {
     private Function<ObservableValue<U>,ObservableValue<R>> func2;
 
     /**
+     * Construct a new binding to func(root).
+     * @param root the root value
+     * @param func a function that accepts the root value and returns the nested value
+     */
+    @SuppressWarnings("unchecked")
+    public DeepBinding(ObservableValue<T> root, Function<T, ObservableValue<U>> func) {
+        // U and R are identical
+        this(root, func, value -> (ObservableValue<R>) value);
+    }
+
+    /**
      * Construct a new binding to func2(func1(root)).
      * @param root the root value
-     * @param func1 a function that accepts the root value and returns the nested value
-     * @param func2 a function that accepts the nested value and returns the desired output
+     * @param func1 a function that accepts the root value and returns the first nested value
+     * @param func2 a function that accepts the first nested value and returns the second nested value
      */
     public DeepBinding(ObservableValue<T> root, Function<T, ObservableValue<U>> func1,
                        Function<ObservableValue<U>, ObservableValue<R>> func2) {

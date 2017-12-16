@@ -7,6 +7,7 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableNumberValue;
+import javafx.beans.value.ObservableStringValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -22,6 +23,8 @@ import main.model.Job;
 import main.model.Location;
 import main.model.donut.DonutType;
 import main.model.ingredient.IngredientBatch;
+import main.model.ingredient.IngredientStock;
+import main.model.ingredient.IngredientType;
 import main.model.station.CashRegister;
 import main.model.station.Fryer;
 import main.model.station.Station;
@@ -41,6 +44,8 @@ import static main.ui.Controller.onUpdate;
  * @since 11/4/2017
  */
 public final class UILinker {
+
+    private static final ObservableStringValue EMPTY_STRING_PROPERTY = new SimpleStringProperty("");
 
     private UILinker() {}
 
@@ -182,6 +187,20 @@ public final class UILinker {
         );
     }
 
+    public static Binding<String> getIngredientSearchMax(Slider s, TableView<IngredientStock> ingredients) {
+        return createStringBinding(
+                () -> {
+                    IngredientStock stock = ingredients.getSelectionModel().getSelectedItem();
+                    if (stock == null) {
+                        return "";
+                    }
+                    IngredientType type = stock.getType();
+                    return getScaledUnitValue((int) s.getValue() * type.getBaseAmount(), type.getUnits(),
+                            type.getDecimalThreshold());
+                }, s.valueProperty(), ingredients.getSelectionModel().selectedItemProperty()
+        );
+    }
+
     public static StringExpression getInterest(Account a) {
         return format("Interest: %.2f%%  (%s)",
                 a.interestRateProperty().multiply(100),
@@ -196,6 +215,10 @@ public final class UILinker {
 
     public static ObservableValue<ObservableList<Location>> getLocations() {
         return Game.game.locationsProperty();
+    }
+
+    public static Binding<String> getMoneyText(ObservableDoubleValue m) {
+        return wrap(m, UILinker::asMoney);
     }
 
     public static ObjectProperty<Employee> getOperator(Station s) {
@@ -252,6 +275,18 @@ public final class UILinker {
         return wrap(s.sellValueProperty(), val -> "Sell - " + asMoney(val));
     }
 
+    public static Binding<String> getShownIngredient(TableView<IngredientStock> ingredientList, TitledPane ingredientOfferPane) {
+        return new DeepBinding<>(
+                ingredientList.getSelectionModel().selectedItemProperty(),
+                ingredientStock -> {
+                    boolean selected = ingredientStock != null;
+                    ingredientOfferPane.setCollapsible(selected);
+                    ingredientOfferPane.setExpanded(selected);
+                    return selected ? ingredientStock.nameProperty() : EMPTY_STRING_PROPERTY;
+                }
+        );
+    }
+
     public static StringBinding getStockedDonuts(Location l) {
         return l.donutStockProperty().asString();
     }
@@ -279,6 +314,7 @@ public final class UILinker {
     public static String asMoney(Number amount) {
         return NumberFormat.getCurrencyInstance().format(amount);
     }
+
     private static String asMoneySigned(Number amount) {
         String value = asMoney(amount);
         return value.startsWith("-") ? value : "+" + value;

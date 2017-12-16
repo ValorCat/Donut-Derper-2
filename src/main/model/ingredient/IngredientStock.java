@@ -6,7 +6,7 @@ package main.model.ingredient;
 public class IngredientStock extends IngredientBatch {
 
     public IngredientStock(IngredientBatch batch) {
-        super(batch.getType(), batch.getAmount());
+        super(batch.getType(), batch.getAmount(), batch.getQuality(), batch.getBrand());
     }
 
     public void increase(int amount) {

@@ -13,7 +13,9 @@ import main.model.Account;
 import main.model.Employee;
 import main.model.Job;
 import main.model.Location;
+import main.model.ingredient.IngredientOffer;
 import main.model.ingredient.IngredientStock;
+import main.model.ingredient.IngredientSupplier;
 import main.model.ingredient.IngredientType;
 import main.model.station.CashRegister;
 import main.model.station.Fryer;
@@ -24,6 +26,7 @@ import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static javafx.collections.FXCollections.observableList;
 import static main.ui.UILinker.*;
 
 /**
@@ -51,6 +54,12 @@ public class Controller implements Initializable {
 
     // inventory
     @FXML public TableView<IngredientStock> ingredientList;
+    @FXML public TitledPane ingredientOfferPane;
+    @FXML public Label shownIngredient;
+    @FXML public Label ingredientMinBound;
+    @FXML public Label ingredientMaxBound;
+    @FXML public Slider ingredientBoundSlider;
+    @FXML public TableView<IngredientOffer> ingredientOfferList;
     @FXML public Label donutCountDetailed;
     @FXML public Accordion productList;
     @FXML public Button addProductButton;
@@ -88,7 +97,10 @@ public class Controller implements Initializable {
         linkChoice(currentLocation, getLocation(), Game.location(), this::bindLocationSpecific);
 
         // other
-        linkColumns(ingredientList, "name", "amountText", "amount");
+        linkColumns(ingredientList, "name", "amountText", "quality", "brand");
+        linkText(shownIngredient, getShownIngredient(ingredientList, ingredientOfferPane));
+        linkText(ingredientMaxBound, getIngredientSearchMax(ingredientBoundSlider, ingredientList));
+        linkColumns(ingredientOfferList, "supplierName", "amountText", "quality", "priceText");
         linkItems(orderItem, IngredientType.typesProperty());
         linkText(grossDonutCount, getGrossDonuts());
     }
@@ -156,6 +168,16 @@ public class Controller implements Initializable {
         Game.location().getFryers().getPlayerOperated().ifPresent(Fryer::attemptToBegin);
     }
 
+    public void onSearchIngredients() {
+        int min = 1;
+        int max = getMaxIngredients();
+        IngredientStock selected = ingredientList.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            ingredientOfferList.setItems(observableList(
+                    IngredientSupplier.getAllOffers(selected.getType(), min, max)));
+        }
+    }
+
     public void onCreateProduct() {
 
     }
@@ -191,6 +213,11 @@ public class Controller implements Initializable {
         if (superior != null && !jobs.contains(superior)) {
             jobs.add(superior);
         }
+    }
+
+    private int getMaxIngredients() {
+        IngredientStock stock = ingredientList.getSelectionModel().getSelectedItem();
+        return stock == null ? 0 : (int) ingredientBoundSlider.getValue();
     }
 
     public static <T> void onUpdate(ObservableValue<T> observable, Consumer<T> action) {
