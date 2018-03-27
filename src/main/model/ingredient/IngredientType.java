@@ -12,7 +12,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 /**
  * @since 12/6/2017
  */
-public class IngredientType {
+public final class IngredientType {
 
     private static final SortedMap<Integer, String> FLUID_UNITS = new TreeMap<>(Map.of(
             0, "tsp.",
@@ -55,7 +55,7 @@ public class IngredientType {
     private int decimalThreshold;
     private final int hashcode;
 
-    public IngredientType(String name, double baseValue, int decimalThreshold, SortedMap<Integer,String> units) {
+    private IngredientType(String name, double baseValue, int decimalThreshold, SortedMap<Integer,String> units) {
         this.name = new SimpleStringProperty(name);
         this.baseValue = new SimpleDoubleProperty(baseValue);
         this.units = units;
@@ -68,7 +68,7 @@ public class IngredientType {
         return name.get();
     }
 
-    public final StringProperty nameProperty() {
+    public StringProperty nameProperty() {
         return name;
     }
 
@@ -76,7 +76,7 @@ public class IngredientType {
         return baseValue.get();
     }
 
-    public final DoubleProperty baseValueProperty() {
+    public DoubleProperty baseValueProperty() {
         return baseValue;
     }
 

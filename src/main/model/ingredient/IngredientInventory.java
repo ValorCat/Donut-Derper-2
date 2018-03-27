@@ -36,7 +36,7 @@ public class IngredientInventory {
         return stock.stream()
                 .filter(query::isSameTypeAs)
                 .findAny()
-                .filter(query::hasLessThan)
+                .filter(stocked -> stocked.hasAtLeast(query))
                 .isPresent();
     }
 

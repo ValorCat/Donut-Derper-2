@@ -69,11 +69,11 @@ public class IngredientBatch {
     }
 
     public boolean isSameTypeAs(IngredientBatch other) {
-        return type == other.type;
+        return getType() == other.getType();
     }
 
-    public boolean hasLessThan(IngredientBatch other) {
-        return getAmount() <= other.getAmount();
+    public boolean hasAtLeast(IngredientBatch other) {
+        return getAmount() >= other.getAmount();
     }
 
     public static IngredientBatch of(String typeName, int amount) {

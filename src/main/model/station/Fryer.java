@@ -35,7 +35,8 @@ public class Fryer extends Station {
     }
 
     protected boolean canBegin() {
-        boolean hasAllIngredients = getDonutType().getRecipe().stream().allMatch(ingredients::hasAtLeast);
+        boolean hasAllIngredients = getDonutType().getRecipe().stream()
+                .allMatch(ingredients::hasAtLeast);
         setIsMissingIngredients(!hasAllIngredients);
         return hasAllIngredients;
     }
@@ -107,7 +108,7 @@ public class Fryer extends Station {
         for (IngredientBatch recipeItem : getDonutType().getRecipe()) {
             int amountNeeded = recipeItem.getAmount() * actualSize;
             int amountInStock = ingredients.getAmount(recipeItem.getType());
-            actualSize = Math.min(actualSize, amountInStock / amountNeeded);
+            actualSize = Math.min(actualSize, amountNeeded > 0 ? amountInStock / amountNeeded : 0);
         }
         return actualSize;
     }

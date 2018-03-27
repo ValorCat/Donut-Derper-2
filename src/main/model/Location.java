@@ -68,7 +68,7 @@ public class Location {
         donuts = new DonutInventory(DonutType.PLAIN);
         ingredients = new IngredientInventory(
                 IngredientBatch.of("All-Purpose Flour", 10 * 181),
-                IngredientBatch.of("Butter", 15 * 24),
+                IngredientBatch.of("Butter", 20 * 24),
                 IngredientBatch.of("Eggs", 6 * 144),
                 IngredientBatch.of("Sugar", 3 * 109),
                 IngredientBatch.of("Whole Milk", 2 * 768)
